@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AssignSubstitutes.Settings.SettingsController">
+   <left>
+      <ListView prefHeight="265.0" prefWidth="159.0" BorderPane.alignment="CENTER">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Maximum on-callers" />
+               <String fx:value="Input files" />
+               <String fx:value="Output paths" />
+               <String fx:value="Coverage view" />
+            </FXCollections>
+         </items>
+      </ListView>
+   </left>
+   <center>
+      <StackPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="265.0" prefWidth="399.0" visible="false">
+               <children>
+                  <TextField layoutX="164.0" layoutY="51.0" prefHeight="31.0" prefWidth="188.0" />
+                  <Label layoutX="15.0" layoutY="14.0" text="On-caller form output" />
+                  <Label layoutX="45.0" layoutY="56.0" text="location" />
+                  <Button layoutX="327.0" layoutY="225.0" mnemonicParsing="false" text="Save" />
+                  <Button layoutX="355.0" layoutY="51.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="23.0" text="Browse" />
+                  <Label layoutX="45.0" layoutY="107.0" text="Format" />
+                  <TextField layoutX="165.0" layoutY="102.0" prefHeight="31.0" prefWidth="187.0" />
+                  <Pane layoutX="45.0" layoutY="137.0" prefHeight="88.0" prefWidth="333.0">
+                     <children>
+                        <Label layoutY="2.0" text="Format options (case sensitive)" />
+                        <Label layoutY="64.0" text="[AbsL] : The name of the absent teacher" />
+                        <Label layoutY="64.0" text="[AbsF] : The first name of the absent teacher" />
+                        <Label layoutY="44.0" text="[AbsL] : The name of the absent teacher" />
+                        <Label layoutY="21.0" text="[AbsF] : The first name of the absent teacher" />
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="265.0" prefWidth="399.0" visible="false">
+               <children>
+                  <TextField layoutX="164.0" layoutY="51.0" prefHeight="31.0" prefWidth="188.0" />
+                  <Label layoutX="15.0" layoutY="14.0" text="Input files" />
+                  <Label layoutX="45.0" layoutY="56.0" text="Master Schedule" />
+                  <Button layoutX="327.0" layoutY="225.0" mnemonicParsing="false" text="Save" />
+                  <Button layoutX="355.0" layoutY="51.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="23.0" text="Browse" />
+                  <Label layoutX="45.0" layoutY="107.0" text="Absence list" />
+                  <Button layoutX="355.0" layoutY="102.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="23.0" text="Browse" />
+                  <TextField layoutX="165.0" layoutY="102.0" prefHeight="31.0" prefWidth="187.0" />
+                  <Label layoutX="45.0" layoutY="149.0" text="Course codes" />
+                  <Button layoutX="355.0" layoutY="144.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="23.0" text="Browse" />
+                  <TextField layoutX="165.0" layoutY="144.0" prefHeight="31.0" prefWidth="187.0" />
+                  <Label layoutX="45.0" layoutY="186.0" text="Supply teachers" />
+                  <Button layoutX="355.0" layoutY="181.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="23.0" text="Browse" />
+                  <TextField layoutX="165.0" layoutY="181.0" prefHeight="31.0" prefWidth="187.0" />
+               </children>
+            </AnchorPane>
+         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+               <TextField layoutX="152.0" layoutY="89.0" prefHeight="31.0" prefWidth="33.0" />
+               <TextField layoutX="254.0" layoutY="89.0" prefHeight="31.0" prefWidth="33.0" />
+               <Pane layoutX="28.0" layoutY="134.0" prefHeight="71.0" prefWidth="330.0" style="-fx-border-color: black;">
+                  <children>
+                     <TextField layoutX="125.0" layoutY="20.0" prefHeight="31.0" prefWidth="33.0" />
+                     <Label layoutX="14.0" layoutY="25.0" text="Permanent" />
+                     <TextField layoutX="224.0" layoutY="20.0" prefHeight="31.0" prefWidth="33.0" />
+                  </children>
+               </Pane>
+               <Label layoutX="132.0" layoutY="14.0" text="Maximum on-calls" />
+               <Label layoutX="137.0" layoutY="55.0" text="Per Week" />
+               <Label layoutX="239.0" layoutY="55.0" text="Per Month" />
+               <Label layoutX="38.0" layoutY="94.0" text="Temporary" />
+               <Button layoutX="307.0" layoutY="220.0" mnemonicParsing="false" text="Save" />
+            </children>
+         </AnchorPane>
+         </children>
+      </StackPane>
+   </center>
+</BorderPane>

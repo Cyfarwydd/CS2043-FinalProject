@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>11</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>638</x>
+      <y>627</y>
+      <w>253</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>OnStaffTeacher
+--
+-replacementsThisWeek: int
+-replacementsThisMonth: int
+--
++incrementWeekTally(): int
++incrementMonthTally(): int
++getWeekTally(): int
++getMonthTally(): int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>968</x>
+      <y>561</y>
+      <w>275</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>Teacher
+--
+-name: String
+-Schedule: Period[5]
+-teachable: String
+--
++getTeachable(): String
++getReplacementsThisWeek(): int
++getReplacementsThisMonth(): int
++getSchedule(): Period[5]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>660</y>
+      <w>110</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>396</x>
+      <y>715</y>
+      <w>682</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+
+
+</panel_attributes>
+    <additional_attributes>600.0;10.0;600.0;100.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>176</x>
+      <y>693</y>
+      <w>231</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>Period
+--
+-course : String
+-teachable : String
+-roomNumber : int
+--
++getCourse() : String
++getTeachable() : String
++getRoomNumber() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>561</x>
+      <y>286</y>
+      <w>264</w>
+      <h>275</h>
+    </coordinates>
+    <panel_attributes>Controller
+--
+-teachers : Teacher[]
+-onStaffTeachers : OnStaffTeacher[]
+-absences : OnStaffTeacher[]
+-assignments : Assignment[]
+--
+-initialize()
+-clickGenerate()
+-clickSettings()
+-clickSave()
+-clickPrint()
+-changeDate()
+-toggleTodayCheckbox()
+-displayOnCallerListe()
+-displayErrorMessage()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>99</y>
+      <w>319</w>
+      <h>275</h>
+    </coordinates>
+    <panel_attributes>_FileInputOutput_
+--
+_-settings : Settings_
+--
+_+readAbsences() : OnStaffTeachers[]_
+_+readTeachers() : Teachers[]_
+_+readSettings() : Settings_
+_+writeOnCallerForms() : void_
+_+writeSomeOtherOutput() : void_
+_+updateSettings(Settings) : void_
+_+getMasterResetDate() : String_
+_+getMaxWeeklyTally() : int_
+_+getMaxMonthlyTally() : int_
+_+getTempMaxWeeklyTally() : int_
+_+getTempMaxMonthlyTally() : int_
+_+getDefaultCoverageView() : int_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>451</x>
+      <y>231</y>
+      <w>275</w>
+      <h>231</h>
+    </coordinates>
+    <panel_attributes>Controller uses InformationHandle
+
+
+
+
+
+
+
+
+
+
+lt=-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;230.0;20.0;230.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1430</x>
+      <y>110</y>
+      <w>286</w>
+      <h>396</h>
+    </coordinates>
+    <panel_attributes>Settings
+--
+-masterResetDate: String
+-maxWeeklyTally: int
+-maxMonthlyTally: int
+-tempMaxWeeklyTally: int
+-tempMaxMonthlyTally: int
+-absenceInputPath: String
+-masterSchedulePath: String
+-courseCodePath: String
+-supplyTeacherPath: String
+-getDefaultCoverageView() : int
+--
++getMasterResetDate() : String
++getMaxWeeklyTally() : int
++getMaxMonthlyTally() : int
++getTempMaxWeeklyTally() : int
++getTempMaxMonthlyTally() : int
++getAbsenceInputPath() : String
++getMasterSchedulePath() : String
++getCourseCodePath() : String
++getSupplyTeacherPath() : String
++getDefaultCoverageView() : int
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>220</y>
+      <w>462</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>_InformationHandle_
+--
+_+GenerateAssignments(OnStaffTeacher[], Teacher[]) : String[][]_
+_+GenerateCoverageStats(OnStaffTeacher[]) : String[][]_
+_+GenerateAvailabilityStats(OnStaffTeacher[]) : String[][]_
+_-GetAvailability(Teacher[], int): Teacher[]_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1265</x>
+      <y>44</y>
+      <w>396</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes> FileInputOutput initializes Settings
+ Settings provides file paths for FileInputOutput
+
+lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;20.0;340.0;20.0;340.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>814</x>
+      <y>363</y>
+      <w>473</w>
+      <h>297</h>
+    </coordinates>
+    <panel_attributes>FileInputOutput retrieves and writes information for Controller
+
+
+
+
+
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes>10.0;50.0;410.0;50.0;410.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>396</x>
+      <y>396</y>
+      <w>187</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>286</x>
+      <y>374</y>
+      <w>121</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>Main
+--
++main() : void
++start() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>737</x>
+      <y>99</y>
+      <w>231</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>SettingsController
+--
+-stage : Stage
+--
+-initializeSystem() : void
++setStage() : void
++saveSettings() : void
+-getFilePath() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>814</x>
+      <y>66</y>
+      <w>451</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>SettingController gets and changes Config with FileInputOutput
+</panel_attributes>
+    <additional_attributes>320.0;30.0;320.0;20.0;70.0;20.0;70.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1243</x>
+      <y>605</y>
+      <w>110</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>Supply teachers use the generic Teacher class
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>748</x>
+      <y>220</y>
+      <w>286</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Controller Launches SettingController
+lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1100</x>
+      <y>363</y>
+      <w>297</w>
+      <h>715</h>
+    </coordinates>
+    <panel_attributes>
+
+
+
+
+
+
+
+
+
+
+lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;330.0;10.0;480.0;250.0;480.0;250.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>781</x>
+      <y>363</y>
+      <w>616</w>
+      <h>561</h>
+    </coordinates>
+    <panel_attributes>
+lt=-&gt;
+FileInputOutput creates Teachers and Periods</panel_attributes>
+    <additional_attributes>10.0;380.0;10.0;480.0;540.0;480.0;540.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>297</x>
+      <y>363</y>
+      <w>1100</w>
+      <h>946</h>
+    </coordinates>
+    <panel_attributes>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes>10.0;430.0;10.0;480.0;980.0;480.0;980.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>814</x>
+      <y>429</y>
+      <w>330</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;280.0;20.0;280.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>484</y>
+      <w>253</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>Assignment
+--
+-absentee : OnStaffTeacher
+-substitute : Teacher
+-period : Period
+--
++getAbsentee() : OnStaffTeacher
++getSubstitute() : Teacher
++getPeriod() : Period
++setSubstitute(Teacher) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>242</x>
+      <y>572</y>
+      <w>748</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;660.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>0</x>
+      <y>319</y>
+      <w>297</w>
+      <h>187</h>
+    </coordinates>
+    <panel_attributes>InformationHandle creates Assignment
+lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>242</x>
+      <y>616</y>
+      <w>418</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0;310.0;60.0;360.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>88</x>
+      <y>638</y>
+      <w>110</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0;80.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>737</x>
+      <y>550</y>
+      <w>33</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>242</x>
+      <y>506</y>
+      <w>341</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>792</x>
+      <y>0</y>
+      <w>913</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>SettingController creates new Settings to pass to FileInputOutput
+</panel_attributes>
+    <additional_attributes>810.0;100.0;810.0;20.0;10.0;20.0;10.0;90.0</additional_attributes>
+  </element>
+</diagram>

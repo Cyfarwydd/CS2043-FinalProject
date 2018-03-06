@@ -1,0 +1,17 @@
+<config>
+	<onCalls>
+		<weeklyMax>2</weeklyMax>
+		<monthlyMax>4</monthlyMax>
+	</onCalls>
+	<filePaths>
+		<input>
+			<masterSchedule></masterSchedule>
+			<supply></supply>
+			<absences></absences>
+		</input>
+		<output>
+			<assignmentSchedule></assignmentSchedule>
+			<assignmentsPerTerm></assignmentsPerTerm>
+		</output>
+	</filePaths>
+</config>

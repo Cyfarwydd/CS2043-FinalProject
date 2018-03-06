@@ -41,7 +41,7 @@
                         <Button layoutX="531.0" layoutY="12.0" mnemonicParsing="false" onAction="#clickSettings" prefHeight="37.0" prefWidth="48.0" style="-fx-background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/WMF-Agora-Settings_424242.svg/2000px-WMF-Agora-Settings_424242.svg.png'); -fx-background-size: 30px 30px; -fx-background-position: center; -fx-background-repeat: no-repeat;" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="12.0" />
                         <TableView layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                             <columns>
-                                <TableColumn prefWidth="202.0" text="Teacher" />
+                                <TableColumn prefWidth="202.0" text="AssignSubstitutes.classes.Teacher" />
                                 <TableColumn editable="false" maxWidth="259.0" prefWidth="173.0" sortable="false" text="On-calls">
                                     <columns>
                                         <TableColumn editable="false" maxWidth="116.0" prefWidth="84.0" text="this week" />

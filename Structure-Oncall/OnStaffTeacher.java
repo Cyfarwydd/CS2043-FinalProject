@@ -11,7 +11,6 @@ public class OnStaffTeacher extends Teacher{
 	}
 	public void incrementMonthlyTally(){
 		replacementsThisMonth++;
-		totalTally++;
 	}
 	public getWeeklyTally(){return replacementsThisWeek;}
 	public getMonthlyTally(){return replacementsThisMonth;}

@@ -7,7 +7,7 @@ public class period{
 	public period(boolean isAbsent){
 		absent=true;
 	}
-	public period()
+	public period(){}
 	public String getCoure(){return course;}
 	public String getTeachable(){return teachable;}
 	public int getRoomNumber(){return roomNumber;}

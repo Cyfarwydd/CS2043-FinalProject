@@ -7,7 +7,7 @@ public class Assignment{
 		substitute=substituteIn;
 		period=periodIn;
 	}
-	public (OnStaffTeacher onStaffTeacherIn,Period periodIn){
+	public Assignment(OnStaffTeacher onStaffTeacherIn,Period periodIn){
 		absentee=onStaffTeacherIn;
 		period=periodIn;
 	}

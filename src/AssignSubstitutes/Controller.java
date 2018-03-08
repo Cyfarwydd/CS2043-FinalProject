@@ -15,17 +15,20 @@ public class Controller {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings/SettingsUI.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
-            //stage.initModality(Modality.APPLICATION_MODAL);
-            //stage.initStyle(StageStyle.UNDECORATED);
-            //stage.setScene(new Scene(root1, 200, 150));
-            stage.setTitle("AssignSubstitutes.Settings.Settings");
+            stage.setTitle("AssignSubstitutes.classes.Settings");
             stage.setScene(new Scene(root1));
 
             //get the controller and send it the stage
             SettingsController controller = fxmlLoader.getController();
             controller.setStage(stage);
 
+            //add a listener to run on Settings dialog close
+            stage.setOnCloseRequest(event -> controller.unload(event));
+
             //show
-            stage.show();
+            stage.showAndWait();
+
+            boolean saved = controller.getSaved();
+            System.out.println("Saved: "+saved);
     }
 }

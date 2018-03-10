@@ -94,6 +94,7 @@ public class SettingsController {
                     false,false, false));
             onlyInts(new KeyEvent(txtPermMaxWeek, null, null, null, null, null, false,
                     false,false, false));
+            System.out.println("onlyInt 4 times");
             return;
         }
         TextField target = (TextField) event.getSource();
@@ -114,8 +115,12 @@ public class SettingsController {
     private boolean saveSettings(){
         onlyInts(null);
         removeIllegalCharactersFromFileName();
-        //modify Settings object
-        finalizeChanges();
+        try {
+            //modify Settings object
+            finalizeChanges();
+        }catch (Exception e){
+            errorHandler("ERROR: There was a problem before trying to save the settings file");
+        }
         //TODO: send Settings to updateSettings in IO
         saved=true;
         System.out.println("Save Settings");

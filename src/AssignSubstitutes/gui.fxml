@@ -19,15 +19,18 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="600.0">
                     <children>
-                        <Button layoutX="405.0" layoutY="15.0" mnemonicParsing="false" text="Save" AnchorPane.rightAnchor="146.0" AnchorPane.topAnchor="15.0" />
-                        <Button layoutX="180.0" layoutY="15.0" mnemonicParsing="false" text="Generate Assignments" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="15.0" />
+                        <Button layoutX="405.0" layoutY="15.0" mnemonicParsing="false" text="Save"
+                                onAction="#clickSave" AnchorPane.rightAnchor="146.0" AnchorPane.topAnchor="15.0" />
+                        <Button layoutX="180.0" layoutY="15.0" mnemonicParsing="false"
+                                onAction="#clickGenerateAssignments"
+                                text="Generate Assignments" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="15.0" />
                         <Button layoutX="461.0" layoutY="15.0" mnemonicParsing="false" text="Print" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="15.0" />
                         <DatePicker layoutX="25.0" layoutY="15.0" maxHeight="-Infinity" prefHeight="31.0" prefWidth="145.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="12.0" />
-                        <TableView layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                        <TableView fx:id="tblAssignments" editable="true" layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                             <columns>
-                                <TableColumn prefWidth="220.0" text="Absent" />
-                                <TableColumn prefWidth="204.0" text="Substitute" />
-                                <TableColumn prefWidth="94.0" text="Period" />
+                                <TableColumn fx:id="colAssignAbsent" editable="false" prefWidth="220.0" text="Absent" />
+                                <TableColumn fx:id="colAssignSub" prefWidth="204.0" text="Substitute" />
+                                <TableColumn fx:id="colAssignPeriod" editable="false" prefWidth="94.0" text="Period" />
                             </columns>
                         </TableView>
                         <Button layoutX="525.0" layoutY="12.0" mnemonicParsing="false" onAction="#clickSettings" prefHeight="37.0" prefWidth="48.0" style="-fx-background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/WMF-Agora-Settings_424242.svg/2000px-WMF-Agora-Settings_424242.svg.png'); -fx-background-size: 30px 30px; -fx-background-position: center; -fx-background-repeat: no-repeat;" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="12.0" />

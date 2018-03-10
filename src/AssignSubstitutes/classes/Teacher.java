@@ -12,4 +12,5 @@ public class Teacher{
 	public String getName(){return name;}
 	public String getTeachable(){return teachable;}
 	public Period[] getSchedule(){return schedule;}
+	public String toString(){return name;}
 }

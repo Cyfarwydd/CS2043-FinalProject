@@ -6,6 +6,7 @@ import AssignSubstitutes.classes.Period;
 import AssignSubstitutes.classes.Teacher;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -106,8 +107,8 @@ public class ThePointlessClassIMade {
 
     //For test use until InformationHandle is available
     //gets a list of available teachers for a given period
-    public static List<Teacher> getAvailableTeachers(Collection<OnStaffTeacher> fullTeacherList,
-                                                      ObservableList<Assignment>
+    public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList,
+                                                         ObservableList<Assignment>
                                                                   assignments, int periodNumber, Assignment
                                                              currentAssignment){
         System.out.println("Period " + periodNumber);
@@ -152,8 +153,8 @@ public class ThePointlessClassIMade {
         List<Teacher> notAssigned = noneThisPeriod.stream().filter(
                 teacher -> (assignments.stream().noneMatch(
                         assignment -> assignment.getSubstitute().equals(teacher) &&
-                                        assignment.getPeriod().getPeriodNumber() == periodNumber /*&&
-                                        !assignment.equals( currentAssignment )*/
+                                        assignment.getPeriod().getPeriodNumber() == periodNumber &&
+                                        !assignment.equals( currentAssignment )
                         )
         )).collect(Collectors.toList());
         for(Teacher t: notAssigned) {
@@ -176,23 +177,29 @@ public class ThePointlessClassIMade {
                         )
                 )
         ).collect(Collectors.toList());
+        Period[] schedule = {new Period(null, null, periodNumber, 0, false), new Period
+                (null, null, periodNumber, 0, false), new Period(null, null, periodNumber, 0, false), new
+                Period(null, null, periodNumber, 0, false)};
+        Teacher nullTeacher=new Teacher(null, null, null);
+        notAbsent.add(0, nullTeacher);
         for(Teacher t: notAbsent) {
-            System.out.print(t+" ");
-            for(Period p : t.getSchedule()){
-                System.out.print(p.getPeriodNumber()+" ");
-            }
+            System.out.print(t + " ");
+            /*for (Period p : t.getSchedule()) {
+                System.out.print(p.getPeriodNumber() + " ");
+            }*/
             System.out.println();
         }
         return notAbsent;
-        /*return fullTeacherList.stream().filter(
-                teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(period->period.getPeriodNumber()==periodNumber)
-                ).filter(
-                teacher -> (
-                        assignments.stream().noneMatch(
-                                assignment -> assignment.getSubstitute().equals(teacher) &&
-                                        assignment.getPeriod().getPeriodNumber()==periodNumber
-                        )
-                )
-        ).collect(Collectors.toList());*/
+    }
+    //For test use until IO is available
+    //creates teachers and period objects
+    public static ArrayList<Assignment> getAssignmentByDate(LocalDate date, ArrayList<OnStaffTeacher> osTeachers){
+        ArrayList<Assignment> retVal = new ArrayList<>();
+        if(date.equals(LocalDate.of(2018, 3, 6))){
+            retVal.add(new Assignment(osTeachers.get(0), osTeachers.get(3), osTeachers.get(3).getSchedule()[0]));
+            retVal.add(new Assignment(osTeachers.get(1), osTeachers.get(4), osTeachers.get(4).getSchedule()[0]));
+            retVal.add(new Assignment(osTeachers.get(2), osTeachers.get(5), osTeachers.get(5).getSchedule()[0]));
+        }
+        return retVal;
     }
 }

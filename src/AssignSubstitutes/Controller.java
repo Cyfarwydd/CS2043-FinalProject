@@ -18,7 +18,7 @@ public class Controller {
             //stage.initModality(Modality.APPLICATION_MODAL);
             //stage.initStyle(StageStyle.UNDECORATED);
             //stage.setScene(new Scene(root1, 200, 150));
-            stage.setTitle("Settings");
+            stage.setTitle("AssignSubstitutes.Settings.Settings");
             stage.setScene(new Scene(root1));
 
             //get the controller and send it the stage

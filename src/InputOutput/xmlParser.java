@@ -68,7 +68,7 @@ public class xmlParser {
 
     public void setMasterResetDate(String masterResetDate) throws ParserConfigurationException, SAXException, IOException
     {
-        writeXML(masterResetDate.toString(), "config", "masterResetDate");
+        writeXML(masterResetDate, "config", "masterResetDate");
         this.masterResetDate = masterResetDate;
     }
 

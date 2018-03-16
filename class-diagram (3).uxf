@@ -127,7 +127,7 @@ _+readTeachers() : Teachers[]_
 _+readSettings() : Settings_
 _+writeOnCallerForms() : void_
 _+writeSomeOtherOutput() : void_
-_+updateSettings(AssignSubstitutes.Settings.Settings) : void_
+_+updateSettings(AssignSubstitutes.classes.Settings) : void_
 _+getMasterResetDate() : String_
 _+getMaxWeeklyTally() : int_
 _+getMaxMonthlyTally() : int_
@@ -167,7 +167,7 @@ lt=-
       <w>286</w>
       <h>396</h>
     </coordinates>
-    <panel_attributes>AssignSubstitutes.Settings.Settings
+    <panel_attributes>AssignSubstitutes.classes.Settings
 --
 -masterResetDate: String
 -maxWeeklyTally: int
@@ -217,8 +217,8 @@ _-GetAvailability(AssignSubstitutes.classes.Teacher[], int): AssignSubstitutes.c
       <w>396</w>
       <h>88</h>
     </coordinates>
-    <panel_attributes> FileInputOutput initializes AssignSubstitutes.Settings.Settings
- AssignSubstitutes.Settings.Settings provides file paths for FileInputOutput
+    <panel_attributes> FileInputOutput initializes AssignSubstitutes.classes.Settings
+ AssignSubstitutes.classes.Settings provides file paths for FileInputOutput
 
 lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;20.0;340.0;20.0;340.0;60.0</additional_attributes>
@@ -508,7 +508,7 @@ lt=-&gt;</panel_attributes>
       <w>913</w>
       <h>132</h>
     </coordinates>
-    <panel_attributes>SettingController creates new AssignSubstitutes.Settings.Settings to pass to FileInputOutput
+    <panel_attributes>SettingController creates new AssignSubstitutes.classes.Settings to pass to FileInputOutput
 </panel_attributes>
     <additional_attributes>810.0;100.0;810.0;20.0;10.0;20.0;10.0;90.0</additional_attributes>
   </element>

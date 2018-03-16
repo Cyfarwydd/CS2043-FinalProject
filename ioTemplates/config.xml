@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+	<onCalls>
+		<weeklyMax>2</weeklyMax>
+		<monthlyMax>4</monthlyMax>
+		<tempWeeklyMax>-1</tempWeeklyMax>
+		<tempMonthlyMax>-1</tempMonthlyMax>
+		<defaultCoverageView>-1</defaultCoverageView>
+	</onCalls>
+	<filePaths>
+		<input>
+			<masterSchedule></masterSchedule>
+			<supply></supply>
+			<absences></absences>
+		</input>
+		<output>
+			<assignmentSchedule></assignmentSchedule>
+			<assignmentsPerTerm></assignmentsPerTerm>
+		</output>
+	</filePaths>
+</config>

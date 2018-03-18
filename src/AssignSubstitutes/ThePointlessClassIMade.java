@@ -152,6 +152,31 @@ public class ThePointlessClassIMade {
         osTeachers.add(teacher);
         return osTeachers;
     }
+    public static ArrayList<Teacher> getAbsences(ArrayList<OnStaffTeacher> osTeachers){
+        ArrayList<Teacher> absences = new ArrayList<Teacher>();
+        for(int i = 0; i < 4; i++) {
+            double rand = Math.random() * 10;
+            int r = (int) rand;
+            if(r >= 7){
+                i--;
+                continue;
+            }
+            Teacher t = osTeachers.get(r);
+            absences.add(t);
+        }
+        return absences;
+    }
+
+    public static ArrayList<Teacher> getSupplies(){
+        ArrayList<Teacher> supplies = new ArrayList<Teacher>();
+        Period p[] = new Period[4];
+        supplies.add(new Teacher("Jane Foster", p, "Math"));
+        p = new Period[4];
+        supplies.add(new Teacher("Jane Fondant", p, "Eng"));
+        p = new Period[4];
+        supplies.add(new Teacher("Mark Zuckerberg", p, "Sci"));
+        return supplies;
+    }
 
     //For test use until InformationHandle is available
     //creates teachers and period objects

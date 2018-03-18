@@ -13,7 +13,7 @@ public class Period{
 		roomNumber=roomNumberIn;
 		absent=isAbsent;
 	}
-	public String getCoure(){return course;}
+	public String getCourse(){return course;}
 	public String getTeachable(){return teachable;}
 	public int getRoomNumber(){return roomNumber;}
 	public int getPeriodNumber(){return periodNumber;}

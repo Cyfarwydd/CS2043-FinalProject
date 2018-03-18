@@ -250,13 +250,14 @@ public class ThePointlessClassIMade {
     }
     //For test use until InformationHandle is available
     //gets a list of available teachers for a given period
-    public static ObservableList<ArrayList<String>> getAvailabilityByPeriod(Collection<OnStaffTeacher> fullTeacherList){
-        ObservableList<ArrayList<String>> periods= FXCollections.observableArrayList();
+    public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
+        ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
         xmlParser settings = new xmlParser("./config");
         int maxMonthly = settings.getTempMonthlyMax();
         int maxWeekly = settings.getTempWeeklyMax();
+        OnStaffTeacher emptyTeacher = new OnStaffTeacher("",null,null);
         for(int i = 0; i<5; i++) {
-            ArrayList<String> period = new ArrayList();
+            ArrayList<Object> period = new ArrayList();
             int periodNumber = i+1;
             String periodStr = "Period ";
             switch(i){
@@ -273,14 +274,23 @@ public class ThePointlessClassIMade {
                 case 4:
                     period.add(new String(periodStr+i));
                     break;
+                default:
+                    throw new Exception("Period out of bounds");
             }
+
             List<OnStaffTeacher> noneThisPeriod = fullTeacherList.stream().filter(
                     teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(p -> p.getPeriodNumber()
                             == periodNumber)
             ).collect(Collectors.toList());
 
-            period.add(Long.toString(noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).count()));
-            period.add(Long.toString(noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxMonthly).count()));
+            List<OnStaffTeacher> teachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
+            teachers.add(0, emptyTeacher);
+            period.add(teachers);
+
+            teachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
+            teachers.add(0, emptyTeacher);
+            period.add(teachers);
+
             periods.add(period);
         }
         return periods;

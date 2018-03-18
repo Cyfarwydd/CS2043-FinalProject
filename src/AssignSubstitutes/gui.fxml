@@ -62,8 +62,10 @@
                         <TableView fx:id="tblAvailability" layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                             <columns>
                                 <TableColumn fx:id="colAvailPeriod" prefWidth="150.0" text="Period" />
+                        <TableColumn fx:id="colAvailWeekTeachers" editable="false" maxWidth="200.0" prefWidth="107.0" />
                                 <TableColumn fx:id="colAvailWeek" editable="false" maxWidth="200.0" prefWidth="85.0" text="this week" />
-                                <TableColumn fx:id="colAvailMonth" editable="false" maxWidth="244.0" prefWidth="95.0" text="this month" />
+                                <TableColumn fx:id="colAvailMonthTeachers" editable="false" maxWidth="244.0" prefWidth="127.0" />
+                        <TableColumn fx:id="colAvailMonth" editable="false" maxWidth="244.0" prefWidth="90.0" text="this month" />
                             </columns>
                         </TableView>
                     </children>

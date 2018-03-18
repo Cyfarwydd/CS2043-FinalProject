@@ -1,4 +1,4 @@
-package InputOutput;
+package AssignSubstitutes.InputOutput;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,7 +44,6 @@ public class xmlParser {
         this.maxMonthlyTally = Integer.valueOf(settings.getElementsByTagName("monthlyMax").item(0).getTextContent());
         this.tempWeeklyMax = Integer.valueOf(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent());
         this.tempMonthlyMax = Integer.valueOf(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent());
-        this.defaultCoverageView = Integer.valueOf(settings.getElementsByTagName("defaultCoverageView").item(0).getTextContent());
         this.masterResetDate = "Not Set";
 
     } // constructor

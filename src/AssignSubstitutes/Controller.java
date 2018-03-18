@@ -10,11 +10,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
@@ -28,13 +32,18 @@ public class Controller {
     private ArrayList<Teacher> abscences;
     private ArrayList<Teacher> supplies;
     private ArrayList<LocalDate> generated;
-    private boolean noNagRestore, noNagSaveWithEmptyAssignments;
+    private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges;
     @FXML private TableView<Assignment> tblAssignments;
-    @FXML private TableColumn<Assignment, String> colAssignAbsent, colDeleteAssignment;
+    @FXML private TableColumn<Assignment, String> colAssignAbsent, colAssignDelete;
     @FXML private TableColumn<Assignment, Teacher> colAssignSub;
     @FXML private TableColumn<Assignment, Integer> colAssignPeriod;
+    @FXML private TableView<OnStaffTeacher> tblCoverage;
+    @FXML private TableColumn<OnStaffTeacher, String> colCovTeacher;
+    @FXML private TableColumn<OnStaffTeacher, Integer> colCovWeek, colCovMonth, colCovTotal;
+    @FXML private TableView<ArrayList<String>> tblAvailability;
+    @FXML private TableColumn<ArrayList<String>, String> colAvailPeriod, colAvailWeek, colAvailMonth;
     @FXML private DatePicker datePicker;
-    @FXML private Button btnGenerate, btnSave, btnRestore;
+    @FXML private Button btnGenerate, btnSave;
 
     @FXML
     public void initialize(){
@@ -48,11 +57,18 @@ public class Controller {
         //TODO: get noNag booleans from settings
 
         btnSave.setVisible(false);
-        btnRestore.setVisible(false);
 
         datePicker.setValue(LocalDate.now());
 
         buildAssignmentsTable();
+        buildCoverageTable();
+        tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
+        buildAvailabilityTable();
+        ObservableList<ArrayList<String>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityByPeriod(osTeachers);
+        for(ArrayList<String> o : availabilityByPeriod){
+            System.out.println(o.get(0)+"\t"+o.get(1)+"\t"+o.get(2));
+        }
+        tblAvailability.setItems(availabilityByPeriod);
     }
 
     @FXML
@@ -62,17 +78,14 @@ public class Controller {
         if(date.isBefore(LocalDate.now())) {
             btnGenerate.setVisible(false);
             btnSave.setVisible(false);
-            btnRestore.setVisible(false);
             tblAssignments.setEditable(false);
             ArrayList<Assignment> prevAssignments = ThePointlessClassIMade.getAssignmentByDate(date, osTeachers);
             displayAssignments(prevAssignments);
         }else{
             btnGenerate.setVisible(true);
             if(generated.contains(date)) {
-                btnRestore.setVisible(true);
                 btnSave.setVisible(true);
             }else{
-                btnRestore.setVisible(false);
                 btnSave.setVisible(false);
             }
             tblAssignments.setEditable(true);
@@ -83,27 +96,41 @@ public class Controller {
     @FXML
     private void clickGenerateAssignments(){
         LocalDate date = datePicker.getValue();
+        ArrayList<Assignment> currentAssignments;
+        ArrayList<Assignment> currentUnsavedAssignments;
         if(!generated.contains(date)){
             generated.add(date);
             btnSave.setVisible(true);
-            btnRestore.setVisible(true);
-        }
-        assignments.put(date, ThePointlessClassIMade.getAssignmentsFacsimile(osTeachers));
-        clickRestore();
-    }
+        }else{
+            //check to see if it has already been generated.
+            currentAssignments=assignments.get(date);
+            currentUnsavedAssignments=unsavedAssignments.get(date);
+            if(!noNagOverwriteAssignmentChanges&&!currentAssignments.equals(currentUnsavedAssignments)){
+                boolean[] nagCheck={noNagOverwriteAssignmentChanges};
+                ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.APPLY);
+                ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-    @FXML
-    private void clickRestore(){
-        LocalDate date = datePicker.getValue();
-        ArrayList<Assignment> currentUnsavedAssignments = new ArrayList<>();
+                Alert alert = createConfirmAlertWithOptOut("Changes detected!", "Are you sure that you want to overwrite the changes that you've made to the generated assignments?", nagCheck, buttonTypeYes, buttonTypeNo);
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == buttonTypeNo) {
+                    return;
+                }else{
+                    noNagOverwriteAssignmentChanges = nagCheck[0];
+                    //TODO: write noNag to settings
+                    //TODO: get Absentees and Supplies
+                }
+            }
+        }
+        currentAssignments = ThePointlessClassIMade.getAssignmentsFacsimile(osTeachers);
+        assignments.put(date, currentAssignments);
+        currentUnsavedAssignments = new ArrayList<>();
         unsavedAssignments.put(date, currentUnsavedAssignments);
-        ArrayList<Assignment> currentAssignments = assignments.get(date);
         for(Assignment a : currentAssignments) {
             currentUnsavedAssignments.add(new Assignment(a.getAbsentee(), a.getSubstitute(), a.getPeriod()));
         }
         tblAssignments.getItems().setAll(currentUnsavedAssignments);
-        //TODO: remove restore--it is redundant and re-generating will get the same result.
-        //TODO: add check to generate to see if it has already been generated.
     }
 
     @FXML
@@ -111,11 +138,28 @@ public class Controller {
         LocalDate date = datePicker.getValue();
         ObservableList<Assignment> tblItems = tblAssignments.getItems();
         //check for empty assignments
-        if(tblItems.stream().anyMatch(a-> a.getAbsentee().getName().isEmpty())){
-            //TODO: pop up a dialog asking if user is sure they want to save assignments with no substitute
+        if(!noNagSaveWithEmptyAssignments && tblItems.stream().anyMatch(a-> a.getAbsentee().getName().isEmpty())){
+            boolean[] nagCheck={noNagSaveWithEmptyAssignments};
+            ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.APPLY);
+            ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            Alert alert = createConfirmAlertWithOptOut("Blank assignments!", "Are you sure that you want to save when there are abscences that have not been assigned substitutes?", nagCheck, buttonTypeYes, buttonTypeNo);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == buttonTypeNo) {
+                return;
+            }else{
+                noNagSaveWithEmptyAssignments = nagCheck[0];
+                //TODO: write noNag to settings
+            }
         }
         assignments.put(date, new ArrayList<>(tblItems));
         //TODO: call IO to write assignments to file.
+        if(date == LocalDate.now()) {
+            //TODO: increment tallys
+            //TODO: update availability
+        }
     }
 
     @FXML
@@ -198,7 +242,7 @@ public class Controller {
             }
         });
 
-        colDeleteAssignment.setCellFactory(new Callback<>(){
+        colAssignDelete.setCellFactory(new Callback<>(){
             @Override
             public TableCell<Assignment, String> call(final TableColumn<Assignment, String> param) {
                 final TableCell<Assignment, String> cell = new TableCell<Assignment, String>() {
@@ -225,7 +269,55 @@ public class Controller {
         });
     }
 
+    private void buildCoverageTable() {
+
+        colCovTeacher.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        colCovWeek.setCellValueFactory(new PropertyValueFactory<>("WeeklyTally"));
+
+        colCovMonth.setCellValueFactory(new PropertyValueFactory<>("MonthlyTally"));
+
+        colCovTotal.setCellValueFactory(new PropertyValueFactory<>("totalTally"));
+    }
+
+    private void buildAvailabilityTable() {
+        colAvailPeriod.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(0)));
+
+        colAvailWeek.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(1)));
+
+        colAvailMonth.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(2)));
+    }
+
+    private static Alert createConfirmAlertWithOptOut(String title, String headerText,
+                                                            boolean[] selected,
+                                                            ButtonType... buttonTypes) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().applyCss();
+        Node graphic = alert.getDialogPane().getGraphic();
+        alert.setDialogPane(new DialogPane() {
+            @Override
+            protected Node createDetailsButton() {
+                CheckBox optOut = new CheckBox();
+                optOut.setText("Don't show me this again");
+                //optOut.setOnAction(e->nagChangeHandler(optOut, selected));
+                optOut.setOnAction(event -> selected[0] = optOut.isSelected());
+                return optOut;
+            }
+        });
+        alert.getDialogPane().getButtonTypes().addAll(buttonTypes);
+        alert.getDialogPane().setExpandableContent(new Group());
+        alert.getDialogPane().setExpanded(true);
+        alert.getDialogPane().setGraphic(graphic);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.initStyle(StageStyle.UTILITY);
+        return alert;
+    }
+
     private void errorHandler(String msg) {
-        System.out.println("Display error: " + msg);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(msg);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.show();
     }
 }

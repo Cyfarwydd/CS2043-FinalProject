@@ -19,20 +19,18 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="600.0">
                     <children>
-                        <Button fx:id="btnSave" layoutX="363.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickSave" text="Save" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="15.0" />
+                        <Button fx:id="btnSave" layoutX="488.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickSave" text="Save" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="15.0" />
                         <Button fx:id="btnGenerate" layoutX="180.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickGenerateAssignments" text="Generate Assignments" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="15.0" />
-                        <Button layoutX="491.0" layoutY="15.0" mnemonicParsing="false" text="Print" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="15.0" />
                         <DatePicker fx:id="datePicker" layoutX="25.0" layoutY="12.0" maxHeight="-Infinity" onAction="#changeDate" prefHeight="31.0" prefWidth="145.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="12.0" />
                         <TableView fx:id="tblAssignments" editable="true" layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                             <columns>
                                 <TableColumn fx:id="colAssignAbsent" editable="false" prefWidth="220.0" text="Absent" />
                                 <TableColumn fx:id="colAssignSub" prefWidth="250.0" text="Substitute" />
                                 <TableColumn fx:id="colAssignPeriod" editable="false" prefWidth="58.0" text="Period" />
-                        <TableColumn fx:id="colDeleteAssignment" editable="false" prefWidth="28.0" />
+                                 <TableColumn fx:id="colAssignDelete" editable="false" prefWidth="28.0" />
                             </columns>
                         </TableView>
                         <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickSettings" prefHeight="28.0" prefWidth="28.0" style="-fx-background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/WMF-Agora-Settings_424242.svg/2000px-WMF-Agora-Settings_424242.svg.png'); -fx-background-size: 25px 25px; -fx-background-position: center; -fx-background-repeat: no-repeat;" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="15.0" />
-                  <Button fx:id="btnRestore" layoutX="417.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickRestore" text="Restore" AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="15.0" />
                     </children></AnchorPane>
             </content>
         </Tab>
@@ -41,30 +39,18 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
                         <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickSettings" prefHeight="28.0" prefWidth="28.0" style="-fx-background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/WMF-Agora-Settings_424242.svg/2000px-WMF-Agora-Settings_424242.svg.png'); -fx-background-size: 25px 25px; -fx-background-position: center; -fx-background-repeat: no-repeat;" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="15.0" />
-                        <TableView layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                        <TableView fx:id="tblCoverage" layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                             <columns>
-                                <TableColumn prefWidth="202.0" text="AssignSubstitutes.classes.Teacher" />
+                                <TableColumn fx:id="colCovTeacher" prefWidth="202.0" text="Teacher" />
                                 <TableColumn editable="false" maxWidth="259.0" prefWidth="173.0" sortable="false" text="On-calls">
                                     <columns>
-                                        <TableColumn editable="false" maxWidth="116.0" prefWidth="84.0" text="this week" />
-                                        <TableColumn editable="false" maxWidth="200.0" prefWidth="100.0" text="this month" />
-                                    </columns>
-                                </TableColumn>
-                                <TableColumn editable="false" maxWidth="287.0" prefWidth="155.0" sortable="false" text="Remaining on-calls">
-                                    <columns>
-                                        <TableColumn editable="false" maxWidth="80.0" prefWidth="77.0" text="this week" />
-                                        <TableColumn editable="false" maxWidth="200.0" prefWidth="100.0" text="this month" />
+                                        <TableColumn fx:id="colCovWeek" editable="false" maxWidth="116.0" prefWidth="84.0" text="this week" />
+                                        <TableColumn fx:id="colCovMonth" editable="false" maxWidth="200.0" prefWidth="100.0" text="this month" />
+                                        <TableColumn fx:id="colCovTotal" editable="false" maxWidth="200.0" prefWidth="100.0" text="total" />
                                     </columns>
                                 </TableColumn>
                             </columns>
                         </TableView>
-                        <RadioButton layoutX="137.0" layoutY="20.0" mnemonicParsing="false" text="Including today" AnchorPane.leftAnchor="135.0" AnchorPane.topAnchor="20.0">
-                            <toggleGroup>
-                                <ToggleGroup fx:id="CoverageView" />
-                            </toggleGroup>
-                        </RadioButton>
-                        <RadioButton layoutX="278.0" layoutY="20.0" mnemonicParsing="false" text="Not including today" toggleGroup="$CoverageView" AnchorPane.leftAnchor="276.0" AnchorPane.topAnchor="20.0" />
-                        <RadioButton layoutX="37.0" layoutY="20.0" mnemonicParsing="false" selected="true" text="Only today" toggleGroup="$CoverageView" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="20.0" />
                     </children></AnchorPane>
             </content>
         </Tab>
@@ -73,13 +59,11 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
                         <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" onAction="#clickSettings" prefHeight="28.0" prefWidth="28.0" style="-fx-background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/WMF-Agora-Settings_424242.svg/2000px-WMF-Agora-Settings_424242.svg.png'); -fx-background-size: 25px 25px; -fx-background-position: center; -fx-background-repeat: no-repeat;" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="15.0" />
-                        <TableView layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                        <TableView fx:id="tblAvailability" layoutX="20.0" layoutY="60.0" prefHeight="279.0" prefWidth="560.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                             <columns>
-                                <TableColumn prefWidth="79.0" text="Period" />
-                                <TableColumn editable="false" maxWidth="200.0" prefWidth="40.0" />
-                                <TableColumn editable="false" maxWidth="200.0" prefWidth="200.0" text="Absent" />
-                                <TableColumn editable="false" maxWidth="200.0" prefWidth="41.0" />
-                                <TableColumn editable="false" maxWidth="200.0" prefWidth="200.0" text="Available" />
+                                <TableColumn fx:id="colAvailPeriod" prefWidth="150.0" text="Period" />
+                                <TableColumn fx:id="colAvailWeek" editable="false" maxWidth="200.0" prefWidth="85.0" text="this week" />
+                                <TableColumn fx:id="colAvailMonth" editable="false" maxWidth="244.0" prefWidth="95.0" text="this month" />
                             </columns>
                         </TableView>
                     </children>

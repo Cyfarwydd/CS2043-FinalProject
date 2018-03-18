@@ -48,7 +48,8 @@ public class SettingsController {
         //add a listener to detect when the settings menu selection has been changed and switch the visible panel
         //  accordingly.
         settingsMenu.getSelectionModel().selectedItemProperty().addListener((ChangeListener<String>) (observable,
-                                                                                                      oldValue, newValue) -> navSelectionChange(observable, oldValue, newValue));
+                                                                                                      oldValue, newValue) ->
+                                                                                                            navSelectionChange(observable, oldValue, newValue));
         populateSettingsFields();
     }
 
@@ -151,9 +152,11 @@ public class SettingsController {
         System.out.println("populate settings");
     }
 
-    private void errorHandler(String error){
-        //TODO: display dialog indicating error
-        System.out.println("Display error: " + error);
+    private void errorHandler(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(msg);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.show();
     }
 
     public void setStage(Stage stage){
@@ -189,6 +192,7 @@ public class SettingsController {
             errorHandler("ERROR: checking for changes in settings before closing window");
         }
     }
+
     private boolean changesMade(){
         if(
                 !txtPermMaxWeek.getText().equals(String.format("%d", settings.getMaxWeeklyTally())) ||

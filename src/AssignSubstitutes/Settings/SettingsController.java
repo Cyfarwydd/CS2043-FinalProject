@@ -1,6 +1,6 @@
 package AssignSubstitutes.Settings;
 
-import AssignSubstitutes.classes.Settings;
+import AssignSubstitutes.InputOutput.xmlParser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -23,7 +23,8 @@ public class SettingsController {
 
     private Stage stage;
     private boolean saved;
-    private Settings settings;
+    //private Settings settings;
+    private xmlParser settings;
 
     @FXML
     public void initialize(){
@@ -48,7 +49,6 @@ public class SettingsController {
         //  accordingly.
         settingsMenu.getSelectionModel().selectedItemProperty().addListener((ChangeListener<String>) (observable,
                                                                                                       oldValue, newValue) -> navSelectionChange(observable, oldValue, newValue));
-
         populateSettingsFields();
     }
 
@@ -143,6 +143,11 @@ public class SettingsController {
 
     private void populateSettingsFields(){
         //TODO: get settings from IO and display them
+        settings = new xmlParser("config");
+        txtTmpMaxMnth.setText(Integer.toString(settings.getTempMonthlyMax()));
+        txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
+        txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));
+        txtPermMaxWeek.setText(Integer.toString(settings.getMaxWeeklyTally()));
         System.out.println("populate settings");
     }
 
@@ -187,15 +192,17 @@ public class SettingsController {
     private boolean changesMade(){
         if(
                 !txtPermMaxWeek.getText().equals(String.format("%d", settings.getMaxWeeklyTally())) ||
-                !txtTmpMaxWeek.getText().equals(String.format("%d", settings.getTempMaxWeeklyTally())) ||
+                //!txtTmpMaxWeek.getText().equals(String.format("%d", settings.getTempMaxWeeklyTally())) ||
+                !txtTmpMaxWeek.getText().equals(String.format("%d", settings.getTempWeeklyMax())) ||
                 !txtPermMaxMnth.getText().equals(String.format("%d", settings.getMaxMonthlyTally())) ||
-                !txtPermMaxMnth.getText().equals(String.format("%d", settings.getTempMaxMonthlyTally())) ||
+                !txtTmpMaxMnth.getText().equals(String.format("%d", settings.getTempMonthlyMax()))
+                /*!txtTmpMaxMnth.getText().equals(String.format("%d", settings.getTempMaxMonthlyTally())) ||
                 !txtMasterSchedule.getText().equals(settings.getMasterSchedulePath()) ||
                 !txtCourseCodes.getText().equals(settings.getCourseCodePath()) ||
                 !txtAbsenceList.getText().equals(settings.getAbsenceInputPath()) ||
                 !txtSupplies.getText().equals(settings.getSupplyTeacherPath()) ||
                 !txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath()) ||
-                !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())
+                !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())*/
         ){
             return true;
         }else{
@@ -211,66 +218,77 @@ public class SettingsController {
     }
 
     private void finalizeChanges(){
-        //permanent weekly tally
-        if(
-                !txtPermMaxWeek.getText().isEmpty()
-                && Integer.parseInt(txtPermMaxWeek.getText())!=settings.getMaxWeeklyTally()
-                ){
-            settings.setMaxWeeklyTally(Integer.parseInt(txtPermMaxWeek.getText()));
-        }
-        //temp weekly tally
-        if(
-                !txtTmpMaxWeek.getText().isEmpty() ||
-                Integer.parseInt(txtTmpMaxWeek.getText())!=settings.getTempMaxWeeklyTally()
-                ){
-            if(txtTmpMaxWeek.getText().isEmpty()){
-                settings.setTempMaxWeeklyTally(settings.getMaxWeeklyTally());
-            }else{
-                settings.setTempMaxWeeklyTally(Integer.parseInt(txtTmpMaxWeek.getText()));
+        try {
+            //permanent weekly tally
+            if (
+                    !txtPermMaxWeek.getText().isEmpty()
+                            && Integer.parseInt(txtPermMaxWeek.getText()) != settings.getMaxWeeklyTally()
+                    ) {
+                settings.setMaxWeeklyTally(Integer.parseInt(txtPermMaxWeek.getText()));
             }
-        }
-        //permanent monthly tally
-        if(
-                !txtPermMaxMnth.getText().isEmpty()
-                        && Integer.parseInt(txtPermMaxMnth.getText())!=settings.getMaxMonthlyTally()
-                ){
-            settings.setMaxMonthlyTally(Integer.parseInt(txtPermMaxMnth.getText()));
-        }
-        //temp monthly tally
-        if(
-                !txtPermMaxMnth.getText().isEmpty() ||
-                        Integer.parseInt(txtTmpMaxMnth.getText())!=settings.getTempMaxMonthlyTally()
-                ){
-            if(txtTmpMaxMnth.getText().isEmpty()){
-                settings.setTempMaxMonthlyTally(settings.getMaxMonthlyTally());
-            }else{
-                settings.setTempMaxMonthlyTally(Integer.parseInt(txtTmpMaxMnth.getText()));
+            //temp weekly tally
+            if (
+                    !txtTmpMaxWeek.getText().isEmpty() ||
+                            //Integer.parseInt(txtTmpMaxWeek.getText()) != settings.getTempMaxWeeklyTally()
+                            Integer.parseInt(txtTmpMaxWeek.getText()) != settings.getTempWeeklyMax()
+                    ) {
+                if (txtTmpMaxWeek.getText().isEmpty()) {
+                    //settings.setTempMaxWeeklyTally(settings.getMaxWeeklyTally());
+                    settings.setTempMonthlyMax(settings.getMaxWeeklyTally());
+                } else {
+                    //settings.setTempMaxWeeklyTally(Integer.parseInt(txtTmpMaxWeek.getText()));
+                    settings.setTempWeeklyMax(Integer.parseInt(txtTmpMaxWeek.getText()));
+                }
             }
-        }
-        //master schedule path
-        if(!txtMasterSchedule.getText().isEmpty() && !txtMasterSchedule.getText().equals(settings.getMasterSchedulePath())){
-            settings.setMasterSchedulePath(txtMasterSchedule.getText());
-        }
-        //course codes path
-        if(!txtCourseCodes.getText().isEmpty() && !txtCourseCodes.getText().equals(settings.getCourseCodePath())){
-            settings.setCourseCodePath(txtCourseCodes.getText());
-        }
-        //Absence input path
-        if(!txtAbsenceList.getText().isEmpty() && !txtAbsenceList.getText().equals(settings.getAbsenceInputPath())){
-            settings.setAbsenceInputPath(txtAbsenceList.getText());
-        }
-        //Supply input path
-        if(!txtSupplies.getText().isEmpty() && !txtSupplies.getText().equals(settings.getSupplyTeacherPath())){
-            settings.setSupplyTeacherPath(txtSupplies.getText());
-        }
-        //on-caller form output dir
-        if(!txtOnCallerDir.getText().isEmpty() && !txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath())){
-            settings.setOnCallerFormDirPath(txtOnCallerDir.getText());
-        }
-        //on-caller form name format
-        if(!txtFormatOut.getText().isEmpty() && !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())){
-            settings.setOnCallerFormFileNameFormat(txtFormatOut.getText());
-        }
+            //permanent monthly tally
+            if (
+                    !txtPermMaxMnth.getText().isEmpty()
+                            && Integer.parseInt(txtPermMaxMnth.getText()) != settings.getMaxMonthlyTally()
+                    ) {
+                settings.setMaxMonthlyTally(Integer.parseInt(txtPermMaxMnth.getText()));
+            }
+            //temp monthly tally
+            if (
+                    !txtPermMaxMnth.getText().isEmpty() ||
+                            Integer.parseInt(txtTmpMaxMnth.getText()) != settings.getTempMonthlyMax()
+                    ) {
+                if (txtTmpMaxMnth.getText().isEmpty()) {
+                    //settings.setTempMaxMonthlyTally(settings.getMaxMonthlyTally());
+                    settings.setTempMonthlyMax(settings.getMaxMonthlyTally());
+                } else {
+                    //settings.setTempMaxMonthlyTally(Integer.parseInt(txtTmpMaxMnth.getText()));
+                    settings.setTempMonthlyMax(Integer.parseInt(txtTmpMaxMnth.getText()));
+                }
+            }
+            //master schedule path
+            /*if(!txtMasterSchedule.getText().isEmpty() && !txtMasterSchedule.getText().equals(settings
+                    .getMasterSchedulePath())){
+                settings.setMasterSchedulePath(txtMasterSchedule.getText());
+            }
+            //course codes path
+            if(!txtCourseCodes.getText().isEmpty() && !txtCourseCodes.getText().equals(settings.getCourseCodePath())){
+                settings.setCourseCodePath(txtCourseCodes.getText());
+            }
+            //Absence input path
+            if(!txtAbsenceList.getText().isEmpty() && !txtAbsenceList.getText().equals(settings.getAbsenceInputPath())){
+                settings.setAbsenceInputPath(txtAbsenceList.getText());
+            }
+            //Supply input path
+            if(!txtSupplies.getText().isEmpty() && !txtSupplies.getText().equals(settings.getSupplyTeacherPath())){
+                settings.setSupplyTeacherPath(txtSupplies.getText());
+            }
+            //on-caller form output dir
+            if(!txtOnCallerDir.getText().isEmpty() && !txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath())){
+                settings.setOnCallerFormDirPath(txtOnCallerDir.getText());
+            }
+            //on-caller form name format
+            if(!txtFormatOut.getText().isEmpty() && !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())){
+                settings.setOnCallerFormFileNameFormat(txtFormatOut.getText());
+            }*/
         //TODO:Add reset date to settings UI
+        }catch(Exception e){
+            errorHandler("ERROR: There was a problem writing settings to config file");
+        }
+
     }
 }

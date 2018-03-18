@@ -2,6 +2,8 @@
 	<onCalls>
 		<weeklyMax>2</weeklyMax>
 		<monthlyMax>4</monthlyMax>
+		<tempWeeklyMax>2</tempWeeklyMax>
+		<tempMonthlyMax>4</tempMonthlyMax>
 	</onCalls>
 	<filePaths>
 		<input>

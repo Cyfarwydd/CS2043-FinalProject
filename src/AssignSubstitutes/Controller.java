@@ -28,6 +28,7 @@ public class Controller {
     private ArrayList<Teacher> abscences;
     private ArrayList<Teacher> supplies;
     private ArrayList<LocalDate> generated;
+    private boolean noNagRestore, noNagSaveWithEmptyAssignments;
     @FXML private TableView<Assignment> tblAssignments;
     @FXML private TableColumn<Assignment, String> colAssignAbsent, colDeleteAssignment;
     @FXML private TableColumn<Assignment, Teacher> colAssignSub;
@@ -42,6 +43,9 @@ public class Controller {
         generated = new ArrayList<>();
 
         osTeachers = ThePointlessClassIMade.getTeachers();
+        //TODO: get Absentees and Supplies
+
+        //TODO: get noNag booleans from settings
 
         btnSave.setVisible(false);
         btnRestore.setVisible(false);
@@ -98,13 +102,20 @@ public class Controller {
             currentUnsavedAssignments.add(new Assignment(a.getAbsentee(), a.getSubstitute(), a.getPeriod()));
         }
         tblAssignments.getItems().setAll(currentUnsavedAssignments);
+        //TODO: remove restore--it is redundant and re-generating will get the same result.
+        //TODO: add check to generate to see if it has already been generated.
     }
 
     @FXML
     private void clickSave(){
         LocalDate date = datePicker.getValue();
         ObservableList<Assignment> tblItems = tblAssignments.getItems();
+        //check for empty assignments
+        if(tblItems.stream().anyMatch(a-> a.getAbsentee().getName().isEmpty())){
+            //TODO: pop up a dialog asking if user is sure they want to save assignments with no substitute
+        }
         assignments.put(date, new ArrayList<>(tblItems));
+        //TODO: call IO to write assignments to file.
     }
 
     @FXML

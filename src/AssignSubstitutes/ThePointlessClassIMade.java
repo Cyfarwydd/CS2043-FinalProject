@@ -1,18 +1,18 @@
 package AssignSubstitutes;
 
+import AssignSubstitutes.InputOutput.xmlParser;
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.Period;
 import AssignSubstitutes.classes.Teacher;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ThePointlessClassIMade {
@@ -50,49 +50,106 @@ public class ThePointlessClassIMade {
     //For test use until IO is available
     //creates teachers and period objects
     public static ArrayList<OnStaffTeacher> getTeachers(){
+        Random random = new Random(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
         ArrayList<OnStaffTeacher> osTeachers=new ArrayList<>();
         Period[] periods=new Period[4];
         periods[0]=new Period(null, null, 1, 100, false);
         periods[1]=new Period(null, null, 2, 100, false);
         periods[2]=new Period(null, null, 4, 100, false);
         periods[3]=new Period(null, null, 5, 100, false);
-        osTeachers.add(new OnStaffTeacher("Dawn MacIsaac", periods, null));
+        OnStaffTeacher teacher = new OnStaffTeacher("Dawn MacIsaac", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         periods=new Period[4];
         periods[0]=new Period(null, null, 1, 100, false);
         periods[1]=new Period(null, null, 2, 100, false);
         periods[2]=new Period(null, null, 4, 100, false);
         periods[3]=new Period(null, null, 5, 100, false);
-        osTeachers.add(new OnStaffTeacher("Jimmy Mac", periods, null));
+        teacher = new OnStaffTeacher("Jimmy Mac", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         periods=new Period[4];
         periods[0]=new Period(null, null, 1, 100, true);
         periods[1]=new Period(null, null, 2, 100, true);
         periods[2]=new Period(null, null, 4, 100, true);
         periods[3]=new Period(null, null, 5, 100, true);
-        osTeachers.add(new OnStaffTeacher("Johnny Mnemonic", periods, null));
+        teacher = new OnStaffTeacher("Johnny Mnemonic", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         periods=new Period[4];
         periods[0]=new Period(null, null, 2, 100, false);
         periods[1]=new Period(null, null, 3, 100, false);
         periods[2]=new Period(null, null, 4, 100, false);
         periods[3]=new Period(null, null, 5, 100, false);
-        osTeachers.add(new OnStaffTeacher("Jane Doe", periods, null));
+        teacher = new OnStaffTeacher("Jane Doe", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         periods=new Period[4];
         periods[0]=new Period(null, null, 2, 100, false);
         periods[1]=new Period(null, null, 3, 100, false);
         periods[2]=new Period(null, null, 4, 100, false);
         periods[3]=new Period(null, null, 5, 100, false);
-        osTeachers.add(new OnStaffTeacher("John Doe", periods, null));
+        teacher = new OnStaffTeacher("John Doe", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         periods=new Period[4];
         periods[0]=new Period(null, null, 2, 100, false);
         periods[1]=new Period(null, null, 3, 100, false);
         periods[2]=new Period(null, null, 4, 100, false);
         periods[3]=new Period(null, null, 5, 100, false);
-        osTeachers.add(new OnStaffTeacher("Stephen Cormier", periods, null));
+        teacher = new OnStaffTeacher("Stephen Cormier", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         periods=new Period[4];
         periods[0]=new Period(null, null, 2, 100, true);
         periods[1]=new Period(null, null, 3, 100, true);
         periods[2]=new Period(null, null, 4, 100, true);
         periods[3]=new Period(null, null, 5, 100, true);
-        osTeachers.add(new OnStaffTeacher("Trish Knockwood", periods, null));
+        teacher = new OnStaffTeacher("Trish Knockwood", periods, null);
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementTally();
+            teacher.incrementMonthlyTally();
+        }
+        for(int i=0; i < random.nextInt(3); i++){
+            teacher.incrementMonthlyTally();
+        }
+        osTeachers.add(teacher);
         return osTeachers;
     }
 
@@ -190,6 +247,43 @@ public class ThePointlessClassIMade {
             System.out.println();
         }
         return notAbsent;
+    }
+    //For test use until InformationHandle is available
+    //gets a list of available teachers for a given period
+    public static ObservableList<ArrayList<String>> getAvailabilityByPeriod(Collection<OnStaffTeacher> fullTeacherList){
+        ObservableList<ArrayList<String>> periods= FXCollections.observableArrayList();
+        xmlParser settings = new xmlParser("./config");
+        int maxMonthly = settings.getTempMonthlyMax();
+        int maxWeekly = settings.getTempWeeklyMax();
+        for(int i = 0; i<5; i++) {
+            ArrayList<String> period = new ArrayList();
+            int periodNumber = i+1;
+            String periodStr = "Period ";
+            switch(i){
+                case 0:
+                case 1:
+                    period.add(new String(periodStr+periodNumber));
+                    break;
+                case 2:
+                    period.add(new String(periodStr+periodNumber+"A"));
+                    break;
+                case 3:
+                    period.add(new String(periodStr+i+"B"));
+                    break;
+                case 4:
+                    period.add(new String(periodStr+i));
+                    break;
+            }
+            List<OnStaffTeacher> noneThisPeriod = fullTeacherList.stream().filter(
+                    teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(p -> p.getPeriodNumber()
+                            == periodNumber)
+            ).collect(Collectors.toList());
+
+            period.add(Long.toString(noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).count()));
+            period.add(Long.toString(noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxMonthly).count()));
+            periods.add(period);
+        }
+        return periods;
     }
     //For test use until IO is available
     //creates teachers and period objects

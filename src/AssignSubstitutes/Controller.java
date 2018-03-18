@@ -40,8 +40,8 @@ public class Controller {
     @FXML private TableView<OnStaffTeacher> tblCoverage;
     @FXML private TableColumn<OnStaffTeacher, String> colCovTeacher;
     @FXML private TableColumn<OnStaffTeacher, Integer> colCovWeek, colCovMonth, colCovTotal;
-    @FXML private TableView<ArrayList<String>> tblAvailability;
-    @FXML private TableColumn<ArrayList<String>, String> colAvailPeriod, colAvailWeek, colAvailMonth;
+    @FXML private TableView<ArrayList<Object>> tblAvailability;
+    @FXML private TableColumn<ArrayList<Object>, String> colAvailPeriod, colAvailWeek, colAvailMonth, colAvailWeekTeachers, colAvailMonthTeachers;
     @FXML private DatePicker datePicker;
     @FXML private Button btnGenerate, btnSave;
 
@@ -64,11 +64,15 @@ public class Controller {
         buildCoverageTable();
         tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
         buildAvailabilityTable();
-        ObservableList<ArrayList<String>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityByPeriod(osTeachers);
-        for(ArrayList<String> o : availabilityByPeriod){
+        try {
+            ObservableList<ArrayList<Object>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityStats(osTeachers);
+        /*for(ArrayList<String> o : availabilityByPeriod){
             System.out.println(o.get(0)+"\t"+o.get(1)+"\t"+o.get(2));
+        }*/
+            tblAvailability.setItems(availabilityByPeriod);
+        }catch(Exception e){
+            errorHandler(e.getMessage());
         }
-        tblAvailability.setItems(availabilityByPeriod);
     }
 
     @FXML
@@ -280,12 +284,85 @@ public class Controller {
         colCovTotal.setCellValueFactory(new PropertyValueFactory<>("totalTally"));
     }
 
-    private void buildAvailabilityTable() {
+    /*private void buildAvailabilityTable() {
         colAvailPeriod.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(0)));
 
         colAvailWeek.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(1)));
 
         colAvailMonth.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(2)));
+    }*/
+
+    private void buildAvailabilityTable() {
+        colAvailPeriod.setCellValueFactory(arrayList -> new SimpleObjectProperty<>((String)arrayList.getValue().get(0)));
+
+        colAvailWeek.setCellValueFactory(arrayList -> {
+            List<OnStaffTeacher> teacherList = (List<OnStaffTeacher>)(arrayList.getValue().get(1));
+            String size = Integer.toString(teacherList.size()-1);
+            return new SimpleObjectProperty<>(size);
+        });
+
+        //colAvailWeek.setCellValueFactory(arrayList -> new SimpleObjectProperty<>(Integer.toString((List<OnStaffTeacher>)(arrayList.getValue().get(1)))));
+
+        colAvailWeekTeachers.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<ArrayList<Object>, String> call(final TableColumn<ArrayList<Object>, String> param) {
+
+                final TableCell<ArrayList<Object>, String> cell = new
+                        TableCell<>() {
+
+                    final ComboBox<OnStaffTeacher> comboBox = new ComboBox();
+
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(1);
+                            comboBox.setItems(FXCollections.observableArrayList(teachers));
+                            setGraphic(comboBox);
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+        //colAvailMonth.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(2)));
+
+        colAvailMonth.setCellValueFactory(arrayList -> {
+            List<OnStaffTeacher> teacherList = (List<OnStaffTeacher>)(arrayList.getValue().get(2));
+            String size = Integer.toString(teacherList.size()-1);
+            return new SimpleObjectProperty<>(size);
+        });
+
+        colAvailMonthTeachers.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<ArrayList<Object>, String> call(final TableColumn<ArrayList<Object>, String> param) {
+
+                final TableCell<ArrayList<Object>, String> cell = new
+                        TableCell<>() {
+
+                            final ComboBox<OnStaffTeacher> comboBox = new ComboBox();
+
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(2);
+                                    comboBox.setItems(FXCollections.observableArrayList(teachers));
+                                    setGraphic(comboBox);
+                                    setText(null);
+                                }
+                            }
+                        };
+                return cell;
+            }
+        });
     }
 
     private static Alert createConfirmAlertWithOptOut(String title, String headerText,

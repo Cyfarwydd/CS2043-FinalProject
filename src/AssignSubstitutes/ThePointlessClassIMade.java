@@ -1,10 +1,7 @@
 package AssignSubstitutes;
 
 import AssignSubstitutes.InputOutput.xmlParser;
-import AssignSubstitutes.classes.Assignment;
-import AssignSubstitutes.classes.OnStaffTeacher;
-import AssignSubstitutes.classes.Period;
-import AssignSubstitutes.classes.Teacher;
+import AssignSubstitutes.classes.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -152,8 +149,8 @@ public class ThePointlessClassIMade {
         osTeachers.add(teacher);
         return osTeachers;
     }
-    public static ArrayList<Teacher> getAbsences(ArrayList<OnStaffTeacher> osTeachers){
-        ArrayList<Teacher> absences = new ArrayList<Teacher>();
+    public static ArrayList<OnStaffTeacher> getAbsences(ArrayList<OnStaffTeacher> osTeachers){
+        ArrayList<OnStaffTeacher> absences = new ArrayList<OnStaffTeacher>();
         for(int i = 0; i < 4; i++) {
             double rand = Math.random() * 10;
             int r = (int) rand;
@@ -161,7 +158,7 @@ public class ThePointlessClassIMade {
                 i--;
                 continue;
             }
-            Teacher t = osTeachers.get(r);
+            OnStaffTeacher t = osTeachers.get(r);
             absences.add(t);
         }
         return absences;
@@ -170,11 +167,11 @@ public class ThePointlessClassIMade {
     public static ArrayList<Teacher> getSupplies(){
         ArrayList<Teacher> supplies = new ArrayList<Teacher>();
         Period p[] = new Period[4];
-        supplies.add(new Teacher("Jane Foster", p, "Math"));
+        supplies.add(new Supply("Jane Foster", p, "Math"));
         p = new Period[4];
-        supplies.add(new Teacher("Jane Fondant", p, "Eng"));
+        supplies.add(new Supply("Jane Fondant", p, "Eng"));
         p = new Period[4];
-        supplies.add(new Teacher("Mark Zuckerberg", p, "Sci"));
+        supplies.add(new Supply("Mark Zuckerberg", p, "Sci"));
         return supplies;
     }
 
@@ -262,7 +259,7 @@ public class ThePointlessClassIMade {
         Period[] schedule = {new Period(null, null, periodNumber, 0, false), new Period
                 (null, null, periodNumber, 0, false), new Period(null, null, periodNumber, 0, false), new
                 Period(null, null, periodNumber, 0, false)};
-        Teacher nullTeacher=new Teacher(null, null, null);
+        Teacher nullTeacher=new Supply(null, null, null);
         notAbsent.add(0, nullTeacher);
         for(Teacher t: notAbsent) {
             System.out.print(t + " ");

@@ -280,7 +280,6 @@ public class ThePointlessClassIMade {
         xmlParser settings = new xmlParser("./config");
         int maxMonthly = settings.getTempMonthlyMax();
         int maxWeekly = settings.getTempWeeklyMax();
-        OnStaffTeacher emptyTeacher = new OnStaffTeacher("",null,null);
         for(int i = 0; i<5; i++) {
             ArrayList<Object> period = new ArrayList();
             int periodNumber = i+1;
@@ -308,13 +307,18 @@ public class ThePointlessClassIMade {
                             == periodNumber)
             ).collect(Collectors.toList());
 
-            List<OnStaffTeacher> teachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
-            teachers.add(0, emptyTeacher);
-            period.add(teachers);
+            List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
+            List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
 
-            teachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
-            teachers.add(0, emptyTeacher);
-            period.add(teachers);
+            int size = weekTeachers.size();
+            OnStaffTeacher weekAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);
+            weekTeachers.add(0, weekAvailTeacher);
+            period.add(weekTeachers);
+
+            size = monthTeachers.size();
+            OnStaffTeacher monthAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);
+            monthTeachers.add(0, monthAvailTeacher);
+            period.add(monthTeachers);
 
             periods.add(period);
         }

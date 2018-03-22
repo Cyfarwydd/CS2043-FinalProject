@@ -40,8 +40,8 @@ public class Controller {
     @FXML private TableView<OnStaffTeacher> tblCoverage;
     @FXML private TableColumn<OnStaffTeacher, String> colCovTeacher;
     @FXML private TableColumn<OnStaffTeacher, Integer> colCovWeek, colCovMonth, colCovTotal;
-    @FXML private TableView<ArrayList<String>> tblAvailability;
-    @FXML private TableColumn<ArrayList<String>, String> colAvailPeriod, colAvailWeek, colAvailMonth;
+    @FXML private TableView<ArrayList<Object>> tblAvailability;
+    @FXML private TableColumn<ArrayList<Object>, String> colAvailPeriod, colAvailWeek, colAvailMonth, colAvailWeekTeachers, colAvailMonthTeachers;
     @FXML private DatePicker datePicker;
     @FXML private Button btnGenerate, btnSave;
 
@@ -64,11 +64,12 @@ public class Controller {
         buildCoverageTable();
         tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
         buildAvailabilityTable();
-        ObservableList<ArrayList<String>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityByPeriod(osTeachers);
-        for(ArrayList<String> o : availabilityByPeriod){
-            System.out.println(o.get(0)+"\t"+o.get(1)+"\t"+o.get(2));
+        try {
+            ObservableList<ArrayList<Object>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityStats(osTeachers);
+            tblAvailability.setItems(availabilityByPeriod);
+        }catch(Exception e){
+            errorHandler(e.getMessage());
         }
-        tblAvailability.setItems(availabilityByPeriod);
     }
 
     @FXML
@@ -205,6 +206,7 @@ public class Controller {
             }
         });
 
+        //TODO: Make combobox always visible
         colAssignSub.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, Teacher>,
                 ObservableValue<Teacher>>() {
             @Override
@@ -281,11 +283,63 @@ public class Controller {
     }
 
     private void buildAvailabilityTable() {
-        colAvailPeriod.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(0)));
+        colAvailPeriod.setCellValueFactory(arrayList -> new SimpleObjectProperty<>((String)arrayList.getValue().get(0)));
 
-        colAvailWeek.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(1)));
+        colAvailWeek.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<ArrayList<Object>, String> call(final TableColumn<ArrayList<Object>, String> param) {
 
-        colAvailMonth.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(2)));
+                final TableCell<ArrayList<Object>, String> cell = new
+                        TableCell<>() {
+
+                    final ComboBox<OnStaffTeacher> comboBox = new ComboBox();
+
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(1);
+                            comboBox.setItems(FXCollections.observableArrayList(teachers));
+                            comboBox.getSelectionModel().selectFirst();
+                            setGraphic(comboBox);
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
+        colAvailMonth.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<ArrayList<Object>, String> call(final TableColumn<ArrayList<Object>, String> param) {
+
+                final TableCell<ArrayList<Object>, String> cell = new
+                        TableCell<>() {
+
+                            final ComboBox<OnStaffTeacher> comboBox = new ComboBox();
+
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(2);
+                                    comboBox.setItems(FXCollections.observableArrayList(teachers));
+                                    comboBox.getSelectionModel().selectFirst();
+                                    setGraphic(comboBox);
+                                    setText(null);
+                                }
+                            }
+                        };
+                return cell;
+            }
+        });
     }
 
     private static Alert createConfirmAlertWithOptOut(String title, String headerText,

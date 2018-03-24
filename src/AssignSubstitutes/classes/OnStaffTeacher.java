@@ -16,9 +16,13 @@ public class OnStaffTeacher extends Teacher{
 	public void incrementTally(){
 		replacementsThisWeek++;
 		totalTally++;
-	}
-	public void incrementMonthlyTally(){
 		replacementsThisMonth++;
+	}
+	public void resetMonthlyTally(){
+		replacementsThisMonth=0;
+	}
+	public void resetWeeklyTally(){
+		replacementsThisWeek=0;
 	}
 	public String getName(){return name;}
 	public String getTeachable(){return teachable;}

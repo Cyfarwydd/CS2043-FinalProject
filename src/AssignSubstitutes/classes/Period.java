@@ -18,4 +18,21 @@ public class Period{
 	public int getRoomNumber(){return roomNumber;}
 	public int getPeriodNumber(){return periodNumber;}
 	public boolean Absent(){return absent;}
+	public String getPeriodString(){
+		//returns empty string if error
+		String periodNum = "";
+		switch(periodNumber){
+			case 1:	periodNum += 1;
+				break;
+			case 2: periodNum += 2;
+				break;
+			case 3: periodNum += "3a";
+				break;
+			case 4:	periodNum += "3b";
+				break;
+			case 5: periodNum += "4";
+			break;
+		}
+		return periodNum;
+	}
 }

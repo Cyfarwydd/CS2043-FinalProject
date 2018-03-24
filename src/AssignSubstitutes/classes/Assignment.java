@@ -9,6 +9,9 @@ public class Assignment{
 		substitute=substituteIn;
 		period=periodIn;
 	}
+	public Assignment(){
+
+	}
 	public OnStaffTeacher getAbsentee(){return absentee;}
 	public Teacher getSubstitute(){return substitute;}
 	public Period getPeriod(){return period;}

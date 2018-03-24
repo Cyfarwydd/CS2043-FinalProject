@@ -1,11 +1,17 @@
 package AssignSubstitutes.classes;
 
 public class OnStaffTeacher extends Teacher{
-	int replacementsThisWeek=0;
-	int replacementsThisMonth=0;
-	int totalTally=0;
-	public OnStaffTeacher(String name, Period[] schedule, String teachable){
-		super(name, schedule, teachable);
+	private int replacementsThisWeek=0;
+	private int replacementsThisMonth=0;
+	private int totalTally=0;
+	private String name;
+	private Period[] schedule;
+	private String teachable;
+	public OnStaffTeacher(String nameIn, Period[] scheduleIn, String teachableIn){
+		super();
+		name=nameIn;
+		schedule=scheduleIn;
+		teachable=teachableIn;
 	}
 	public void incrementTally(){
 		replacementsThisWeek++;
@@ -13,8 +19,11 @@ public class OnStaffTeacher extends Teacher{
 	}
 	public void incrementMonthlyTally(){
 		replacementsThisMonth++;
-		totalTally++;
 	}
+	public String getName(){return name;}
+	public String getTeachable(){return teachable;}
+	public Period[] getSchedule(){return schedule;}
+	public String toString(){return name;}
 	public int getWeeklyTally(){return replacementsThisWeek;}
 	public int getMonthlyTally(){return replacementsThisMonth;}
 	public int getTotalTally(){return totalTally;}

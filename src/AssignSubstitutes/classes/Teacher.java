@@ -5,5 +5,4 @@ abstract class Teacher{
 	abstract public String getTeachable();
 	abstract public Period[] getSchedule();
 	abstract public String toString();
-
 }

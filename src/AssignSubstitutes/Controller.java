@@ -29,7 +29,7 @@ public class Controller {
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
-    private ArrayList<Teacher> abscences;
+    private ArrayList<OnStaffTeacher> abscences;
     private ArrayList<Teacher> supplies;
     private ArrayList<LocalDate> generated;
     private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges;
@@ -53,7 +53,8 @@ public class Controller {
 
         osTeachers = ThePointlessClassIMade.getTeachers();
         //TODO: get Absentees and Supplies
-
+        supplies = ThePointlessClassIMade.getSupplies();
+        abscences = ThePointlessClassIMade.getAbsences(osTeachers);
         //TODO: get noNag booleans from settings
 
         btnSave.setVisible(false);
@@ -124,7 +125,7 @@ public class Controller {
                 }
             }
         }
-        currentAssignments = ThePointlessClassIMade.getAssignmentsFacsimile(osTeachers);
+        currentAssignments = InformationHandle.generateAssignments(osTeachers, supplies, abscences);
         assignments.put(date, currentAssignments);
         currentUnsavedAssignments = new ArrayList<>();
         unsavedAssignments.put(date, currentUnsavedAssignments);

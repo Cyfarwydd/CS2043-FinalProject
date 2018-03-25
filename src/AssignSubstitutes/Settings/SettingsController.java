@@ -20,6 +20,7 @@ public class SettingsController {
     @FXML private AnchorPane[] panels;
     @FXML private TextField txtMasterSchedule, txtAbsenceList, txtCourseCodes, txtSupplies, txtOnCallerDir,
             txtFormatOut, txtTmpMaxWeek, txtTmpMaxMnth, txtPermMaxWeek, txtPermMaxMnth;
+    //TODO: add noNags checkboxes in panelSave
 
     private Stage stage;
     private boolean saved;
@@ -212,7 +213,6 @@ public class SettingsController {
         }else{
             return false;
         }
-        //TODO:Add reset date to settings UI
     }
 
     private void removeUnwantedCharacters(TextField target, String charactersToRemove){
@@ -289,7 +289,6 @@ public class SettingsController {
             if(!txtFormatOut.getText().isEmpty() && !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())){
                 settings.setOnCallerFormFileNameFormat(txtFormatOut.getText());
             }*/
-        //TODO:Add reset date to settings UI
         }catch(Exception e){
             errorHandler("ERROR: There was a problem writing settings to config file");
         }

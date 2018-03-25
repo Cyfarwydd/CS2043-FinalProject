@@ -305,6 +305,7 @@ public class Controller {
                             comboBox.setItems(FXCollections.observableArrayList(teachers));
                             comboBox.getSelectionModel().selectFirst();
                             setGraphic(comboBox);
+                            //TODO: on select, selectFirst
                             setText(null);
                         }
                     }

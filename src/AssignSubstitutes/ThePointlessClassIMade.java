@@ -1,6 +1,6 @@
 package AssignSubstitutes;
 
-import AssignSubstitutes.InputOutput.xmlParser;
+import AssignSubstitutes.InputOutput.XMLParser;
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.Period;
@@ -277,7 +277,7 @@ public class ThePointlessClassIMade {
     //gets a list of available teachers for a given period
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
         ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
-        xmlParser settings = new xmlParser("./config");
+        XMLParser settings = new XMLParser("./config");
         int maxMonthly = settings.getTempMonthlyMax();
         int maxWeekly = settings.getTempWeeklyMax();
         for(int i = 0; i<5; i++) {

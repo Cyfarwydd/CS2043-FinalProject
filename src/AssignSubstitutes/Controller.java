@@ -67,9 +67,6 @@ public class Controller {
         buildAvailabilityTable();
         try {
             ObservableList<ArrayList<Object>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityStats(osTeachers);
-        /*for(ArrayList<String> o : availabilityByPeriod){
-            System.out.println(o.get(0)+"\t"+o.get(1)+"\t"+o.get(2));
-        }*/
             tblAvailability.setItems(availabilityByPeriod);
         }catch(Exception e){
             errorHandler(e.getMessage());
@@ -210,6 +207,7 @@ public class Controller {
             }
         });
 
+        //TODO: Make combobox always visible
         colAssignSub.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, Teacher>,
                 ObservableValue<Teacher>>() {
             @Override
@@ -285,26 +283,10 @@ public class Controller {
         colCovTotal.setCellValueFactory(new PropertyValueFactory<>("totalTally"));
     }
 
-    /*private void buildAvailabilityTable() {
-        colAvailPeriod.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(0)));
-
-        colAvailWeek.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(1)));
-
-        colAvailMonth.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(2)));
-    }*/
-
     private void buildAvailabilityTable() {
         colAvailPeriod.setCellValueFactory(arrayList -> new SimpleObjectProperty<>((String)arrayList.getValue().get(0)));
 
-        colAvailWeek.setCellValueFactory(arrayList -> {
-            List<OnStaffTeacher> teacherList = (List<OnStaffTeacher>)(arrayList.getValue().get(1));
-            String size = Integer.toString(teacherList.size()-1);
-            return new SimpleObjectProperty<>(size);
-        });
-
-        //colAvailWeek.setCellValueFactory(arrayList -> new SimpleObjectProperty<>(Integer.toString((List<OnStaffTeacher>)(arrayList.getValue().get(1)))));
-
-        colAvailWeekTeachers.setCellFactory(new Callback<>() {
+        colAvailWeek.setCellFactory(new Callback<>() {
             @Override
             public TableCell<ArrayList<Object>, String> call(final TableColumn<ArrayList<Object>, String> param) {
 
@@ -322,6 +304,7 @@ public class Controller {
                         } else {
                             List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(1);
                             comboBox.setItems(FXCollections.observableArrayList(teachers));
+                            comboBox.getSelectionModel().selectFirst();
                             setGraphic(comboBox);
                             setText(null);
                         }
@@ -330,15 +313,8 @@ public class Controller {
                 return cell;
             }
         });
-        //colAvailMonth.setCellValueFactory(assignment -> new SimpleObjectProperty<>(assignment.getValue().get(2)));
 
-        colAvailMonth.setCellValueFactory(arrayList -> {
-            List<OnStaffTeacher> teacherList = (List<OnStaffTeacher>)(arrayList.getValue().get(2));
-            String size = Integer.toString(teacherList.size()-1);
-            return new SimpleObjectProperty<>(size);
-        });
-
-        colAvailMonthTeachers.setCellFactory(new Callback<>() {
+        colAvailMonth.setCellFactory(new Callback<>() {
             @Override
             public TableCell<ArrayList<Object>, String> call(final TableColumn<ArrayList<Object>, String> param) {
 
@@ -356,6 +332,7 @@ public class Controller {
                                 } else {
                                     List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(2);
                                     comboBox.setItems(FXCollections.observableArrayList(teachers));
+                                    comboBox.getSelectionModel().selectFirst();
                                     setGraphic(comboBox);
                                     setText(null);
                                 }

@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 
-public class xmlParser {
+public class XMLParser {
 
     private String masterResetDate;
     private Integer maxWeeklyTally;
@@ -27,7 +27,7 @@ public class xmlParser {
     private Integer defaultCoverageView;
     private String filepath;
 
-    public xmlParser(String filepath) {
+    public XMLParser(String filepath) {
         Document doc = null;
 
         try

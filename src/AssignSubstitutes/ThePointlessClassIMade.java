@@ -1,7 +1,11 @@
 package AssignSubstitutes;
 
-import AssignSubstitutes.InputOutput.xmlParser;
-import AssignSubstitutes.classes.*;
+
+import AssignSubstitutes.InputOutput.XMLParser;
+import AssignSubstitutes.classes.Assignment;
+import AssignSubstitutes.classes.OnStaffTeacher;
+import AssignSubstitutes.classes.Period;
+import AssignSubstitutes.classes.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -295,10 +299,9 @@ public class ThePointlessClassIMade {
     //gets a list of available teachers for a given period
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
         ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
-        xmlParser settings = new xmlParser("./config");
+        XMLParser settings = new XMLParser("./config");
         int maxMonthly = settings.getTempMonthlyMax();
         int maxWeekly = settings.getTempWeeklyMax();
-        OnStaffTeacher emptyTeacher = new OnStaffTeacher("",null,null);
         for(int i = 0; i<5; i++) {
             ArrayList<Object> period = new ArrayList();
             int periodNumber = i+1;
@@ -326,13 +329,18 @@ public class ThePointlessClassIMade {
                             == periodNumber)
             ).collect(Collectors.toList());
 
-            List<OnStaffTeacher> teachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
-            teachers.add(0, emptyTeacher);
-            period.add(teachers);
+            List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
+            List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
 
-            teachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
-            teachers.add(0, emptyTeacher);
-            period.add(teachers);
+            int size = weekTeachers.size();
+            OnStaffTeacher weekAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);
+            weekTeachers.add(0, weekAvailTeacher);
+            period.add(weekTeachers);
+
+            size = monthTeachers.size();
+            OnStaffTeacher monthAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);
+            monthTeachers.add(0, monthAvailTeacher);
+            period.add(monthTeachers);
 
             periods.add(period);
         }

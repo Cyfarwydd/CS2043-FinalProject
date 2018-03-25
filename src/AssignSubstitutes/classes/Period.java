@@ -13,6 +13,9 @@ public class Period{
 		roomNumber=roomNumberIn;
 		absent=isAbsent;
 	}
+	public void toggleAbsence(boolean toggle){
+		absent=toggle;
+	}
 	public String getCourse(){return course;}
 	public String getTeachable(){return teachable;}
 	public int getRoomNumber(){return roomNumber;}

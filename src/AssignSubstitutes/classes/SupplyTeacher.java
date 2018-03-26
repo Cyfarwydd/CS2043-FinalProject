@@ -14,4 +14,11 @@ public class SupplyTeacher extends Teacher{
     public String getTeachable(){return teachable;}
     public Period[] getSchedule(){return schedule;}
     public String toString(){return name;}
+    public boolean checkForSpare(Period p){
+        boolean isFree = false;
+        if(p.getPeriodNumber() == schedule[p.getPeriodNumber()-1].getPeriodNumber() && schedule[p.getPeriodNumber()-1].getCourse() == null){
+            isFree = true;
+        }
+        return isFree;
+    }
 }

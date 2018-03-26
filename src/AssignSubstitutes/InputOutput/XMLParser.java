@@ -27,7 +27,7 @@ public class XMLParser {
     private Integer defaultCoverageView;
     private String filepath;
 
-    public xmlParser(String filepath) {
+    public XMLParser(String filepath) {
         Document doc = null;
 
         try

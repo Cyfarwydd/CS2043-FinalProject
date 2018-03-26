@@ -3,6 +3,7 @@ package AssignSubstitutes;
 import AssignSubstitutes.Settings.SettingsController;
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
+import AssignSubstitutes.classes.SupplyTeacher;
 import AssignSubstitutes.classes.Teacher;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -29,13 +30,13 @@ public class Controller {
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
-    private ArrayList<Teacher> abscences;
-    private ArrayList<Teacher> supplies;
+    private ArrayList<OnStaffTeacher> abscences;
+    private ArrayList<SupplyTeacher> supplies;
     private ArrayList<LocalDate> generated;
     private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges;
     @FXML private TableView<Assignment> tblAssignments;
     @FXML private TableColumn<Assignment, String> colAssignAbsent, colAssignDelete;
-    @FXML private TableColumn<Assignment, Teacher> colAssignSub;
+    @FXML private TableColumn<Assignment, SupplyTeacher> colAssignSub;
     @FXML private TableColumn<Assignment, Integer> colAssignPeriod;
     @FXML private TableView<OnStaffTeacher> tblCoverage;
     @FXML private TableColumn<OnStaffTeacher, String> colCovTeacher;
@@ -53,7 +54,8 @@ public class Controller {
 
         osTeachers = ThePointlessClassIMade.getTeachers();
         //TODO: get Absentees and Supplies
-
+        supplies = ThePointlessClassIMade.getSupplies();
+        abscences = ThePointlessClassIMade.getAbsences(osTeachers);
         //TODO: get noNag booleans from settings
 
         btnSave.setVisible(false);
@@ -124,7 +126,7 @@ public class Controller {
                 }
             }
         }
-        currentAssignments = ThePointlessClassIMade.getAssignmentsFacsimile(osTeachers);
+        currentAssignments = InformationHandle.generateAssignments(osTeachers, supplies, abscences);
         assignments.put(date, currentAssignments);
         currentUnsavedAssignments = new ArrayList<>();
         unsavedAssignments.put(date, currentUnsavedAssignments);
@@ -207,7 +209,7 @@ public class Controller {
         });
 
         //TODO: Make combobox always visible
-        colAssignSub.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, Teacher>,
+        colAssignSub.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, SupplyTeacher>,
                 ObservableValue<Teacher>>() {
             @Override
             public ObservableValue<Teacher> call(TableColumn.CellDataFeatures<Assignment, Teacher> param) {
@@ -215,7 +217,7 @@ public class Controller {
             }
         });
 
-        colAssignSub.setCellFactory(t -> new ComboBoxTableCell<Assignment, Teacher>(FXCollections.observableArrayList()) {
+        colAssignSub.setCellFactory(t -> new ComboBoxTableCell<Assignment, SupplyTeacher>(FXCollections.observableArrayList()) {
             @Override
             public void startEdit() {
                 Assignment currentRow = getTableRow().getItem();
@@ -225,8 +227,8 @@ public class Controller {
             }
         });
 
-        colAssignSub.setOnEditCommit((TableColumn.CellEditEvent<Assignment, Teacher> event) -> {
-            TablePosition<Assignment, Teacher> pos = event.getTablePosition();
+        colAssignSub.setOnEditCommit((TableColumn.CellEditEvent<Assignment, SupplyTeacher> event) -> {
+            TablePosition<Assignment, SupplyTeacher> pos = event.getTablePosition();
             System.out.println("onEditCommit");
             Teacher newTeacher = event.getNewValue();
 
@@ -305,6 +307,7 @@ public class Controller {
                             comboBox.setItems(FXCollections.observableArrayList(teachers));
                             comboBox.getSelectionModel().selectFirst();
                             setGraphic(comboBox);
+                            //TODO: on select, selectFirst
                             setText(null);
                         }
                     }

@@ -1,6 +1,6 @@
 package AssignSubstitutes.Settings;
 
-import AssignSubstitutes.InputOutput.xmlParser;
+import AssignSubstitutes.InputOutput.XMLParser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -20,11 +20,12 @@ public class SettingsController {
     @FXML private AnchorPane[] panels;
     @FXML private TextField txtMasterSchedule, txtAbsenceList, txtCourseCodes, txtSupplies, txtOnCallerDir,
             txtFormatOut, txtTmpMaxWeek, txtTmpMaxMnth, txtPermMaxWeek, txtPermMaxMnth;
+    //TODO: add noNags checkboxes in panelSave
 
     private Stage stage;
     private boolean saved;
     //private Settings settings;
-    private xmlParser settings;
+    private XMLParser settings;
 
     @FXML
     public void initialize(){
@@ -144,7 +145,7 @@ public class SettingsController {
 
     private void populateSettingsFields(){
         //TODO: get settings from IO and display them
-        settings = new xmlParser("config");
+        settings = new XMLParser("config");
         txtTmpMaxMnth.setText(Integer.toString(settings.getTempMonthlyMax()));
         txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
         txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));
@@ -212,7 +213,6 @@ public class SettingsController {
         }else{
             return false;
         }
-        //TODO:Add reset date to settings UI
     }
 
     private void removeUnwantedCharacters(TextField target, String charactersToRemove){
@@ -289,7 +289,6 @@ public class SettingsController {
             if(!txtFormatOut.getText().isEmpty() && !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())){
                 settings.setOnCallerFormFileNameFormat(txtFormatOut.getText());
             }*/
-        //TODO:Add reset date to settings UI
         }catch(Exception e){
             errorHandler("ERROR: There was a problem writing settings to config file");
         }

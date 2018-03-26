@@ -4,10 +4,7 @@
 package AssignSubstitutes.InputOutput;
 
 
-import AssignSubstitutes.classes.OnStaffTeacher;
-import AssignSubstitutes.classes.Period;
-import AssignSubstitutes.classes.Settings;
-import AssignSubstitutes.classes.Teacher;
+import AssignSubstitutes.classes.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -21,18 +18,16 @@ import java.util.Iterator;
 public class IO {
 
 
-        public ArrayList<Teacher> readTeachers(String file) throws IOException {
-            ArrayList<Teacher> osTeachers = new ArrayList<>();
+        public ArrayList<OnStaffTeacher> readTeachers(String file) throws IOException {
+            ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
             Sheet sheet = newSheet(file);
             DataFormatter df = new DataFormatter();
 
-
             String tName;
             String tSkills;
-            String tp1, tp2, tp3a, tp3b, tp4;
+            String[] tp1, tp2, tp3a, tp3b, tp4;
             Period[] tSchedule = new Period[5];
-
 
             for ( Row row : sheet) {
                 // Iterator keeps going even if cells are empty have to force a break
@@ -41,21 +36,21 @@ public class IO {
                 if(row == sheet.getRow(0))  continue;
 
                 tName = df.formatCellValue(row.getCell(0));
-                // !*! Will need to handle csv parsing !*! \\
-                tSkills = df.formatCellValue(row.getCell(1));
-                tp1 = df.formatCellValue(row.getCell(2));
-                tp2 = df.formatCellValue(row.getCell(3));
-                tp3a = df.formatCellValue(row.getCell(4));
-                tp3b = df.formatCellValue(row.getCell(5));
-                tp4 = df.formatCellValue(row.getCell(6));
+                tSkills = df.formatCellValue(row.getCell(1)).split(",")[0];
+                tp1 = df.formatCellValue(row.getCell(2)).split(",");
+                tp2 = df.formatCellValue(row.getCell(3)).split(",");
+                tp3a = df.formatCellValue(row.getCell(4)).split(",");
+                tp3b = df.formatCellValue(row.getCell(5)).split(",");
+                tp4 = df.formatCellValue(row.getCell(6)).split(",");
 
-                tSchedule[0] = new Period(tp1, null, 1, -1, false);
-                tSchedule[1] = new Period(tp2, null, 2, -1, false);
-                tSchedule[2] = new Period(tp3a, null, 3, -1, false);
-                tSchedule[3] = new Period(tp3b, null, 4, -1, false);
-                tSchedule[4] = new Period(tp4, null, 5, -1, false);
 
-                osTeachers.add(new Teacher(tName, tSchedule, tSkills));
+                tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0]), 1, Integer.parseInt(tp1[1]), false);
+                tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0]), 2, Integer.parseInt(tp2[1]), false);
+                tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0]), 3, Integer.parseInt(tp3a[1]), false);
+                tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0]), 4, Integer.parseInt(tp3b[1]), false);
+                tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, Integer.parseInt(tp4[1]), false);
+
+                osTeachers.add(new OnStaffTeacher(tName, tSchedule, tSkills));
             }
 
             return osTeachers;
@@ -63,7 +58,7 @@ public class IO {
 
 
 
-
+        // correlate absences to teachers and change their isAbsent state.
         public ArrayList<OnStaffTeacher> readAbsences(String file) throws IOException {
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
@@ -100,10 +95,73 @@ public class IO {
 
 
 
-        /////////////\\\\\\\\\\\\\\
+        public ArrayList<SupplyTeacher> readSupplies() throws IOException{
+            String file = "./in/Supply Teacher Input.xlsx";
+            Sheet sheet = newSheet(file);
+            DataFormatter df = new DataFormatter();
+
+            ArrayList<SupplyTeacher> supplies = new ArrayList<>();
+
+            for (Row row : sheet){
+                // skips labels and empty rows
+                if (row.getCell(0) == null) break;
+                if (row == sheet.getRow(0)) continue;
+
+                supplies.add(new SupplyTeacher(df.formatCellValue(row.getCell(0)), null, null));
+            }
+
+            return supplies;
+        }
+
+
+        //private String checkTeachables(){} //
+
+
+
+
+        //public void readMasterSchedule(){} //TO DO
+
+
+
+
+        //public void saveAssignments(){} // TO DO
+        //public void writeOnCallerForm(){} // TO DO
+        //public Settings readSettings() {} // TO DO
+        //public String getMasterResetDate() {} // TO DO
+        //public int getMaxWeeklyTally(){} // to do
+        //public int getMaxMonthlyTally(){} // to do
+    //    public int getTempMaxWeeklyTally(){} // to do
+  //      public int getTempMaxMonthlyTally(){} // to do
+//        public int getDefaultCoverageView(){} // to do
+
+
+
+
+
+
+    /////////////\\\\\\\\\\\\\\
         // ### Helper Methods ###  \\
         // // // // ///\\\ \\ \\ \\ \\\
 
+
+        private String getTeachable(String courseName) throws IOException{
+            String teachable = "None";
+            DataFormatter df = new DataFormatter();
+
+            Sheet sheet = newSheet("./in/Course Code Input");
+
+            for (Row row : sheet){
+                if (row.getCell(0) == null) break;
+                if (row == sheet.getRow(0)) continue;
+
+                for(Cell cell : row){
+                    if (df.formatCellValue(cell).equals(courseName))
+                        teachable = df.formatCellValue(row.getCell(0));
+                }
+            }
+
+            return teachable;
+        }
 
         private Sheet newSheet(String file) throws IOException {
             FileInputStream xlFile = new FileInputStream(new File(file));

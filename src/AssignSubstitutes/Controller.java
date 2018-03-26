@@ -1,8 +1,11 @@
 package AssignSubstitutes;
 
+import AssignSubstitutes.InputOutput.IO;
+import AssignSubstitutes.InputOutput.XMLParser;
 import AssignSubstitutes.Settings.SettingsController;
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
+import AssignSubstitutes.classes.SupplyTeacher;
 import AssignSubstitutes.classes.Teacher;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -21,16 +24,20 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
 public class Controller {
 
+    private XMLParser settings;
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
-    private ArrayList<OnStaffTeacher> abscences;
-    private ArrayList<Teacher> supplies;
+
+    private ArrayList<OnStaffTeacher> absences;
+    private ArrayList<SupplyTeacher> supplies;
+
     private ArrayList<LocalDate> generated;
     private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges;
     @FXML private TableView<Assignment> tblAssignments;
@@ -51,10 +58,28 @@ public class Controller {
         unsavedAssignments = Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         generated = new ArrayList<>();
 
-        osTeachers = ThePointlessClassIMade.getTeachers();
-        //TODO: get Absentees and Supplies
-        supplies = ThePointlessClassIMade.getSupplies();
-        abscences = ThePointlessClassIMade.getAbsences(osTeachers);
+        //try {
+            settings = new XMLParser("config");
+        /*}catch (IOException e){
+            errorHandler("XML config file could not be found");
+        }*/
+        try {
+            osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
+        }catch (IOException e){
+            errorHandler("Master Schedule file could not be found");
+            System.out.println(e.getMessage());
+        }
+        try {
+            supplies = IO.readSupplies(settings.getSupplyTeacherPath());
+        }catch (IOException e){
+            errorHandler("Supply Teacher file could not be found");
+        }
+        try {
+            absences = IO.readAbsences(settings.getAbsenceInputPath());
+        }catch (IOException e){
+            errorHandler("Absences file could not be found");
+        }
+
         //TODO: get noNag booleans from settings
 
         btnSave.setVisible(false);
@@ -63,13 +88,17 @@ public class Controller {
 
         buildAssignmentsTable();
         buildCoverageTable();
-        tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
+        if(osTeachers!=null) {
+            tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
+        }
         buildAvailabilityTable();
         try {
             ObservableList<ArrayList<Object>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityStats(osTeachers);
             tblAvailability.setItems(availabilityByPeriod);
         }catch(Exception e){
-            errorHandler(e.getMessage());
+            //errorHandler(e.getMessage());
+            //TODO: make alternative errorhandlers (USER and StackFrame)
+            //TODO: improve error messages
         }
     }
 
@@ -125,7 +154,9 @@ public class Controller {
                 }
             }
         }
-        currentAssignments = InformationHandle.generateAssignments(osTeachers, supplies, abscences);
+
+        currentAssignments = InformationHandle.generateAssignments(osTeachers, supplies, absences);
+
         assignments.put(date, currentAssignments);
         currentUnsavedAssignments = new ArrayList<>();
         unsavedAssignments.put(date, currentUnsavedAssignments);
@@ -197,7 +228,7 @@ public class Controller {
         }else{
             tblAssignments.getItems().setAll(new ArrayList<>());
         }
-    }
+    }-
 
     private void buildAssignmentsTable() {
         colAssignAbsent.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, String>, ObservableValue<String>>() {

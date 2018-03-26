@@ -1,4 +1,4 @@
-<config>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><config>
 	<onCalls>
 		<weeklyMax>2</weeklyMax>
 		<monthlyMax>4</monthlyMax>
@@ -7,13 +7,15 @@
 	</onCalls>
 	<filePaths>
 		<input>
-			<masterSchedule></masterSchedule>
-			<supply></supply>
-			<absences></absences>
+			<masterSchedule>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\SampleInput\MasterSchedule.xlsx</masterSchedule>
+			<supply>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\SampleInput\Supply Teacher Input.xlsx</supply>
+			<absences>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\SampleInput\Absences Input.xlsx</absences>
 		</input>
 		<output>
-			<assignmentSchedule></assignmentSchedule>
-			<assignmentsPerTerm></assignmentsPerTerm>
+			<assignmentSchedule/>
+			<assignmentsPerTerm/>
 		</output>
 	</filePaths>
+	<uiSettings>
+	</uiSettings>
 </config>

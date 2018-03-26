@@ -19,12 +19,18 @@ import java.io.IOException;
 
 public class XMLParser {
 
-    private String masterResetDate;
+
+    private String masterSchedulePath;
+    private String absenceInputPath;
+    private String supplyTeacherPath;
+
     private Integer maxWeeklyTally;
     private Integer maxMonthlyTally;
     private Integer tempWeeklyMax;
     private Integer tempMonthlyMax;
-    private Integer defaultCoverageView;
+
+
+
     private String filepath;
 
     public XMLParser(String filepath) {
@@ -44,12 +50,27 @@ public class XMLParser {
         this.maxMonthlyTally = Integer.valueOf(settings.getElementsByTagName("monthlyMax").item(0).getTextContent());
         this.tempWeeklyMax = Integer.valueOf(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent());
         this.tempMonthlyMax = Integer.valueOf(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent());
-        this.masterResetDate = "Not Set";
+
+        this.masterSchedulePath = settings.getElementsByTagName("masterSchedule").item(0).getTextContent();
+        this.absenceInputPath = settings.getElementsByTagName("absences").item(0).getTextContent();
+        this.supplyTeacherPath = settings.getElementsByTagName("supply").item(0).getTextContent();
+        /*this.masterSchedulePath = "";
+        this.absenceInputPath = "";
+        this.supplyTeacherPath = "";*/
 
     } // constructor
 
-    public String getMasterResetDate() {
-        return masterResetDate;
+    public String getMasterSchedulePath() {
+        return masterSchedulePath;
+    }
+
+    public String getAbsenceInputPath() {
+        return absenceInputPath;
+    }
+
+    public String getSupplyTeacherPath() {
+        return supplyTeacherPath;
+
     }
 
     public Integer getMaxWeeklyTally() {
@@ -68,14 +89,24 @@ public class XMLParser {
         return tempMonthlyMax;
     }
 
-    public Integer getDefaultCoverageView() {
-        return defaultCoverageView;
+
+    public void setMasterSchedulePath(String masterSchedulePath) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        writeXML(masterSchedulePath, "masterSchedule");
+        this.masterSchedulePath = masterSchedulePath;
     }
 
-    public void setMasterResetDate(String masterResetDate) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    public void setAbsenceInputPath(String absenceInputPath) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {
-        writeXML(masterResetDate, "masterResetDate");
-        this.masterResetDate = masterResetDate;
+        writeXML(absenceInputPath, "absences");
+        this.absenceInputPath = absenceInputPath;
+    }
+
+    public void setSupplyTeacherPath(String supplyTeacherPath) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        writeXML(supplyTeacherPath, "supply");
+        this.supplyTeacherPath = supplyTeacherPath;
+
     }
 
     public void setMaxWeeklyTally(Integer maxWeeklyTally) throws ParserConfigurationException, SAXException, IOException, TransformerException
@@ -102,11 +133,6 @@ public class XMLParser {
         this.tempMonthlyMax = tempMonthlyMax;
     }
 
-    public void setDefaultCoverageView(Integer defaultCoverageView) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(defaultCoverageView.toString(), "defaultCoverageView");
-        this.defaultCoverageView = defaultCoverageView;
-    }
 
     private static Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {

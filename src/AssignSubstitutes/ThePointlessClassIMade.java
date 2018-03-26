@@ -2,10 +2,9 @@ package AssignSubstitutes;
 
 
 import AssignSubstitutes.InputOutput.XMLParser;
-import AssignSubstitutes.classes.Assignment;
-import AssignSubstitutes.classes.OnStaffTeacher;
-import AssignSubstitutes.classes.Period;
-import AssignSubstitutes.classes.Teacher;
+
+import AssignSubstitutes.classes.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -180,9 +179,11 @@ public class ThePointlessClassIMade {
         //p = getSupplyPeriod();
         //supplies.add(new Teacher("Jane Foster", p, "Math"));
         p = getSupplyPeriod();
-        supplies.add(new Teacher("Jane Fondant", p, "Eng"));
+
+        supplies.add(new SupplyTeacher("Jane Fondant", p, "Eng"));
         p = getSupplyPeriod();
-        supplies.add(new Teacher("Mark Zuckerberg", p, "Sci"));
+        supplies.add(new SupplyTeacher("Mark Zuckerberg", p, "Sci"));
+
         return supplies;
     }
     public static Period[] getSupplyPeriod(){
@@ -284,7 +285,7 @@ public class ThePointlessClassIMade {
         Period[] schedule = {new Period(null, null, periodNumber, 0, false), new Period
                 (null, null, periodNumber, 0, false), new Period(null, null, periodNumber, 0, false), new
                 Period(null, null, periodNumber, 0, false)};
-        Teacher nullTeacher=new Teacher(null, null, null);
+        Teacher nullTeacher=new OnStaffTeacher(null, null, null);
         notAbsent.add(0, nullTeacher);
         for(Teacher t: notAbsent) {
             System.out.print(t + " ");

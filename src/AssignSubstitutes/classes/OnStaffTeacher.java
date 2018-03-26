@@ -15,8 +15,14 @@ public class OnStaffTeacher extends Teacher{
 	}
 	public void incrementTally(){
 		replacementsThisWeek++;
-		totalTally++;
+
+	}
+	public void incrementMonthlyTally(){
 		replacementsThisMonth++;
+	}
+	public void incrementTotalTally(){
+		totalTally++;
+
 	}
 	public void resetMonthlyTally(){
 		replacementsThisMonth=0;
@@ -31,4 +37,11 @@ public class OnStaffTeacher extends Teacher{
 	public int getWeeklyTally(){return replacementsThisWeek;}
 	public int getMonthlyTally(){return replacementsThisMonth;}
 	public int getTotalTally(){return totalTally;}
+	public boolean checkForSpare(Period p){
+		boolean r = false;
+		if(schedule[(p.getPeriodNumber() -1)].getCourse()==null){
+			r = true;
+		}
+		return r;
+	}
 }

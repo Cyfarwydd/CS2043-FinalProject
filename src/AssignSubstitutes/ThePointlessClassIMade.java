@@ -2,7 +2,9 @@ package AssignSubstitutes;
 
 
 import AssignSubstitutes.InputOutput.XMLParser;
+
 import AssignSubstitutes.classes.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -177,9 +179,11 @@ public class ThePointlessClassIMade {
         //p = getSupplyPeriod();
         //supplies.add(new Teacher("Jane Foster", p, "Math"));
         p = getSupplyPeriod();
+
         supplies.add(new SupplyTeacher("Jane Fondant", p, "Eng"));
         p = getSupplyPeriod();
         supplies.add(new SupplyTeacher("Mark Zuckerberg", p, "Sci"));
+
         return supplies;
     }
     public static Period[] getSupplyPeriod(){

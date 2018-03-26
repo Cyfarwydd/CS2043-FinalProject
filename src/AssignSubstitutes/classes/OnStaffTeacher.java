@@ -15,12 +15,14 @@ public class OnStaffTeacher extends Teacher{
 	}
 	public void incrementTally(){
 		replacementsThisWeek++;
+
 	}
 	public void incrementMonthlyTally(){
 		replacementsThisMonth++;
 	}
 	public void incrementTotalTally(){
 		totalTally++;
+
 	}
 	public void resetMonthlyTally(){
 		replacementsThisMonth=0;

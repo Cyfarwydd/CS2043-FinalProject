@@ -19,13 +19,17 @@ import java.io.IOException;
 
 public class XMLParser {
 
+
     private String masterSchedulePath;
     private String absenceInputPath;
     private String supplyTeacherPath;
+
     private Integer maxWeeklyTally;
     private Integer maxMonthlyTally;
     private Integer tempWeeklyMax;
     private Integer tempMonthlyMax;
+
+
 
     private String filepath;
 
@@ -46,6 +50,7 @@ public class XMLParser {
         this.maxMonthlyTally = Integer.valueOf(settings.getElementsByTagName("monthlyMax").item(0).getTextContent());
         this.tempWeeklyMax = Integer.valueOf(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent());
         this.tempMonthlyMax = Integer.valueOf(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent());
+
         this.masterSchedulePath = settings.getElementsByTagName("masterSchedule").item(0).getTextContent();
         this.absenceInputPath = settings.getElementsByTagName("absences").item(0).getTextContent();
         this.supplyTeacherPath = settings.getElementsByTagName("supply").item(0).getTextContent();
@@ -65,6 +70,7 @@ public class XMLParser {
 
     public String getSupplyTeacherPath() {
         return supplyTeacherPath;
+
     }
 
     public Integer getMaxWeeklyTally() {
@@ -83,6 +89,7 @@ public class XMLParser {
         return tempMonthlyMax;
     }
 
+
     public void setMasterSchedulePath(String masterSchedulePath) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {
         writeXML(masterSchedulePath, "masterSchedule");
@@ -99,6 +106,7 @@ public class XMLParser {
     {
         writeXML(supplyTeacherPath, "supply");
         this.supplyTeacherPath = supplyTeacherPath;
+
     }
 
     public void setMaxWeeklyTally(Integer maxWeeklyTally) throws ParserConfigurationException, SAXException, IOException, TransformerException
@@ -124,6 +132,7 @@ public class XMLParser {
         writeXML(tempMonthlyMax.toString(), "tempMonthlyMax");
         this.tempMonthlyMax = tempMonthlyMax;
     }
+
 
     private static Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {

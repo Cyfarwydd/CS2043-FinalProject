@@ -1,5 +1,6 @@
 package AssignSubstitutes;
 
+
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.SupplyTeacher;
@@ -7,16 +8,19 @@ import AssignSubstitutes.classes.Teacher;
 
 import java.util.ArrayList;
 
+
 public class InformationHandle{
     //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
     //TODO: it's still only ever assigning one onstaff teacher
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = 4;
 	private static final int W_TAL = 2;
+
 	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> genericSupply, ArrayList<OnStaffTeacher> absent){
 	    //TODO: any osTeachers handling only seems to handle first in the arraylist
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 	    ArrayList<Teacher> supply=new ArrayList<>(genericSupply);
+
 		for(int i = 0; i < absent.size(); i++){
 		    for(int j = 0; j < absent.get(i).getSchedule().length; j++){
 		        if((absent.get(i).getSchedule()[j].Absent()

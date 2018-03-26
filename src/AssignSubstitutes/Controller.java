@@ -34,8 +34,10 @@ public class Controller {
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
+
     private ArrayList<OnStaffTeacher> absences;
     private ArrayList<SupplyTeacher> supplies;
+
     private ArrayList<LocalDate> generated;
     private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges;
     @FXML private TableView<Assignment> tblAssignments;
@@ -77,6 +79,7 @@ public class Controller {
         }catch (IOException e){
             errorHandler("Absences file could not be found");
         }
+
         //TODO: get noNag booleans from settings
 
         btnSave.setVisible(false);
@@ -151,7 +154,9 @@ public class Controller {
                 }
             }
         }
+
         currentAssignments = InformationHandle.generateAssignments(osTeachers, supplies, absences);
+
         assignments.put(date, currentAssignments);
         currentUnsavedAssignments = new ArrayList<>();
         unsavedAssignments.put(date, currentUnsavedAssignments);
@@ -223,7 +228,7 @@ public class Controller {
         }else{
             tblAssignments.getItems().setAll(new ArrayList<>());
         }
-    }
+    }-
 
     private void buildAssignmentsTable() {
         colAssignAbsent.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, String>, ObservableValue<String>>() {

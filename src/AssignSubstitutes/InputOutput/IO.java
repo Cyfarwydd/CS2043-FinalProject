@@ -50,7 +50,7 @@ public class IO {
                 tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0]), 4, Integer.parseInt(tp3b[1]), false);
                 tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, Integer.parseInt(tp4[1]), false);
 
-                osTeachers.add(new Teacher(tName, tSchedule, tSkills));
+                osTeachers.add(new OnStaffTeacher(tName, tSchedule, tSkills));
             }
 
             return osTeachers;
@@ -114,25 +114,25 @@ public class IO {
         }
 
 
-        private String checkTeachables(){} //
+        //private String checkTeachables(){} //
 
 
 
 
-        public void readMasterSchedule(){} //TO DO
+        //public void readMasterSchedule(){} //TO DO
 
 
 
 
-        public void saveAssignments(){} // TO DO
-        public void writeOnCallerForm(){} // TO DO
-        public Settings readSettings() {} // TO DO
-        public String getMasterResetDate() {} // TO DO
-        public int getMaxWeeklyTally(){} // to do
-        public int getMaxMonthlyTally(){} // to do
-        public int getTempMaxWeeklyTally(){} // to do
-        public int getTempMaxMonthlyTally(){} // to do
-        public int getDefaultCoverageView(){} // to do
+        //public void saveAssignments(){} // TO DO
+        //public void writeOnCallerForm(){} // TO DO
+        //public Settings readSettings() {} // TO DO
+        //public String getMasterResetDate() {} // TO DO
+        //public int getMaxWeeklyTally(){} // to do
+        //public int getMaxMonthlyTally(){} // to do
+    //    public int getTempMaxWeeklyTally(){} // to do
+  //      public int getTempMaxMonthlyTally(){} // to do
+//        public int getDefaultCoverageView(){} // to do
 
 
 

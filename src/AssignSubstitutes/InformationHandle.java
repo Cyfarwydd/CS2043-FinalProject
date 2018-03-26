@@ -10,7 +10,7 @@ public class InformationHandle{
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = 4;
 	private static final int W_TAL = 2;
-	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<Teacher> supply, ArrayList<OnStaffTeacher> absent){
+	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
 	    //TODO: any osTeachers handling only seems to handle first in the arraylist
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 		for(int i = 0; i < absent.size(); i++){
@@ -36,7 +36,7 @@ public class InformationHandle{
         }
 		return assignments;
 	}
-	private static boolean supplyFree(ArrayList<Teacher> supply, Assignment a, ArrayList<Assignment> assignments){
+	private static boolean supplyFree(ArrayList<SupplyTeacher> supply, Assignment a, ArrayList<Assignment> assignments){
 	    boolean freeTeacher = false;
 	    for(int i = 0; i < supply.size(); i++){
 	        if(supply.get(i).checkForSpare(a.getPeriod())){
@@ -58,7 +58,7 @@ public class InformationHandle{
         }
         a.setSubstitute(best);
     }
-    private static void assignSupply(Assignment a, ArrayList<Teacher> supply, ArrayList<Assignment> assignments){
+    private static void assignSupply(Assignment a, ArrayList<SupplyTeacher> supply, ArrayList<Assignment> assignments){
         for(int i = 0; i < supply.size(); i++){
             Teacher newTeach = supply.get(i);
 

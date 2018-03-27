@@ -12,8 +12,8 @@ public class SupplyTeacher extends Teacher{
     }
     public SupplyTeacher(String nameIn, String teachableIn){
         name = nameIn;
-        teachableIn = teachable;
-        Period sch = new Period[5];
+        teachable = teachableIn;
+        Period[] sch = new Period[5];
         for(int i = 0; i < 5; i++){
             sch[i] = new Period(null, null, i, 100, false);
         }

@@ -15,10 +15,9 @@ public class InformationHandle{
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = 4;
 	private static final int W_TAL = 2;
-	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> genericSupply, ArrayList<OnStaffTeacher> absent){
+	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
 	    //TODO: any osTeachers handling only seems to handle first in the arraylist
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
-	    ArrayList<Teacher> supply=new ArrayList<>(genericSupply);
 
 		for(int i = 0; i < absent.size(); i++){
 		    for(int j = 0; j < absent.get(i).getSchedule().length; j++){

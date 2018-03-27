@@ -1,8 +1,13 @@
 package AssignSubstitutes;
 
-import java.lang.reflect.Array;
+
+import AssignSubstitutes.classes.Assignment;
+import AssignSubstitutes.classes.OnStaffTeacher;
+import AssignSubstitutes.classes.SupplyTeacher;
+import AssignSubstitutes.classes.Teacher;
+
 import java.util.ArrayList;
-import AssignSubstitutes.classes.*;
+
 
 public class InformationHandle{
     //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
@@ -10,9 +15,11 @@ public class InformationHandle{
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = 4;
 	private static final int W_TAL = 2;
-	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
+	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> genericSupply, ArrayList<OnStaffTeacher> absent){
 	    //TODO: any osTeachers handling only seems to handle first in the arraylist
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
+	    ArrayList<Teacher> supply=new ArrayList<>(genericSupply);
+
 		for(int i = 0; i < absent.size(); i++){
 		    for(int j = 0; j < absent.get(i).getSchedule().length; j++){
 		        if((absent.get(i).getSchedule()[j].Absent()

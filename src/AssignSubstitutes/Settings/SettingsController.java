@@ -57,25 +57,33 @@ public class SettingsController {
     @FXML
     private void browseMasterSchedule(){
         String location = getFilePath();
-        txtMasterSchedule.setText(location);
+        if(location!=null) {
+            txtMasterSchedule.setText(location);
+        }
     }
 
     @FXML
     private void browseAbsenceList(){
         String location = getFilePath();
-        txtAbsenceList.setText(location);
+        if(location!=null) {
+            txtAbsenceList.setText(location);
+        }
     }
 
     @FXML
     private void browseCourseCodes(){
         String location = getFilePath();
-        txtCourseCodes.setText(location);
+        if(location!=null) {
+            txtCourseCodes.setText(location);
+        }
     }
 
     @FXML
     private void browseSupplies(){
         String location = getFilePath();
-        txtSupplies.setText(location);
+        if(location!=null) {
+            txtSupplies.setText(location);
+        }
     }
 
     @FXML
@@ -150,6 +158,9 @@ public class SettingsController {
         txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
         txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));
         txtPermMaxWeek.setText(Integer.toString(settings.getMaxWeeklyTally()));
+        txtMasterSchedule.setText(settings.getMasterSchedulePath());
+        txtAbsenceList.setText(settings.getAbsenceInputPath());
+        txtSupplies.setText(settings.getSupplyTeacherPath());
         System.out.println("populate settings");
     }
 
@@ -200,13 +211,13 @@ public class SettingsController {
                 //!txtTmpMaxWeek.getText().equals(String.format("%d", settings.getTempMaxWeeklyTally())) ||
                 !txtTmpMaxWeek.getText().equals(String.format("%d", settings.getTempWeeklyMax())) ||
                 !txtPermMaxMnth.getText().equals(String.format("%d", settings.getMaxMonthlyTally())) ||
-                !txtTmpMaxMnth.getText().equals(String.format("%d", settings.getTempMonthlyMax()))
-                /*!txtTmpMaxMnth.getText().equals(String.format("%d", settings.getTempMaxMonthlyTally())) ||
+                !txtTmpMaxMnth.getText().equals(String.format("%d", settings.getTempMonthlyMax())) ||
+                //!txtTmpMaxMnth.getText().equals(String.format("%d", settings.getTempMaxMonthlyTally())) ||
                 !txtMasterSchedule.getText().equals(settings.getMasterSchedulePath()) ||
-                !txtCourseCodes.getText().equals(settings.getCourseCodePath()) ||
+                //!txtCourseCodes.getText().equals(settings.getCourseCodePath()) ||
                 !txtAbsenceList.getText().equals(settings.getAbsenceInputPath()) ||
-                !txtSupplies.getText().equals(settings.getSupplyTeacherPath()) ||
-                !txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath()) ||
+                !txtSupplies.getText().equals(settings.getSupplyTeacherPath())
+                /*!txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath()) ||
                 !txtFormatOut.getText().equals(settings.getOnCallerFormFileNameFormat())*/
         ){
             return true;
@@ -265,14 +276,14 @@ public class SettingsController {
                 }
             }
             //master schedule path
-            /*if(!txtMasterSchedule.getText().isEmpty() && !txtMasterSchedule.getText().equals(settings
+            if(!txtMasterSchedule.getText().isEmpty() && !txtMasterSchedule.getText().equals(settings
                     .getMasterSchedulePath())){
                 settings.setMasterSchedulePath(txtMasterSchedule.getText());
             }
             //course codes path
-            if(!txtCourseCodes.getText().isEmpty() && !txtCourseCodes.getText().equals(settings.getCourseCodePath())){
+            /*if(!txtCourseCodes.getText().isEmpty() && !txtCourseCodes.getText().equals(settings.getCourseCodePath())){
                 settings.setCourseCodePath(txtCourseCodes.getText());
-            }
+            }*/
             //Absence input path
             if(!txtAbsenceList.getText().isEmpty() && !txtAbsenceList.getText().equals(settings.getAbsenceInputPath())){
                 settings.setAbsenceInputPath(txtAbsenceList.getText());
@@ -282,7 +293,7 @@ public class SettingsController {
                 settings.setSupplyTeacherPath(txtSupplies.getText());
             }
             //on-caller form output dir
-            if(!txtOnCallerDir.getText().isEmpty() && !txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath())){
+            /*if(!txtOnCallerDir.getText().isEmpty() && !txtOnCallerDir.getText().equals(settings.getOnCallerFormDirPath())){
                 settings.setOnCallerFormDirPath(txtOnCallerDir.getText());
             }
             //on-caller form name format

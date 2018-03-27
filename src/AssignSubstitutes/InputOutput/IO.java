@@ -4,7 +4,11 @@
 package AssignSubstitutes.InputOutput;
 
 
-import AssignSubstitutes.classes.*;
+
+import AssignSubstitutes.classes.OnStaffTeacher;
+import AssignSubstitutes.classes.Period;
+import AssignSubstitutes.classes.SupplyTeacher;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -13,12 +17,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class IO {
 
 
-        public ArrayList<OnStaffTeacher> readTeachers(String file) throws IOException {
+
+        public static ArrayList<OnStaffTeacher> readTeachers(String file) throws IOException {
+            System.out.println(file);
+
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
             Sheet sheet = newSheet(file);
@@ -31,7 +37,9 @@ public class IO {
 
             for ( Row row : sheet) {
                 // Iterator keeps going even if cells are empty have to force a break
-                if(row.getCell(0) == null) break;
+
+                if(row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
+
                 // skipping labels
                 if(row == sheet.getRow(0))  continue;
 
@@ -44,11 +52,17 @@ public class IO {
                 tp4 = df.formatCellValue(row.getCell(6)).split(",");
 
 
-                tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0]), 1, Integer.parseInt(tp1[1]), false);
+                /*tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0]), 1, Integer.parseInt(tp1[1]), false);
                 tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0]), 2, Integer.parseInt(tp2[1]), false);
                 tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0]), 3, Integer.parseInt(tp3a[1]), false);
                 tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0]), 4, Integer.parseInt(tp3b[1]), false);
-                tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, Integer.parseInt(tp4[1]), false);
+                tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, Integer.parseInt(tp4[1]), false);*/
+                //for testing while teachable code is in progress
+                tSchedule[0] = new Period(tp1[0], null, 1, Integer.parseInt(tp1[1]), false);
+                tSchedule[1] = new Period(tp2[0], null, 2, Integer.parseInt(tp2[1]), false);
+                tSchedule[2] = new Period(tp3a[0], null, 3, Integer.parseInt(tp3a[1]), false);
+                tSchedule[3] = new Period(tp3b[0], null, 4, Integer.parseInt(tp3b[1]), false);
+                tSchedule[4] = new Period(tp4[0], null, 5, Integer.parseInt(tp4[1]), false);
 
                 osTeachers.add(new OnStaffTeacher(tName, tSchedule, tSkills));
             }
@@ -58,12 +72,15 @@ public class IO {
 
 
 
+
         // correlate absences to teachers and change their isAbsent state.
-        public ArrayList<OnStaffTeacher> readAbsences(String file) throws IOException {
+        public static ArrayList<OnStaffTeacher> readAbsences(String file) throws IOException {
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
+
 
             Sheet sheet = newSheet(file);
             DataFormatter df = new DataFormatter();
+
 
             String tName;
             Period[] tSchedule = new Period[5];
@@ -95,8 +112,9 @@ public class IO {
 
 
 
-        public ArrayList<SupplyTeacher> readSupplies() throws IOException{
-            String file = "./in/Supply Teacher Input.xlsx";
+
+        public static ArrayList<SupplyTeacher> readSupplies(String file) throws IOException{
+
             Sheet sheet = newSheet(file);
             DataFormatter df = new DataFormatter();
 
@@ -107,11 +125,12 @@ public class IO {
                 if (row.getCell(0) == null) break;
                 if (row == sheet.getRow(0)) continue;
 
-                supplies.add(new SupplyTeacher(df.formatCellValue(row.getCell(0)), null, null));
+                supplies.add(new SupplyTeacher(df.formatCellValue(row.getCell(0)), null));
             }
 
             return supplies;
         }
+
 
 
         //private String checkTeachables(){} //
@@ -119,7 +138,9 @@ public class IO {
 
 
 
-        //public void readMasterSchedule(){} //TO DO
+
+        public void readMasterSchedule(){} //TO DO
+
 
 
 
@@ -130,21 +151,25 @@ public class IO {
         //public String getMasterResetDate() {} // TO DO
         //public int getMaxWeeklyTally(){} // to do
         //public int getMaxMonthlyTally(){} // to do
-    //    public int getTempMaxWeeklyTally(){} // to do
-  //      public int getTempMaxMonthlyTally(){} // to do
-//        public int getDefaultCoverageView(){} // to do
+        //public int getTempMaxWeeklyTally(){} // to do
+        //public int getTempMaxMonthlyTally(){} // to do
+        //public int getDefaultCoverageView(){} // to do
 
 
 
 
 
 
-    /////////////\\\\\\\\\\\\\\
+
+
+         /////////////\\\\\\\\\\\\\\
+
         // ### Helper Methods ###  \\
         // // // // ///\\\ \\ \\ \\ \\\
 
 
-        private String getTeachable(String courseName) throws IOException{
+        private static String getTeachable(String courseName) throws IOException{
+
             String teachable = "None";
             DataFormatter df = new DataFormatter();
 
@@ -163,7 +188,9 @@ public class IO {
             return teachable;
         }
 
-        private Sheet newSheet(String file) throws IOException {
+
+        private static Sheet newSheet(String file) throws IOException {
+
             FileInputStream xlFile = new FileInputStream(new File(file));
             Workbook wb = new XSSFWorkbook(xlFile);
             Sheet sheet = wb.getSheetAt(0);

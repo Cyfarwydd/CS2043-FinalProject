@@ -1,7 +1,5 @@
 package AssignSubstitutes.classes;
 
-import AssignSubstitutes.InformationHandle;
-
 public class OnStaffTeacher extends Teacher{
 	private int replacementsThisWeek=0;
 	private int replacementsThisMonth=0;
@@ -17,8 +15,14 @@ public class OnStaffTeacher extends Teacher{
 	}
 	public void incrementTally(){
 		replacementsThisWeek++;
-		totalTally++;
+
+	}
+	public void incrementMonthlyTally(){
 		replacementsThisMonth++;
+	}
+	public void incrementTotalTally(){
+		totalTally++;
+
 	}
 	public void resetMonthlyTally(){
 		replacementsThisMonth=0;
@@ -34,10 +38,10 @@ public class OnStaffTeacher extends Teacher{
 	public int getMonthlyTally(){return replacementsThisMonth;}
 	public int getTotalTally(){return totalTally;}
 	public boolean checkForSpare(Period p){
-		boolean isFree = false;
-		if(p.getPeriodNumber() == schedule[p.getPeriodNumber()-1].getPeriodNumber() && schedule[p.getPeriodNumber()-1].getCourse() == null){
-			isFree = true;
+		boolean r = false;
+		if(schedule[(p.getPeriodNumber() -1)].getCourse()==null){
+			r = true;
 		}
-		return isFree;
+		return r;
 	}
 }

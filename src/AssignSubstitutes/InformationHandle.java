@@ -65,7 +65,7 @@ public class InformationHandle{
         a.setSubstitute(best);
     }
     private static void assignSupply(Assignment a, ArrayList<SupplyTeacher> supply, ArrayList<Assignment> assignments){
-	    System.out.println("supply size : "+supply.size());
+	   // System.out.println("supply size : "+supply.size());
         if(supply.size()>0) {
             for (int i = 0; i < supply.size(); i++) {
                 Teacher newTeach = supply.get(i);

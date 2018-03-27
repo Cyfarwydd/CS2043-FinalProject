@@ -125,7 +125,7 @@ public class IO {
                 if (row.getCell(0) == null) break;
                 if (row == sheet.getRow(0)) continue;
 
-                supplies.add(new SupplyTeacher(df.formatCellValue(row.getCell(0)), null, null));
+                supplies.add(new SupplyTeacher(df.formatCellValue(row.getCell(0)), null));
             }
 
             return supplies;

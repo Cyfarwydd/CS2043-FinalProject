@@ -10,6 +10,15 @@ public class SupplyTeacher extends Teacher{
         schedule=scheduleIn;
         teachable=teachableIn;
     }
+    public SupplyTeacher(String nameIn, String teachableIn){
+        name = nameIn;
+        teachableIn = teachable;
+        Period sch = new Period[5];
+        for(int i = 0; i < 5; i++){
+            sch[i] = new Period(null, null, i, 100, false);
+        }
+        schedule = sch;
+    }
     public String getName(){return name;}
     public String getTeachable(){return teachable;}
     public Period[] getSchedule(){return schedule;}

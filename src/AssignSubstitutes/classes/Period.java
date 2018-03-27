@@ -38,4 +38,14 @@ public class Period{
 		}
 		return periodNum;
 	}
+	public String toString(){
+		String strReturn = new String();
+        if (course.isEmpty()){
+			strReturn += "Empty";
+		} else {
+			strReturn += course;
+		}
+		strReturn += " Period # "+periodNumber;
+		return strReturn;
+	}
 }

@@ -65,19 +65,24 @@ public class InformationHandle{
         a.setSubstitute(best);
     }
     private static void assignSupply(Assignment a, ArrayList<SupplyTeacher> supply, ArrayList<Assignment> assignments){
-        for(int i = 0; i < supply.size(); i++){
-            Teacher newTeach = supply.get(i);
+	    System.out.println("supply size : "+supply.size());
+        if(supply.size()>0) {
+            for (int i = 0; i < supply.size(); i++) {
+                Teacher newTeach = supply.get(i);
 
-            for(int j = 0; j < newTeach.getSchedule().length; j++){
-                if(newTeach.checkForSpare(a.getPeriod())
-                        && checkIfAssigned(a, newTeach, assignments)){
-                    a.setSubstitute(newTeach);
-                    return;
+                for (int j = 0; j < newTeach.getSchedule().length; j++) {
+                    //System.out.println("period : " + a.getPeriod() + "; spare? : " + newTeach.checkForSpare(a.getPeriod()) + "; teacher is assigned? : " + checkIfAssigned(a, newTeach, assignments));
+
+                    if (newTeach.checkForSpare(a.getPeriod())
+                            && checkIfAssigned(a, newTeach, assignments)) {
+                        a.setSubstitute(newTeach);
+                        return;
+                    }
                 }
             }
-        }
-        if(a.getSubstitute() == null){
-            System.out.println("ERR: Teacher not assigned\n");
+            if (a.getSubstitute() == null) {
+                System.out.println("ERR: Teacher not assigned\n");
+            }
         }
     }
     private static boolean checkIfAssigned(Assignment a, Teacher t, ArrayList<Assignment> assignments){

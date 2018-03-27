@@ -228,7 +228,7 @@ public class Controller {
         }else{
             tblAssignments.getItems().setAll(new ArrayList<>());
         }
-    }-
+    }
 
     private void buildAssignmentsTable() {
         colAssignAbsent.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Assignment, String>, ObservableValue<String>>() {

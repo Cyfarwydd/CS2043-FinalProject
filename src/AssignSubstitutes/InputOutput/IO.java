@@ -8,14 +8,12 @@ package AssignSubstitutes.InputOutput;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.Period;
 import AssignSubstitutes.classes.SupplyTeacher;
-
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class IO {
@@ -89,7 +87,7 @@ public class IO {
 
             for (Row row : sheet) {
                 // skips labels and empty rows
-                if (row.getCell(0) == null) break;
+                if (row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
                 if (row == sheet.getRow(0)) continue;
                 if (row == sheet.getRow(1)) continue;
 
@@ -122,7 +120,7 @@ public class IO {
 
             for (Row row : sheet){
                 // skips labels and empty rows
-                if (row.getCell(0) == null) break;
+                if (row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
                 if (row == sheet.getRow(0)) continue;
 
                 supplies.add(new SupplyTeacher(df.formatCellValue(row.getCell(0)), null));

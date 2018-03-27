@@ -12,27 +12,28 @@ import java.util.ArrayList;
 public class InformationHandle{
     //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
     //TODO: it's still only ever assigning one onstaff teacher
-	public static final int NUM_PERIODS = 5;
-	private static final int M_TAL = 4;
-	private static final int W_TAL = 2;
-	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> genericSupply, ArrayList<OnStaffTeacher> absent){
-	    //TODO: any osTeachers handling only seems to handle first in the arraylist
-	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
-	    ArrayList<Teacher> supply=new ArrayList<>(genericSupply);
+    public static final int NUM_PERIODS = 5;
+    private static final int M_TAL = 4;
+    private static final int W_TAL = 2;
 
-		for(int i = 0; i < absent.size(); i++){
-		    for(int j = 0; j < absent.get(i).getSchedule().length; j++){
-		        if((absent.get(i).getSchedule()[j].Absent()
+    public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
+        //TODO: any osTeachers handling only seems to handle first in the arraylist
+        ArrayList<Assignment> assignments = new ArrayList<Assignment>();
+        //ArrayList<Teacher> supply=new ArrayList<>(genericSupply);
+
+        for(int i = 0; i < absent.size(); i++){
+            for(int j = 0; j < absent.get(i).getSchedule().length; j++){
+                if((absent.get(i).getSchedule()[j].Absent()
                         && (absent.get(i).getSchedule()[j].getCourse() != null)
                         && !absent.get(i).getSchedule()[j].getCourse().equals("lunch"))){
-		            Assignment a = new Assignment(absent.get(i), absent.get(i).getSchedule()[j]);
-		            assignments.add(a);
+                    Assignment a = new Assignment(absent.get(i), absent.get(i).getSchedule()[j]);
+                    assignments.add(a);
                 }
             }
         }
 
         for(int i = 0; i < assignments.size(); i++){
-		    //grab the assignment, see if a supply is available for this period. If there is, assign them. Otherwise,
+            //grab the assignment, see if a supply is available for this period. If there is, assign them. Otherwise,
             //grab the next best os and assign them.
             Assignment a = assignments.get(i);
             if(supplyFree(supply, a, assignments)){
@@ -41,13 +42,13 @@ public class InformationHandle{
                 assignOS(a, roster, assignments, absent);
             }
         }
-		return assignments;
-	}
-	private static boolean supplyFree(ArrayList<SupplyTeacher> supply, Assignment a, ArrayList<Assignment> assignments){
-	    boolean freeTeacher = false;
-	    for(int i = 0; i < supply.size(); i++){
-	        if(supply.get(i).checkForSpare(a.getPeriod())){
-	            freeTeacher = true;
+        return assignments;
+    }
+    private static boolean supplyFree(ArrayList<Teacher> subs, Assignment a, ArrayList<Assignment> assignments){
+        boolean freeTeacher = false;
+        for(int i = 0; i < subs.size(); i++){
+            if(subs.get(i).checkForSpare(a.getPeriod())){
+                freeTeacher = true;
             }
         }
         return freeTeacher;
@@ -65,10 +66,9 @@ public class InformationHandle{
         }
         a.setSubstitute(best);
     }
-    private static void assignSupply(Assignment a, ArrayList<SupplyTeacher> supply, ArrayList<Assignment> assignments){
+    private static void assignSupply(Assignment a, ArrayList<Teacher> supply, ArrayList<Assignment> assignments){
         for(int i = 0; i < supply.size(); i++){
             Teacher newTeach = supply.get(i);
-
             for(int j = 0; j < newTeach.getSchedule().length; j++){
                 if(newTeach.checkForSpare(a.getPeriod())
                         && checkIfAssigned(a, newTeach, assignments)){
@@ -77,34 +77,36 @@ public class InformationHandle{
                 }
             }
         }
-        if(a.getSubstitute() == null){
-            System.out.println("ERR: Teacher not assigned\n");
+        if (supply.size == 0) {
+            System.out.println("ERR: List of teachers was empty");
+        } else if (a.getSubstitute() == null) {
+            System.out.println("ERR: Teacher not assigned");
         }
     }
     private static boolean checkIfAssigned(Assignment a, Teacher t, ArrayList<Assignment> assignments){
-	    boolean subsFree = true;
-	    for(int i = 0; i < assignments.size(); i++){
-	        Assignment curr = assignments.get(i);
-	        if(a.getPeriod().getPeriodNumber() == curr.getPeriod().getPeriodNumber()){
-	            if(curr.getSubstitute() != null){
-	                if(curr.getSubstitute().getName().equals(t.getName())
+        boolean subsFree = true;
+        for(int i = 0; i < assignments.size(); i++){
+            Assignment curr = assignments.get(i);
+            if(a.getPeriod().getPeriodNumber() == curr.getPeriod().getPeriodNumber()){
+                if(curr.getSubstitute() != null){
+                    if(curr.getSubstitute().getName().equals(t.getName())
                             && t.checkForSpare(a.getPeriod())){
-	                    subsFree = false;
+                        subsFree = false;
                     }
                 }
             }
-	    }
-	    return subsFree;
+        }
+        return subsFree;
     }
-	public static ArrayList<OnStaffTeacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster ){
-		ArrayList<OnStaffTeacher> result = new ArrayList<OnStaffTeacher>();
-		for(int i = 0; i < roster.size(); i++){
-			OnStaffTeacher t = roster.get(i);
-			try{
-				if(	t.getWeeklyTally() < W_TAL &&
-					t.getMonthlyTally() < M_TAL)
+    public static ArrayList<OnStaffTeacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster ){
+        ArrayList<OnStaffTeacher> result = new ArrayList<OnStaffTeacher>();
+        for(int i = 0; i < roster.size(); i++){
+            OnStaffTeacher t = roster.get(i);
+            try{
+                if(	t.getWeeklyTally() < W_TAL &&
+                        t.getMonthlyTally() < M_TAL)
                 {
-				    for(int j = 0; j < t.getSchedule().length; j++) {
+                    for(int j = 0; j < t.getSchedule().length; j++) {
                         if (t.getSchedule()[j].getPeriodNumber() == period) {
                             break;
                         } else if (t.getSchedule()[j].getPeriodNumber() < period) {
@@ -113,32 +115,32 @@ public class InformationHandle{
                             result.add(t);
                         }
                     }
-				}
-			}catch(Exception e){
-				System.err.println(e);
-				continue;
-			}
-		}
-		return result;
-	}
-	private static boolean checkIfAbsent(OnStaffTeacher t, ArrayList<OnStaffTeacher> absences){
-		for(int i = 0; i < absences.size(); i++){
-			if(t.getName().equals(absences.get(i).getName())){
-				return false;
-			}
-		}
-		return true;
-	}
-	private static boolean checkSpareAvailable(OnStaffTeacher t, Assignment a){
-	    boolean available = false;
-	    if(a.getPeriod().getPeriodNumber() == t.getSchedule()[(a.getPeriod().getPeriodNumber()-1)].getPeriodNumber()
+                }
+            }catch(Exception e){
+                System.err.println(e);
+                continue;
+            }
+        }
+        return result;
+    }
+    private static boolean checkIfAbsent(OnStaffTeacher t, ArrayList<OnStaffTeacher> absences){
+        for(int i = 0; i < absences.size(); i++){
+            if(t.getName().equals(absences.get(i).getName())){
+                return false;
+            }
+        }
+        return true;
+    }
+    private static boolean checkSpareAvailable(OnStaffTeacher t, Assignment a){
+        boolean available = false;
+        if(a.getPeriod().getPeriodNumber() == t.getSchedule()[(a.getPeriod().getPeriodNumber()-1)].getPeriodNumber()
                 && t.getSchedule()[(a.getPeriod().getPeriodNumber()-1)].getCourse() == null
-        ){
-	        available = true;
+                ){
+            available = true;
         }
         return available;
     }
-	private static ArrayList<OnStaffTeacher> sortSubs(ArrayList<OnStaffTeacher> oldSubs) {
+    private static ArrayList<OnStaffTeacher> sortSubs(ArrayList<OnStaffTeacher> oldSubs) {
         ArrayList<OnStaffTeacher> newSubs = new ArrayList<OnStaffTeacher>();
         for(int i = 0; i < oldSubs.size(); i++){
             OnStaffTeacher min = oldSubs.get(i);
@@ -151,25 +153,25 @@ public class InformationHandle{
                 }
             }
             System.out.println("Min Teacher #" + i + ": " + min.getName() +
-                "\n\tWeekly Tally: " + min.getWeeklyTally() +
-                "\n\tMonthly Tally: " + min.getMonthlyTally() +
-                "\n\tTotal Tally: " + min.getTotalTally());
+                    "\n\tWeekly Tally: " + min.getWeeklyTally() +
+                    "\n\tMonthly Tally: " + min.getMonthlyTally() +
+                    "\n\tTotal Tally: " + min.getTotalTally());
             newSubs.add(min);
         }
         return newSubs;
     }
-	private static OnStaffTeacher compareTeacher(OnStaffTeacher t, OnStaffTeacher u){
-	    //returns the lesser of the two
-	    OnStaffTeacher result = t;
-	    if(result.getWeeklyTally() > u.getWeeklyTally()) {
+    private static OnStaffTeacher compareTeacher(OnStaffTeacher t, OnStaffTeacher u){
+        //returns the lesser of the two
+        OnStaffTeacher result = t;
+        if(result.getWeeklyTally() > u.getWeeklyTally()) {
             result = u;
         }
-	    else if(result.getWeeklyTally() == u.getWeeklyTally()){
-	        if(result.getMonthlyTally() > u.getMonthlyTally()){
-	            result = u;
+        else if(result.getWeeklyTally() == u.getWeeklyTally()){
+            if(result.getMonthlyTally() > u.getMonthlyTally()){
+                result = u;
             }else if(result.getMonthlyTally() == u.getMonthlyTally()){
-	            if(result.getTotalTally() > u.getTotalTally()){
-	                result = u;
+                if(result.getTotalTally() > u.getTotalTally()){
+                    result = u;
                 }else if(result.getTotalTally() == u.getTotalTally()){
                     if(result.getName().compareTo(u.getName()) > 0){
                         result = u;
@@ -185,13 +187,13 @@ public class InformationHandle{
         return result;
     }
     private static void swap(ArrayList<OnStaffTeacher> oldSubs, int a, int b){
-	    if(a >= oldSubs.size() || b >= oldSubs.size()){
-	        return;
+        if(a >= oldSubs.size() || b >= oldSubs.size()){
+            return;
         }
-	    OnStaffTeacher t = oldSubs.get(a);
-	    OnStaffTeacher u = oldSubs.get(b);
-   	    oldSubs.set(a, u);
-	    oldSubs.set(b, t);
+        OnStaffTeacher t = oldSubs.get(a);
+        OnStaffTeacher u = oldSubs.get(b);
+        oldSubs.set(a, u);
+        oldSubs.set(b, t);
     }
     /*public static ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> generateAvailabilityStats(ArrayList<OnStaffTeacher> roster){
 		//info for help:

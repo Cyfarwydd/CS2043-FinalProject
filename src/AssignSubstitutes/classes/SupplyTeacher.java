@@ -26,8 +26,10 @@ public class SupplyTeacher extends Teacher{
 
     public boolean checkForSpare(Period p){
         boolean r = false;
-        if(schedule[(p.getPeriodNumber() -1)].getCourse()==null){
-            r = true;
+        for(int i = 0; i < schedule.length; i++) {
+        	if(schedule[i].getPeriodNumber() == p.getPeriodNumber() && schedule[i].getCourse() == null) {
+        		r = true;
+        	}
         }
         return r;
     }

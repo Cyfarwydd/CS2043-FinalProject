@@ -11,12 +11,10 @@ import java.util.ArrayList;
 
 public class InformationHandle{
     //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
-    //TODO: it's still only ever assigning one onstaff teacher
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = 4;
 	private static final int W_TAL = 2;
 	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
-	    //TODO: any osTeachers handling only seems to handle first in the arraylist
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 
 		for(int i = 0; i < absent.size(); i++){
@@ -55,24 +53,21 @@ public class InformationHandle{
         roster = sortSubs(roster);
         int wt = roster.get(0).getWeeklyTally();
         OnStaffTeacher best = roster.get(0);
-        for(int j = 0; j < roster.size(); j++) {
+        for(int j = 1; j < roster.size(); j++) {
             if (checkIfAssigned(a, roster.get(j), assignments)
                     && checkIfAbsent(roster.get(j), abs)
-                    && checkSpareAvailable(roster.get(j), a)) {
+                    && roster.get(j).checkForSpare(a.getPeriod())) {
                 best = roster.get(j);
             }
         }
         a.setSubstitute(best);
     }
     private static void assignSupply(Assignment a, ArrayList<SupplyTeacher> supply, ArrayList<Assignment> assignments){
-	   // System.out.println("supply size : "+supply.size());
         if(supply.size()>0) {
             for (int i = 0; i < supply.size(); i++) {
                 Teacher newTeach = supply.get(i);
 
                 for (int j = 0; j < newTeach.getSchedule().length; j++) {
-                    //System.out.println("period : " + a.getPeriod() + "; spare? : " + newTeach.checkForSpare(a.getPeriod()) + "; teacher is assigned? : " + checkIfAssigned(a, newTeach, assignments));
-
                     if (newTeach.checkForSpare(a.getPeriod())
                             && checkIfAssigned(a, newTeach, assignments)) {
                         a.setSubstitute(newTeach);

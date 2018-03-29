@@ -54,9 +54,6 @@ public class XMLParser {
         this.masterSchedulePath = settings.getElementsByTagName("masterSchedule").item(0).getTextContent();
         this.absenceInputPath = settings.getElementsByTagName("absences").item(0).getTextContent();
         this.supplyTeacherPath = settings.getElementsByTagName("supply").item(0).getTextContent();
-        /*this.masterSchedulePath = "";
-        this.absenceInputPath = "";
-        this.supplyTeacherPath = "";*/
 
     } // constructor
 

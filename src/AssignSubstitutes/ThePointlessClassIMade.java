@@ -54,11 +54,11 @@ public class ThePointlessClassIMade {
         int np = 5;
         ArrayList<OnStaffTeacher> osTeachers=new ArrayList<>();
         Period[] periods=new Period[5];
-        periods[0]=new Period("class", "Math", 1, 100, false);
-        periods[1]=new Period("class", "Math", 2, 100, false);
-        periods[2]=new Period(null, null, 3, 100, false);
-        periods[3]=new Period("lunch", null, 4, 100, false);
-        periods[4]=new Period("class", "Math", 5, 100, false);
+        periods[0]=new Period("class", "Math", 1, "100", false);
+        periods[1]=new Period("class", "Math", 2, "100", false);
+        periods[2]=new Period(null, null, 3, "100", false);
+        periods[3]=new Period("lunch", null, 4, "100", false);
+        periods[4]=new Period("class", "Math", 5, "100", false);
         OnStaffTeacher teacher = new OnStaffTeacher("Dawn MacIsaac", periods, "Math");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -69,11 +69,11 @@ public class ThePointlessClassIMade {
         }
         osTeachers.add(teacher);
         periods=new Period[np];
-        periods[0]=new Period(null, null, 1, 100, false);
-        periods[1]=new Period("class", "Science", 2, 100, false);
-        periods[2]=new Period("lunch", null, 3, 100, false);
-        periods[3]=new Period("class", "Science", 4, 100, false);
-        periods[4]=new Period("class", "Science", 5, 100, false);
+        periods[0]=new Period(null, null, 1, "100", false);
+        periods[1]=new Period("class", "Science", 2, "100", false);
+        periods[2]=new Period("lunch", null, 3, "100", false);
+        periods[3]=new Period("class", "Science", 4, "100", false);
+        periods[4]=new Period("class", "Science", 5, "100", false);
         teacher = new OnStaffTeacher("Jimmy Mac", periods, "Science");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -84,11 +84,11 @@ public class ThePointlessClassIMade {
         }
         osTeachers.add(teacher);
         periods=new Period[np];
-        periods[0]=new Period("class", "English", 1, 100, true);
-        periods[1]=new Period(null, null, 2, 100, true);
-        periods[2]=new Period("class", "English", 3, 100, true);
-        periods[3]=new Period("lunch", null, 4, 100, true);
-        periods[4]=new Period("class", "English", 5, 100, true);
+        periods[0]=new Period("class", "English", 1, "100", true);
+        periods[1]=new Period(null, null, 2, "100", true);
+        periods[2]=new Period("class", "English", 3, "100", true);
+        periods[3]=new Period("lunch", null, 4, "100", true);
+        periods[4]=new Period("class", "English", 5, "100", true);
         teacher = new OnStaffTeacher("Johnny Mnemonic", periods, "English");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -99,11 +99,11 @@ public class ThePointlessClassIMade {
         }
         osTeachers.add(teacher);
         periods=new Period[np];
-        periods[0]=new Period("class", "Math", 1, 100, false);
-        periods[1]=new Period("class", "Math", 2, 100, false);
-        periods[2]=new Period(null, null, 3, 100, false);
-        periods[3]=new Period("lunch", null, 4, 100, false);
-        periods[4]=new Period("class", "Math", 5, 100, false);
+        periods[0]=new Period("class", "Math", 1, "100", false);
+        periods[1]=new Period("class", "Math", 2, "100", false);
+        periods[2]=new Period(null, null, 3, "100", false);
+        periods[3]=new Period("lunch", null, 4, "100", false);
+        periods[4]=new Period("class", "Math", 5, "100", false);
         teacher = new OnStaffTeacher("Jane Doe", periods, "Math");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -114,11 +114,11 @@ public class ThePointlessClassIMade {
         }
         osTeachers.add(teacher);
         periods=new Period[np];
-        periods[0]=new Period("class", "Science", 1, 100, false);
-        periods[1]=new Period("class", "Science", 2, 100, false);
-        periods[2]=new Period("lunch", null, 3, 100, false);
-        periods[3]=new Period(null, null, 4, 100, false);
-        periods[4]=new Period("class", "Science", 5, 100, false);
+        periods[0]=new Period("class", "Science", 1, "100", false);
+        periods[1]=new Period("class", "Science", 2, "100", false);
+        periods[2]=new Period("lunch", null, 3, "100", false);
+        periods[3]=new Period(null, null, 4, "100", false);
+        periods[4]=new Period("class", "Science", 5, "100", false);
         teacher = new OnStaffTeacher("John Doe", periods, "Science");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -129,11 +129,11 @@ public class ThePointlessClassIMade {
         }
         osTeachers.add(teacher);
         periods=new Period[np];
-        periods[0]=new Period("class", "English", 1, 100, false);
-        periods[1]=new Period("class", "English", 2, 100, false);
-        periods[2]=new Period("class", "English", 3, 100, false);
-        periods[3]=new Period("lunch", null, 4, 100, false);
-        periods[4]=new Period(null, null, 5, 100, false);
+        periods[0]=new Period("class", "English", 1, "100", false);
+        periods[1]=new Period("class", "English", 2, "100", false);
+        periods[2]=new Period("class", "English", 3, "100", false);
+        periods[3]=new Period("lunch", null, 4, "100", false);
+        periods[4]=new Period(null, null, 5, "100", false);
         teacher = new OnStaffTeacher("Stephen Cormier", periods, "English");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -144,11 +144,11 @@ public class ThePointlessClassIMade {
         }
         osTeachers.add(teacher);
         periods=new Period[np];
-        periods[0]=new Period(null, null, 1, 100, true);
-        periods[1]=new Period("class", "Math", 2, 100, true);
-        periods[2]=new Period("lunch", null, 3, 100, true);
-        periods[3]=new Period("class", "Math", 4, 100, true);
-        periods[4]=new Period("class", "Math", 5, 100, true);
+        periods[0]=new Period(null, null, 1, "100", true);
+        periods[1]=new Period("class", "Math", 2, "100", true);
+        periods[2]=new Period("lunch", null, 3, "100", true);
+        periods[3]=new Period("class", "Math", 4, "100", true);
+        periods[4]=new Period("class", "Math", 5, "100", true);
         teacher = new OnStaffTeacher("Trish Knockwood", periods, "Math");
         for(int i=0; i < random.nextInt(3); i++){
             teacher.incrementTally();
@@ -191,10 +191,10 @@ public class ThePointlessClassIMade {
         int rand = (int)(Math.random() * 10);
         for(int i = 0; i < p.length; i++) {
             if((rand%2==0 && i == 3)||(rand%2 ==1 && i==2)){
-                Period q = new Period("Lunch", null, i, 100, false);
+                Period q = new Period("Lunch", null, i, "100", false);
                 p[i] = q;
             }else{
-                Period q = new Period(null, null, i, 100, false);
+                Period q = new Period(null, null, i, "100", false);
                 p[i] = q;
             }
         }
@@ -282,9 +282,9 @@ public class ThePointlessClassIMade {
                         )
                 )
         ).collect(Collectors.toList());
-        Period[] schedule = {new Period(null, null, periodNumber, 0, false), new Period
-                (null, null, periodNumber, 0, false), new Period(null, null, periodNumber, 0, false), new
-                Period(null, null, periodNumber, 0, false)};
+        Period[] schedule = {new Period(null, null, periodNumber, "0", false), new Period
+                (null, null, periodNumber, "0", false), new Period(null, null, periodNumber, "0", false), new
+                Period(null, null, periodNumber, "0", false)};
         Teacher nullTeacher=new OnStaffTeacher(null, null, null);
         notAbsent.add(0, nullTeacher);
         for(Teacher t: notAbsent) {

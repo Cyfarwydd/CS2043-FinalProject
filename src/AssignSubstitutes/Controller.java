@@ -67,7 +67,6 @@ public class Controller {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
         }catch (IOException e){
             errorHandler("Master Schedule file could not be found");
-            System.out.println(e.getMessage());
         }
         try {
             supplies = IO.readSupplies(settings.getSupplyTeacherPath());
@@ -81,6 +80,8 @@ public class Controller {
         }
 
         //TODO: get noNag booleans from settings
+        noNagOverwriteAssignmentChanges=false;
+        noNagSaveWithEmptyAssignments=false;
 
         btnSave.setVisible(false);
 
@@ -96,7 +97,7 @@ public class Controller {
             ObservableList<ArrayList<Object>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityStats(osTeachers);
             tblAvailability.setItems(availabilityByPeriod);
         }catch(Exception e){
-            //errorHandler(e.getMessage());
+            errorHandler(e.getMessage());
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
         }
@@ -276,7 +277,7 @@ public class Controller {
             }
         });
 
-        colAssignDelete.setCellFactory(new Callback<>(){
+        colAssignDelete.setCellFactory(new Callback<TableColumn<Assignment,String>,TableCell<Assignment,String>>(){
             @Override
             public TableCell<Assignment, String> call(final TableColumn<Assignment, String> param) {
                 final TableCell<Assignment, String> cell = new TableCell<Assignment, String>() {

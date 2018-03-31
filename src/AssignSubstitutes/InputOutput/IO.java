@@ -39,8 +39,9 @@ public class IO {
                 if(row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
 
                 // skipping labels
-                if(row == sheet.getRow(0))  continue;
+                if(row.equals(sheet.getRow(0)))  continue;
 
+                System.out.println("row "+row.getRowNum());
                 tName = df.formatCellValue(row.getCell(0));
                 tSkills = df.formatCellValue(row.getCell(1)).split(",")[0];
                 tp1 = df.formatCellValue(row.getCell(2)).split(",");
@@ -56,11 +57,31 @@ public class IO {
                 tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0]), 4, Integer.parseInt(tp3b[1]), false);
                 tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, Integer.parseInt(tp4[1]), false);*/
                 //for testing while teachable code is in progress
-                tSchedule[0] = new Period(tp1[0], null, 1, Integer.parseInt(tp1[1]), false);
-                tSchedule[1] = new Period(tp2[0], null, 2, Integer.parseInt(tp2[1]), false);
-                tSchedule[2] = new Period(tp3a[0], null, 3, Integer.parseInt(tp3a[1]), false);
-                tSchedule[3] = new Period(tp3b[0], null, 4, Integer.parseInt(tp3b[1]), false);
-                tSchedule[4] = new Period(tp4[0], null, 5, Integer.parseInt(tp4[1]), false);
+                if(tp1.length==1){
+                    String[] temp={tp1[0], "0"};
+                    tp1=temp;
+                }
+                if(tp2.length==1){
+                    String[] temp={tp2[0], "0"};
+                    tp2=temp;
+                }
+                if(tp3a.length==1){
+                    String[] temp={tp3a[0], "0"};
+                    tp3a=temp;
+                }
+                if(tp3b.length==1){
+                    String[] temp={tp3b[0], "0"};
+                    tp3b=temp;
+                }
+                if(tp4.length==1){
+                    String[] temp={tp4[0], "0"};
+                    tp4=temp;
+                }
+                tSchedule[0] = new Period(tp1[0], null, 1, tp1[1], false);
+                tSchedule[1] = new Period(tp2[0], null, 2, tp2[1], false);
+                tSchedule[2] = new Period(tp3a[0], null, 3, tp3a[1], false);
+                tSchedule[3] = new Period(tp3b[0], null, 4, tp3b[1], false);
+                tSchedule[4] = new Period(tp4[0], null, 5, tp4[1], false);
 
                 osTeachers.add(new OnStaffTeacher(tName, tSchedule, tSkills));
             }
@@ -96,7 +117,7 @@ public class IO {
                 // Goes through the teacher's five periods for each day through Monday to Friday
                 for (int j = 0; j < 5; j++) {
                     for (int i = j * 5; i < (j * 5) + 5; i++) {
-                        tSchedule[i - (j * 5)] = new Period(df.formatCellValue(row.getCell(i + 1)), null, i - (j * 5) + 1, -1, true);
+                        tSchedule[i - (j * 5)] = new Period(df.formatCellValue(row.getCell(i + 1)), null, i - (j * 5) + 1, "-1", true);
                     }
                     weeklySchedule[j] = tSchedule;
                 }

@@ -39,8 +39,10 @@ public class OnStaffTeacher extends Teacher{
 	public int getTotalTally(){return totalTally;}
 	public boolean checkForSpare(Period p){
 		boolean r = false;
-		if(schedule[(p.getPeriodNumber() -1)].getCourse()==null){
-			r = true;
+		for(int i = 0; i < schedule.length; i++) {
+			if(schedule[i].getPeriodNumber() == p.getPeriodNumber() && schedule[i].getCourse() == null) {
+				r = true;
+			}
 		}
 		return r;
 	}

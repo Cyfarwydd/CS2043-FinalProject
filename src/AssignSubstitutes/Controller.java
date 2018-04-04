@@ -66,6 +66,9 @@ public class Controller {
         }*/
         try {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
+            /*for(OnStaffTeacher t: osTeachers){
+                System.out.println("osTeacher: "+t+" schedule "+Arrays.toString(t.getSchedule()));
+            }*/
         }catch (IOException e){
             errorHandler("Master Schedule file could not be found");
         }
@@ -102,6 +105,7 @@ public class Controller {
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
         }
+
     }
 
     @FXML

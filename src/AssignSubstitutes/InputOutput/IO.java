@@ -4,7 +4,6 @@
 package AssignSubstitutes.InputOutput;
 
 
-
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.Period;
 import AssignSubstitutes.classes.SupplyTeacher;
@@ -31,7 +30,7 @@ public class IO {
             String tName;
             String tSkills;
             String[] tp1, tp2, tp3a, tp3b, tp4;
-            Period[] tSchedule = new Period[5];
+            Period[] tSchedule;
 
             for ( Row row : sheet) {
                 // Iterator keeps going even if cells are empty have to force a break
@@ -50,7 +49,7 @@ public class IO {
                 tp3b = df.formatCellValue(row.getCell(5)).split(",");
                 tp4 = df.formatCellValue(row.getCell(6)).split(",");
 
-
+                tSchedule = new Period[5];
                 /*tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0]), 1, Integer.parseInt(tp1[1]), false);
                 tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0]), 2, Integer.parseInt(tp2[1]), false);
                 tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0]), 3, Integer.parseInt(tp3a[1]), false);

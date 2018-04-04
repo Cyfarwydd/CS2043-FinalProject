@@ -158,7 +158,7 @@ public class SettingsController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(stage);
-        return file.getPath();
+        return file == null ? null : file.getPath();
     }
 
     private void populateSettingsFields(){

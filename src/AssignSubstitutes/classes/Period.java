@@ -40,7 +40,7 @@ public class Period{
 	}
 	public String toString(){
 		String strReturn = new String();
-        if (course.isEmpty()){
+        if (course ==null || course.isEmpty()){
 			strReturn += "Empty";
 		} else {
 			strReturn += course;

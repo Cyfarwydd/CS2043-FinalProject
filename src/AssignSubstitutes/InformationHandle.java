@@ -104,12 +104,14 @@ public class InformationHandle{
 					t.getMonthlyTally() < M_TAL)
                 {
 				    for(int j = 0; j < t.getSchedule().length; j++) {
-                        if (t.getSchedule()[j].getPeriodNumber() == period) {
+                        if (t.getSchedule()[j].getPeriodNumber() > period) {
                             break;
                         } else if (t.getSchedule()[j].getPeriodNumber() < period) {
                             continue;
                         } else {
-                            result.add(t);
+                        	if(t.getSchedule()[j].getCourse() == null) {
+                        		result.add(t);
+                        	}
                         }
                     }
 				}
@@ -119,6 +121,33 @@ public class InformationHandle{
 			}
 		}
 		return result;
+	}
+	public static ArrayList<Teacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supplies){
+		ArrayList<Teacher> available = new ArrayList<Teacher>();
+		for(SupplyTeacher t : supplies) {
+			available.add(t);
+		}
+		for(OnStaffTeacher t: roster) {
+			try {
+				if(t.getWeeklyTally() < W_TAL && t.getMonthlyTally() < M_TAL) {
+					for(int j = 0; j < t.getSchedule().length; j++) {
+						if(t.getSchedule()[j].getPeriodNumber() > period) {
+							break;
+						}
+						else if(t.getSchedule()[j].getPeriodNumber() < period) {
+							continue;
+						}else {
+							if(t.getSchedule()[j].getCourse() == null) {
+								available.add(t);
+							}
+						}
+					}
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return available;
 	}
 	private static boolean checkIfAbsent(OnStaffTeacher t, ArrayList<OnStaffTeacher> absences){
 		for(int i = 0; i < absences.size(); i++){

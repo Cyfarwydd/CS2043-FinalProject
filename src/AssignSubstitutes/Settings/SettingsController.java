@@ -16,10 +16,12 @@ import java.util.Optional;
 public class SettingsController {
     @FXML private ListView settingsMenu;
     @FXML private StackPane panelContainer;
-    @FXML private AnchorPane panelMaxOnCalls, panelInputLocations, panelOutputLocations, panelSave;
+    @FXML private AnchorPane panelMaxOnCalls, panelOther, panelInputLocations, panelOutputLocations, panelSave;
     @FXML private AnchorPane[] panels;
     @FXML private TextField txtMasterSchedule, txtAbsenceList, txtCourseCodes, txtSupplies, txtOnCallerDir,
-            txtFormatOut, txtTmpMaxWeek, txtTmpMaxMnth, txtPermMaxWeek, txtPermMaxMnth;
+            txtFormatOut, txtTmpMaxWeek, txtTmpMaxMnth, txtPermMaxWeek, txtPermMaxMnth, txtWeeksToReminder;
+    @FXML private DatePicker dpStartDate;
+    @FXML private CheckBox chkboxNoNagOverwriteAssignmentChanges, chkboxNoNagSaveWithEmptyAssignments, chkboxNoNagOverwriteSave;
     //TODO: add noNags checkboxes in panelSave
 
     private Stage stage;
@@ -32,11 +34,12 @@ public class SettingsController {
         saved=false;
 
         //put the panels into an array to make them easier to reference later
-        panels = new AnchorPane[4];
+        panels = new AnchorPane[5];
         panels[0] = panelMaxOnCalls;
-        panels[1] = panelInputLocations;
-        panels[2] = panelOutputLocations;
-        panels[3] = panelSave;
+        panels[1] = panelOther;
+        panels[2] = panelInputLocations;
+        panels[3] = panelOutputLocations;
+        panels[4] = panelSave;
 
         //remove the unused panels
         for(int i=0; i<panels.length-1; i++) {
@@ -138,6 +141,13 @@ public class SettingsController {
     }
 
     private void navSelectionChange(ObservableValue<? extends String> observable, String oldValue, String newValue){
+
+        System.out.println("settingsMenu width: "+settingsMenu.getWidth());
+        System.out.println("panelContainer width: "+panelContainer.getWidth());
+        System.out.println("panelMaxOnCalls width: "+panelMaxOnCalls.getWidth());
+        System.out.println("panelContainer height: "+panelContainer.getHeight());
+        System.out.println("panelMaxOnCalls height: "+panelMaxOnCalls.getHeight());
+        System.out.println("panelMaxOnCalls label height: "+((Label)(panelMaxOnCalls.getChildren().get(4))).getHeight());
         int newIndex = settingsMenu.getItems().indexOf(newValue);
         panelContainer.getChildren().add(panels[newIndex]);
         panelContainer.getChildren().remove(0);
@@ -148,7 +158,7 @@ public class SettingsController {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(stage);
-        return file.getPath();
+        return file == null ? null : file.getPath();
     }
 
     private void populateSettingsFields(){

@@ -212,7 +212,7 @@ public class ThePointlessClassIMade {
 
     //For test use until InformationHandle is available
     //gets a list of available teachers for a given period
-    public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList,
+    /*public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList,
                                                          ObservableList<Assignment>
                                                                   assignments, int periodNumber, Assignment
                                                              currentAssignment){
@@ -295,10 +295,10 @@ public class ThePointlessClassIMade {
             System.out.println();
         }
         return notAbsent;
-    }
+    }*/
     //For test use until InformationHandle is available
     //gets a list of available teachers for a given period
-    public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
+    /*public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
         ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
         XMLParser settings = new XMLParser("./config");
         int maxMonthly = settings.getTempMonthlyMax();
@@ -347,6 +347,7 @@ public class ThePointlessClassIMade {
         }
         return periods;
     }
+    */
     //For test use until IO is available
     //creates teachers and period objects
     public static ArrayList<Assignment> getAssignmentByDate(LocalDate date, ArrayList<OnStaffTeacher> osTeachers){

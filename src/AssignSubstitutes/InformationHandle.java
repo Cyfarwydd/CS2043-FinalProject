@@ -5,6 +5,7 @@ import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.SupplyTeacher;
 import AssignSubstitutes.classes.Teacher;
+import AssignSubstitutes.classes.Period;
 
 import java.util.ArrayList;
 

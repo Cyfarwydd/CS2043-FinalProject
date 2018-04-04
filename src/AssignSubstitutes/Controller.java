@@ -94,7 +94,7 @@ public class Controller {
         }
         buildAvailabilityTable();
         try {
-            ObservableList<ArrayList<Object>> availabilityByPeriod = ThePointlessClassIMade.getAvailabilityStats(osTeachers);
+            ObservableList<ArrayList<Object>> availabilityByPeriod = InformationHandle.getAvailabilityStats(osTeachers);
             tblAvailability.setItems(availabilityByPeriod);
         }catch(Exception e){
             errorHandler(e.getMessage());
@@ -252,7 +252,7 @@ public class Controller {
             @Override
             public void startEdit() {
                 Assignment currentRow = getTableRow().getItem();
-                getItems().setAll(ThePointlessClassIMade.getAssignableTeacherList(osTeachers, getTableView().getItems(),
+                getItems().setAll(InformationHandle.getAssignableTeacherList(osTeachers, getTableView().getItems(),
                         currentRow.getPeriod().getPeriodNumber(), currentRow));
                 super.startEdit();
             }

@@ -57,6 +57,7 @@ public class Controller {
         assignments =Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         unsavedAssignments = Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         generated = new ArrayList<>();
+        //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         //try {
             settings = new XMLParser("config");

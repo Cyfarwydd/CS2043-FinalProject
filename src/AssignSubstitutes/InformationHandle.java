@@ -124,12 +124,12 @@ public class InformationHandle{
 	}
 	public static ArrayList<Teacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supplies){
 		ArrayList<Teacher> available = new ArrayList<Teacher>();
-		for(OnStaffTeacher t : supplies) {
+		for(SupplyTeacher t : supplies) {
 			available.add(t);
 		}
-		for(Teacher t: roster) {
+		for(OnStaffTeacher t: roster) {
 			try {
-				if(t.getWeeklyTally() < W_TALL && t.getMonthlyTally() < M_TAL) {
+				if(t.getWeeklyTally() < W_TAL && t.getMonthlyTally() < M_TAL) {
 					for(int j = 0; j < t.getSchedule().length; j++) {
 						if(t.getSchedule()[j].getPeriodNumber() > period) {
 							break;
@@ -140,7 +140,6 @@ public class InformationHandle{
 							if(t.getSchedule()[j].getCourse() == null) {
 								available.add(t);
 							}
-		
 						}
 					}
 				}

@@ -391,7 +391,7 @@ public class InformationHandle{
     	}
     	System.out.println();
     	
-    	List<Teacher> allTeachers = new List<Teacher>();
+    	ArrayList<Teacher> allTeachers = new ArrayList<>();
     	for(Teacher t : supplyList) {
     		allTeachers.add(t);
     	}
@@ -457,7 +457,7 @@ public class InformationHandle{
     	}
     	return notAbsent;
     }
-    public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
+    /*public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
             ObservableList<Assignment>
                      assignments, int periodNumber, Assignment
                 currentAssignment){
@@ -552,13 +552,12 @@ public class InformationHandle{
     	notAbsent.add(0, nullTeacher);
     	for(Teacher t: notAbsent) {
     		System.out.print(t + " ");
-    		/*for (Period p : t.getSchedule()) {
-				System.out.print(p.getPeriodNumber() + " ");
-			}*/
+
     		System.out.println();
     	}
     	return notAbsent;
-    }
+    }*/
+
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
     	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
     	XMLParser settings = new XMLParser("./config");

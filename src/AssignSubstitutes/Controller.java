@@ -122,7 +122,7 @@ public class Controller {
             btnGenerate.setVisible(false);
             btnSave.setVisible(false);
             tblAssignments.setEditable(false);
-            ArrayList<Assignment> prevAssignments = ThePointlessClassIMade.getAssignmentByDate(date, osTeachers);
+            ArrayList<Assignment> prevAssignments = IOTest.getAssignmentByDate(date, osTeachers);
             displayAssignments(prevAssignments);
         }else{
             btnGenerate.setVisible(true);

@@ -61,7 +61,7 @@ public class InformationHandle{
                 best = roster.get(j);
             }
         }
-        a.setSubstitute(best);
+        a.setSubstitute(best);	
     }
     private static void assignSupply(Assignment a, ArrayList<SupplyTeacher> supply, ArrayList<Assignment> assignments){
         if(supply.size()>0) {
@@ -298,6 +298,108 @@ public class InformationHandle{
     	System.out.println("All teachers without a class this period");
     	System.out.println("/////////////////");
     	List<Teacher> noneThisPeriod = fullTeacherList.stream().filter(
+    			teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(period->period.getPeriodNumber()
+    					==periodNumber)
+    			).collect(Collectors.toList());
+    	for(Teacher t: noneThisPeriod) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	
+    	System.out.println("Teachers without a class this period and not already assigned");
+    	System.out.println("/////////////////");
+    	List<Teacher> notAssigned = noneThisPeriod.stream().filter(
+    			teacher -> (assignments.stream().noneMatch(
+    					assignment -> assignment.getSubstitute().equals(teacher) &&
+    					assignment.getPeriod().getPeriodNumber() == periodNumber &&
+    					!assignment.equals( currentAssignment )
+    					)
+    					)).collect(Collectors.toList());
+    	for(Teacher t: notAssigned) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	
+    	System.out.println();
+    	System.out.println("Teachers without a class this period, not already assigned and not absent");
+    	System.out.println("/////////////////");
+    	List<Teacher> notAbsent = notAssigned.stream().filter(
+    			teacher -> (
+    					assignments.stream().noneMatch(
+    							assignment -> assignment.getAbsentee().equals(teacher) &&
+    							assignment.getPeriod().getPeriodNumber()!=periodNumber
+    							
+    							)
+    					)
+    			).collect(Collectors.toList());
+    	Period[] schedule = {new Period(null, null, periodNumber, "0", false), new Period
+    			(null, null, periodNumber, "0", false), new Period(null, null, periodNumber, "0", false), new
+    			Period(null, null, periodNumber, "0", false)};
+    	Teacher nullTeacher=new OnStaffTeacher(null, null, null);
+    	notAbsent.add(0, nullTeacher);
+    	for(Teacher t: notAbsent) {
+    		System.out.print(t + " ");
+    		/*for (Period p : t.getSchedule()) {
+				System.out.print(p.getPeriodNumber() + " ");
+			}*/
+    		System.out.println();
+    	}
+    	return notAbsent;
+    }
+    public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
+            ObservableList<Assignment>
+                     assignments, int periodNumber, Assignment
+                currentAssignment){
+    	System.out.println("Period " + periodNumber);
+    	System.out.println();
+    	System.out.println("Current Assignment "+currentAssignment.getAbsentee()+"\t"+currentAssignment.getSubstitute
+    			()+"\t"+currentAssignment.getPeriod().getPeriodNumber());
+    	System.out.println("Supply teachers");
+    	System.out.println("/////////////////");
+    	for(Teacher t: supplyList) {
+    		System.out.print(t+" ");
+    		for(Period p: t.getSchedule()) {
+    			System.out.print(p.getPeriodNumber() + " ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	System.out.println("On-staff teachers");
+    	System.out.println("/////////////////");
+    	for(Teacher t: fullTeacherList) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	System.out.println("Assignments");
+    	System.out.println("/////////////////");
+    	for(Assignment a : assignments){
+    		System.out.println(a.getAbsentee()+"\t"+a.getSubstitute()+"\t"+a.getPeriod().getPeriodNumber());
+    		System.out.println();
+    	}
+    	System.out.println();
+    	
+    	List<Teacher> allTeachers = new List<Teacher>();
+    	for(Teacher t : supplyList) {
+    		allTeachers.add(t);
+    	}
+    	for(Teacher t: fullTeacherList) {
+    		allTeachers.add(t);
+    	}
+    	
+    	System.out.println("All teachers without a class this period");
+    	System.out.println("/////////////////");
+    	List<Teacher> noneThisPeriod = allTeachers.stream().filter(
     			teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(period->period.getPeriodNumber()
     					==periodNumber)
     			).collect(Collectors.toList());

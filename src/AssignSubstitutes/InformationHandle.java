@@ -1,13 +1,16 @@
 package AssignSubstitutes;
 
 
-import AssignSubstitutes.classes.Assignment;
-import AssignSubstitutes.classes.OnStaffTeacher;
-import AssignSubstitutes.classes.SupplyTeacher;
-import AssignSubstitutes.classes.Teacher;
-import AssignSubstitutes.classes.Period;
+import AssignSubstitutes.InputOutput.XMLParser;
+import AssignSubstitutes.classes.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class InformationHandle{
@@ -269,7 +272,7 @@ public class InformationHandle{
 		return result;
 	}*/
     public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList,
-            ObservableList<Assignment>
+														 ObservableList<Assignment>
                      assignments, int periodNumber, Assignment
                 currentAssignment){
     	System.out.println("Period " + periodNumber);

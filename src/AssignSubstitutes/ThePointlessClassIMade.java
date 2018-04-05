@@ -289,9 +289,9 @@ public class ThePointlessClassIMade {
         notAbsent.add(0, nullTeacher);
         for(Teacher t: notAbsent) {
             System.out.print(t + " ");
-            /*for (Period p : t.getSchedule()) {
+            for (Period p : t.getSchedule()) {
                 System.out.print(p.getPeriodNumber() + " ");
-            }*/
+            }
             System.out.println();
         }
         return notAbsent;

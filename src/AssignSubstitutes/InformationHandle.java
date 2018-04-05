@@ -5,6 +5,7 @@ import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.SupplyTeacher;
 import AssignSubstitutes.classes.Teacher;
+import AssignSubstitutes.classes.Period;
 
 import java.util.ArrayList;
 
@@ -267,5 +268,137 @@ public class InformationHandle{
 		}
 		return result;
 	}*/
-
+    public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList,
+            ObservableList<Assignment>
+                     assignments, int periodNumber, Assignment
+                currentAssignment){
+    	System.out.println("Period " + periodNumber);
+    	System.out.println();
+    	System.out.println("Current Assignment "+currentAssignment.getAbsentee()+"\t"+currentAssignment.getSubstitute
+    			()+"\t"+currentAssignment.getPeriod().getPeriodNumber());
+    	System.out.println("On-staff teachers");
+    	System.out.println("/////////////////");
+    	for(Teacher t: fullTeacherList) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	System.out.println("Assignments");
+    	System.out.println("/////////////////");
+    	for(Assignment a : assignments){
+    		System.out.println(a.getAbsentee()+"\t"+a.getSubstitute()+"\t"+a.getPeriod().getPeriodNumber());
+    		System.out.println();
+    	}
+    	System.out.println();
+    	
+    	System.out.println("All teachers without a class this period");
+    	System.out.println("/////////////////");
+    	List<Teacher> noneThisPeriod = fullTeacherList.stream().filter(
+    			teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(period->period.getPeriodNumber()
+    					==periodNumber)
+    			).collect(Collectors.toList());
+    	for(Teacher t: noneThisPeriod) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	
+    	System.out.println("Teachers without a class this period and not already assigned");
+    	System.out.println("/////////////////");
+    	List<Teacher> notAssigned = noneThisPeriod.stream().filter(
+    			teacher -> (assignments.stream().noneMatch(
+    					assignment -> assignment.getSubstitute().equals(teacher) &&
+    					assignment.getPeriod().getPeriodNumber() == periodNumber &&
+    					!assignment.equals( currentAssignment )
+    					)
+    					)).collect(Collectors.toList());
+    	for(Teacher t: notAssigned) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	
+    	System.out.println();
+    	System.out.println("Teachers without a class this period, not already assigned and not absent");
+    	System.out.println("/////////////////");
+    	List<Teacher> notAbsent = notAssigned.stream().filter(
+    			teacher -> (
+    					assignments.stream().noneMatch(
+    							assignment -> assignment.getAbsentee().equals(teacher) &&
+    							assignment.getPeriod().getPeriodNumber()!=periodNumber
+    							
+    							)
+    					)
+    			).collect(Collectors.toList());
+    	Period[] schedule = {new Period(null, null, periodNumber, "0", false), new Period
+    			(null, null, periodNumber, "0", false), new Period(null, null, periodNumber, "0", false), new
+    			Period(null, null, periodNumber, "0", false)};
+    	Teacher nullTeacher=new OnStaffTeacher(null, null, null);
+    	notAbsent.add(0, nullTeacher);
+    	for(Teacher t: notAbsent) {
+    		System.out.print(t + " ");
+    		/*for (Period p : t.getSchedule()) {
+				System.out.print(p.getPeriodNumber() + " ");
+			}*/
+    		System.out.println();
+    	}
+    	return notAbsent;
+    }
+    public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
+    	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
+    	XMLParser settings = new XMLParser("./config");
+    	int maxMonthly = settings.getTempMonthlyMax();
+    	int maxWeekly = settings.getTempWeeklyMax();
+    	for(int i = 0; i<5; i++) {
+    		ArrayList<Object> period = new ArrayList();
+    		int periodNumber = i+1;
+    		String periodStr = "Period ";
+    		switch(i){
+    		case 0:
+    		case 1:
+    			period.add(new String(periodStr+periodNumber));
+    			break;
+    		case 2:
+    			period.add(new String(periodStr+periodNumber+"A"));
+    			break;
+    		case 3:
+    			period.add(new String(periodStr+i+"B"));
+    			break;
+    		case 4:
+    			period.add(new String(periodStr+i));
+    			break;
+    		default:
+    			throw new Exception("Period out of bounds");
+    		}
+    		
+    		List<OnStaffTeacher> noneThisPeriod = fullTeacherList.stream().filter(
+    				teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(p -> p.getPeriodNumber()
+    						== periodNumber)
+    				).collect(Collectors.toList());
+    		
+    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
+    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
+    		
+    		int size = weekTeachers.size();
+    		OnStaffTeacher weekAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);
+    		weekTeachers.add(0, weekAvailTeacher);
+    		period.add(weekTeachers);
+    		
+    		size = monthTeachers.size();
+    		OnStaffTeacher monthAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);
+    		monthTeachers.add(0, monthAvailTeacher);
+    		period.add(monthTeachers);
+    		
+    		periods.add(period);
+    	}
+    	return periods;
+    }
 }

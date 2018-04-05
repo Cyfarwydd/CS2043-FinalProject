@@ -39,7 +39,7 @@ public class Controller {
     private ArrayList<SupplyTeacher> supplies;
 
     private ArrayList<LocalDate> generated;
-    private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges;
+    private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges, noNagOverwriteSave;
     @FXML private TableView<Assignment> tblAssignments;
     @FXML private TableColumn<Assignment, String> colAssignAbsent, colAssignDelete;
     @FXML private TableColumn<Assignment, Teacher> colAssignSub;
@@ -48,7 +48,7 @@ public class Controller {
     @FXML private TableColumn<OnStaffTeacher, String> colCovTeacher;
     @FXML private TableColumn<OnStaffTeacher, Integer> colCovWeek, colCovMonth, colCovTotal;
     @FXML private TableView<ArrayList<Object>> tblAvailability;
-    @FXML private TableColumn<ArrayList<Object>, String> colAvailPeriod, colAvailWeek, colAvailMonth, colAvailWeekTeachers, colAvailMonthTeachers;
+    @FXML private TableColumn<ArrayList<Object>, String> colAvailPeriod, colAvailWeek, colAvailMonth;
     @FXML private DatePicker datePicker;
     @FXML private Button btnGenerate, btnSave;
 
@@ -57,7 +57,8 @@ public class Controller {
         assignments =Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         unsavedAssignments = Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         generated = new ArrayList<>();
-
+        //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
+        //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         //try {
             settings = new XMLParser("config");
         /*}catch (IOException e){
@@ -65,6 +66,9 @@ public class Controller {
         }*/
         try {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
+            /*for(OnStaffTeacher t: osTeachers){
+                System.out.println("osTeacher: "+t+" schedule "+Arrays.toString(t.getSchedule()));
+            }*/
         }catch (IOException e){
             errorHandler("Master Schedule file could not be found");
         }
@@ -101,6 +105,7 @@ public class Controller {
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
         }
+
     }
 
     @FXML
@@ -220,6 +225,7 @@ public class Controller {
             System.out.println("Saved: " + saved);
         }catch(Exception e){
             errorHandler(e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -45,7 +45,7 @@ public class Period{
 		} else {
 			strReturn += course;
 		}
-		strReturn += " Period # "+periodNumber;
+		strReturn += " Period # "+getPeriodString();
 		return strReturn;
 	}
 }

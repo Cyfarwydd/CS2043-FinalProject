@@ -59,12 +59,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period(null, null, 3, "100", false);
         periods[3]=new Period("lunch", null, 4, "100", false);
         periods[4]=new Period("class", "Math", 5, "100", false);
-        OnStaffTeacher teacher = new OnStaffTeacher("Dawn MacIsaac", periods, "Math");
-        for(int i=0; i < random.nextInt(3); i++){
+        OnStaffTeacher teacher = new OnStaffTeacher("Dawn MacIsaac", periods, "Math"); //can teach: weekly: 1, monthly: 3
+        for(int i=0; i < 1; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 2; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -74,12 +74,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period("lunch", null, 3, "100", false);
         periods[3]=new Period("class", "Science", 4, "100", false);
         periods[4]=new Period("class", "Science", 5, "100", false);
-        teacher = new OnStaffTeacher("Jimmy Mac", periods, "Science");
-        for(int i=0; i < random.nextInt(3); i++){
+        teacher = new OnStaffTeacher("Jimmy Mac", periods, "Science"); //can teach: weekly: 1, monthly: 1
+        for(int i=0; i < 1; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 0; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -89,12 +89,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period("class", "English", 3, "100", true);
         periods[3]=new Period("lunch", null, 4, "100", true);
         periods[4]=new Period("class", "English", 5, "100", true);
-        teacher = new OnStaffTeacher("Johnny Mnemonic", periods, "English");
-        for(int i=0; i < random.nextInt(3); i++){
+        teacher = new OnStaffTeacher("Johnny Mnemonic", periods, "English");	//monthly: 3, weekly: 2, can't teach this week
+        for(int i=0; i < 2; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 1; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -104,12 +104,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period(null, null, 3, "100", false);
         periods[3]=new Period("lunch", null, 4, "100", false);
         periods[4]=new Period("class", "Math", 5, "100", false);
-        teacher = new OnStaffTeacher("Jane Doe", periods, "Math");
-        for(int i=0; i < random.nextInt(3); i++){
+        teacher = new OnStaffTeacher("Jane Doe", periods, "Math");	//can't teach, monthly: 5, weekly: 3
+        for(int i=0; i < 3; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 2; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -119,12 +119,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period("lunch", null, 3, "100", false);
         periods[3]=new Period(null, null, 4, "100", false);
         periods[4]=new Period("class", "Science", 5, "100", false);
-        teacher = new OnStaffTeacher("John Doe", periods, "Science");
-        for(int i=0; i < random.nextInt(3); i++){
+        teacher = new OnStaffTeacher("John Doe", periods, "Science");	//can teach, monthly:1, weekly: 0
+        for(int i=0; i < 0; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 1; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -134,12 +134,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period("class", "English", 3, "100", false);
         periods[3]=new Period("lunch", null, 4, "100", false);
         periods[4]=new Period(null, null, 5, "100", false);
-        teacher = new OnStaffTeacher("Stephen Cormier", periods, "English");
-        for(int i=0; i < random.nextInt(3); i++){
+        teacher = new OnStaffTeacher("Stephen Cormier", periods, "English"); //can teach: weekly 1: monthly: 2
+        for(int i=0; i < 1; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 1; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -149,12 +149,12 @@ public class ThePointlessClassIMade {
         periods[2]=new Period("lunch", null, 3, "100", true);
         periods[3]=new Period("class", "Math", 4, "100", true);
         periods[4]=new Period("class", "Math", 5, "100", true);
-        teacher = new OnStaffTeacher("Trish Knockwood", periods, "Math");
-        for(int i=0; i < random.nextInt(3); i++){
+        teacher = new OnStaffTeacher("Trish Knockwood", periods, "Math"); //can teach: weekly: 0, monthly: 3
+        for(int i=0; i < 0; i++){
             teacher.incrementTally();
             teacher.incrementMonthlyTally();
         }
-        for(int i=0; i < random.nextInt(3); i++){
+        for(int i=0; i < 3; i++){
             teacher.incrementMonthlyTally();
         }
         osTeachers.add(teacher);
@@ -173,8 +173,8 @@ public class ThePointlessClassIMade {
         return absences;
     }
 
-    public static ArrayList<Teacher> getSupplies(){
-        ArrayList<Teacher> supplies = new ArrayList<Teacher>();
+    public static ArrayList<SupplyTeacher> getSupplies(){
+        ArrayList<SupplyTeacher> supplies = new ArrayList<SupplyTeacher>();
         Period p[];
         //p = getSupplyPeriod();
         //supplies.add(new Teacher("Jane Foster", p, "Math"));

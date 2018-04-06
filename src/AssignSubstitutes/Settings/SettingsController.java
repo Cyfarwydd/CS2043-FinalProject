@@ -30,7 +30,6 @@ public class SettingsController {
     @FXML
     public void initialize(){
         saved=false;
-        //TODO: Update settings controller with XMLParser updates
         //put the panels into an array to make them easier to reference later
         panels = new AnchorPane[5];
         panels[0] = panelMaxOnCalls;
@@ -108,7 +107,6 @@ public class SettingsController {
             onlyInts(new KeyEvent(txtWeeksToReminder, null, null, null, null, null, false,
                     false,false, false));
             System.out.println("onlyInt 5 times");
-            //TODO:add remove non int chars from weeks until reminder
             return;
         }
         TextField target = (TextField) event.getSource();
@@ -135,7 +133,6 @@ public class SettingsController {
         }catch (Exception e){
             errorHandler("ERROR: There was a problem before trying to save the settings file");
         }
-        //TODO: send Settings to updateSettings in IO
         saved=true;
         System.out.println("Save Settings");
         return true;
@@ -163,29 +160,33 @@ public class SettingsController {
     }
 
     private void populateSettingsFields(){
-        //TODO: get settings from IO and display them
-        settings = new XMLParser();
-        txtTmpMaxMnth.setText(Integer.toString(settings.getTempMonthlyMax()));
-        txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
-        txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));
-        txtPermMaxWeek.setText(Integer.toString(settings.getMaxWeeklyTally()));
+        try {
+            settings = new XMLParser();
+            txtTmpMaxMnth.setText(Integer.toString(settings.getTempMonthlyMax()));
+            txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
+            txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));
+            txtPermMaxWeek.setText(Integer.toString(settings.getMaxWeeklyTally()));
 
-        dpStartDate.setValue(settings.getStartDate());
-        txtWeeksToReminder.setText(Integer.toString(settings.getWeeksToReminder()));
+            dpStartDate.setValue(settings.getStartDate());
+            txtWeeksToReminder.setText(Integer.toString(settings.getWeeksToReminder()));
 
-        chkboxNoNagOverwriteAssignmentChanges.selectedProperty().setValue(settings.isNoNagOverwriteAssignmentChanges());
-        chkboxNoNagOverwriteSave.selectedProperty().setValue(settings.isNoNagOverwriteSave());
-        chkboxNoNagSaveWithEmptyAssignments.selectedProperty().setValue(settings.isNoNagSaveWithEmptyAssignments());
+            chkboxNoNagOverwriteAssignmentChanges.selectedProperty().setValue(settings.isNoNagOverwriteAssignmentChanges());
 
-        txtMasterSchedule.setText(settings.getMasterSchedulePath());
-        txtSupplies.setText(settings.getSupplyTeacherPath());
-        txtAbsenceList.setText(settings.getAbsenceInputPath());
-        txtCourseCodes.setText(settings.getCourseCodesPath());
+            chkboxNoNagOverwriteSave.selectedProperty().setValue(settings.isNoNagOverwriteSave());
+            chkboxNoNagSaveWithEmptyAssignments.selectedProperty().setValue(settings.isNoNagSaveWithEmptyAssignments());
 
-        txtOnCallerDir.setText(settings.getOnCallerFormPath());
-        txtFormatOut.setText(settings.getOnCallerFormNameFormat());
+            txtMasterSchedule.setText(settings.getMasterSchedulePath());
+            txtSupplies.setText(settings.getSupplyTeacherPath());
+            txtAbsenceList.setText(settings.getAbsenceInputPath());
+            txtCourseCodes.setText(settings.getCourseCodesPath());
 
-        System.out.println("populate settings");
+            txtOnCallerDir.setText(settings.getOnCallerFormPath());
+            txtFormatOut.setText(settings.getOnCallerFormNameFormat());
+
+            System.out.println("populate settings");
+        }catch (Exception e){
+            errorHandler(e.getMessage());
+        }
     }
 
     private void errorHandler(String msg) {

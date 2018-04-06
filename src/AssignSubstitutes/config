@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-   <config>
+<config>
 	<onCalls>
-		<weeklyMax>2</weeklyMax>
+		<!--<weeklyMax>2</weeklyMax>-->
 		<monthlyMax>4</monthlyMax>
 		<tempWeeklyMax>2</tempWeeklyMax>
 		<tempMonthlyMax>4</tempMonthlyMax>
@@ -10,21 +10,19 @@
 	    <startDate>2017-02-01</startDate>
 	    <weeksUntilEnd>22</weeksUntilEnd>
 	</startEndDates>
-	<noReminders>
+	<!--<noReminders>
 	    <overwriteAssignmentChanges />
         <saveWithEmptyAssignments />
         <overwriteSave />
-	</noReminders>
-	<filePaths>
-		<input>
-			<masterSchedule>C:\Users\nicdm\Documents\CS2043\CS2043-FinalProject\SampleInput\MasterSchedule.xlsx</masterSchedule>
-			<supply>C:\Users\nicdm\Documents\CS2043\CS2043-FinalProject\SampleInput\Supply Teacher Input.xlsx</supply>
-			<absences>C:\Users\nicdm\Documents\CS2043\CS2043-FinalProject\SampleInput\Absences Input.xlsx</absences>
-			<courses>C:\Users\nicdm\Documents\CS2043\CS2043-FinalProject\SampleInput\Absences Input.xlsx</courses>
-		</input>
-		<output>
-			<onCallerFormsDir />
-			<onCallerNameFormat />
-		</output>
-	</filePaths>
+	</noReminders>-->
+	<InputFilePaths>
+        <masterSchedule>\SampleInput\MasterSchedule.xlsx</masterSchedule>
+        <supply>\SampleInput\Supply Teacher Input.xlsx</supply>
+        <absences>\SampleInput\Absences Input.xlsx</absences>
+        <courses>\SampleInput\Absences Input.xlsx</courses>
+    </InputFilePaths>
+    <output>
+        <onCallerFormsDir />
+        <onCallerNameFormat />
+    </output>
 </config>

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class InformationHandle{
-	XMLParser settings = new XMLParser("./config");
+	public static XMLParser settings = new XMLParser();
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = settings.getMaxMonthlyTally();
 	private static final int W_TAL = settings.getMaxWeeklyTally();

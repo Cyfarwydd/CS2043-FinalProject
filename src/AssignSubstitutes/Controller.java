@@ -75,11 +75,6 @@ public class Controller {
         }catch (IOException e){
             errorHandler("Master Schedule file could not be found at " + settings.getMasterSchedulePath());
             clickSettings();
-
-        }catch(Exception e){
-            errorHandler("Error reading Master Schedule File at " + settings.getMasterSchedulePath()+
-                    "\n please check the formatting and reload the program");
-            //TODO:make exit;
         }
 
         try {
@@ -96,10 +91,10 @@ public class Controller {
             absences = IO.readAbsences(settings.getAbsenceInputPath());
             for(Teacher t: absences){
                 System.out.println("absences: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
-                clickSettings();
             }
         }catch (Exception e){
             errorHandler("Absences file could not be found at " + settings.getAbsenceInputPath());
+            clickSettings();
         }
 
         //TODO: get noNag booleans from settings
@@ -218,7 +213,6 @@ public class Controller {
             }
         }
         assignments.put(date, new ArrayList<>(tblItems));
-        //TODO: call IO to write assignments to file.
         //TODO: call IO to write assignments to file.
         try {
             IO.writeOnCallerForms(assignments);

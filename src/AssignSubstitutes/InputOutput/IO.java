@@ -67,6 +67,8 @@ public class IO {
                     String[] temp={tp4[0], "0"};
                     tp4=temp;
                 }
+
+                //TODO: Wrap this in another a try catch to differentiate if MasterSchedule file can't be found or CourseCodes file can't be found
                 tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0], courseFile), 1, tp1[1], false);
                 tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0], courseFile), 2, tp2[1], false);
                 tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0], courseFile), 3, tp3a[1], false);
@@ -111,7 +113,6 @@ public class IO {
 
                 osTeachers.add(new OnStaffTeacher(tName, weeklySchedule[0], null));
             }
-
             return osTeachers;
         } //readAbsences()
 
@@ -133,22 +134,20 @@ public class IO {
             return supplies;
         }
 
-
         public static void writeOnCallerForms(Map<LocalDate, ArrayList<Assignment>> assignments) throws IOException {
-        // iterate through the absent teachers for the day generating an on caller form for each one
+            // iterate through the absent teachers for the day generating an on caller form for each one
 
-        System.err.println(assignments.toString());
+            System.err.println(assignments.toString());
 
-/*       ArraList absentList = assignments.toString()
+    /*       ArraList absentList = assignments.toString()
 
-        for (int i = 0 ; i < assignments.size() ; i++){
-            System.err.println(assignments.get(assignments).get(i).getAbsentee().getName());
-            saveWorkbook((createWorkbook()), "./On Caller Forms/", assignments.get(i).getAbsentee().getName(), LocalDate.now());
-            assignments.get(i).getAbsentee();
-        }
-*/
-    } // TO DO
-
+            for (int i = 0 ; i < assignments.size() ; i++){
+                System.err.println(assignments.get(assignments).get(i).getAbsentee().getName());
+                saveWorkbook((createWorkbook()), "./On Caller Forms/", assignments.get(i).getAbsentee().getName(), LocalDate.now());
+                assignments.get(i).getAbsentee();
+            }
+    */
+        } // TO DO
 
         //public void saveAssignments(){} // TO DO
         //public Settings readSettings() {} // TO DO
@@ -168,24 +167,24 @@ public class IO {
 
         private static String getTeachable(String courseName, String courseFile) throws IOException{
 
-        String teachable = "None";
-        DataFormatter df = new DataFormatter();
+            String teachable = "None";
+            DataFormatter df = new DataFormatter();
 
-        Sheet sheet = newSheet(courseFile);
+            Sheet sheet = newSheet(courseFile);
 
-        for (Row row : sheet){
-            if(row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
+            for (Row row : sheet){
+                if(row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
 
-            if (row == sheet.getRow(0)) continue;
+                if (row == sheet.getRow(0)) continue;
 
-            for(Cell cell : row){
-                if (df.formatCellValue(cell).equals(courseName))
-                    teachable = df.formatCellValue(row.getCell(0));
+                for(Cell cell : row){
+                    if (df.formatCellValue(cell).equals(courseName))
+                        teachable = df.formatCellValue(row.getCell(0));
+                }
             }
-        }
 
-        return teachable;
-    }
+            return teachable;
+        }
 
 
        private static Sheet newSheet(String file) throws IOException {
@@ -198,41 +197,41 @@ public class IO {
 
 
        private static Workbook createWorkbook() throws IOException{
-        Workbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet();
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet();
 
-        Font bold = wb.createFont();
-        bold.setBold(true);
+            Font bold = wb.createFont();
+            bold.setBold(true);
 
-        CellStyle headerStyle = wb.createCellStyle();
-        headerStyle.setFont(bold);
+            CellStyle headerStyle = wb.createCellStyle();
+            headerStyle.setFont(bold);
 
-        Row header = sheet.createRow(1);
-        header.setRowStyle(headerStyle);
+            Row header = sheet.createRow(1);
+            header.setRowStyle(headerStyle);
 
-        sheet.createRow(0);
-        sheet.getRow(0).setRowStyle(headerStyle);
+            sheet.createRow(0);
+            sheet.getRow(0).setRowStyle(headerStyle);
 
-        sheet.getRow(0).createCell(0).setCellValue("Name: ");
-        sheet.getRow(0).createCell(3).setCellValue("Date: ");
+            sheet.getRow(0).createCell(0).setCellValue("Name: ");
+            sheet.getRow(0).createCell(3).setCellValue("Date: ");
 
 
 
-        String[] initHeader = {"Period", "Covered By", "Course", "Room #", "Instructions"};
+            String[] initHeader = {"Period", "Covered By", "Course", "Room #", "Instructions"};
 
-        for(int i = 0 ; i < initHeader.length ; i++){
-            header.createCell(i);
-            header.getCell(i).setCellValue(initHeader[i]);
+            for(int i = 0 ; i < initHeader.length ; i++){
+                header.createCell(i);
+                header.getCell(i).setCellValue(initHeader[i]);
+            }
+
+            sheet.setColumnWidth(0, 2000);
+            sheet.setColumnWidth(1, 4000);
+            sheet.setColumnWidth(2, 3000);
+            sheet.setColumnWidth(3, 2000);
+            sheet.setColumnWidth(4, 6000);
+
+            return wb;
         }
-
-        sheet.setColumnWidth(0, 2000);
-        sheet.setColumnWidth(1, 4000);
-        sheet.setColumnWidth(2, 3000);
-        sheet.setColumnWidth(3, 2000);
-        sheet.setColumnWidth(4, 6000);
-
-        return wb;
-    }
 
 
 

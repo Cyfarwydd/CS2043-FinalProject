@@ -59,11 +59,12 @@ public class Controller {
         generated = new ArrayList<>();
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
-        //try {
+        try {
             settings = new XMLParser();
-        /*}catch (IOException e){
+        }catch (Exception e){
             errorHandler("XML config file could not be found");
-        }*/
+        }
+        //TODO: check for empty input paths and notify user rather than calling IO
         try {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
             for(OnStaffTeacher t: osTeachers){

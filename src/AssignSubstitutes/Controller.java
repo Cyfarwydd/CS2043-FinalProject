@@ -57,6 +57,7 @@ public class Controller {
         assignments =Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         unsavedAssignments = Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         generated = new ArrayList<>();
+
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
@@ -64,30 +65,37 @@ public class Controller {
         }catch (Exception e){
             errorHandler("XML config file could not be found");
         }
+
         //TODO: check for empty input paths and notify user rather than calling IO
         try {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
             for(OnStaffTeacher t: osTeachers){
                 System.out.println("osTeacher: "+t+" schedule "+Arrays.toString(t.getSchedule()));
             }
-        }catch (IOException e){
-            errorHandler("Master Schedule file could not be found");
+        }catch (Exception e){
+            errorHandler("Master Schedule file could not be found at " + settings.getMasterSchedulePath());
+            clickSettings();
+
         }
+
         try {
             supplies = IO.readSupplies(settings.getSupplyTeacherPath());
             for(Teacher t: supplies){
                 System.out.println("supplies: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
             }
-        }catch (IOException e){
-            errorHandler("Supply Teacher file could not be found");
+        }catch (Exception e){
+            errorHandler("Supply Teacher file could not be found at " + settings.getSupplyTeacherPath());
+            clickSettings();
         }
+
         try {
             absences = IO.readAbsences(settings.getAbsenceInputPath());
             for(Teacher t: absences){
                 System.out.println("absences: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
+                clickSettings();
             }
-        }catch (IOException e){
-            errorHandler("Absences file could not be found");
+        }catch (Exception e){
+            errorHandler("Absences file could not be found at " + settings.getAbsenceInputPath());
         }
 
         //TODO: get noNag booleans from settings
@@ -207,6 +215,12 @@ public class Controller {
         }
         assignments.put(date, new ArrayList<>(tblItems));
         //TODO: call IO to write assignments to file.
+        //TODO: call IO to write assignments to file.
+        try {
+            IO.writeOnCallerForms(assignments);
+        }catch (IOException e){
+            errorHandler("Error writing the on caller forms");
+        }
         if(date == LocalDate.now()) {
             //TODO: increment tallys
             //TODO: update availability

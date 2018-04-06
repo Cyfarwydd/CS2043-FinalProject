@@ -13,7 +13,9 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
         primaryStage.setTitle("Sub Finder");
-        primaryStage.setScene(new Scene(root, 600, 361));
+        primaryStage.setMinHeight(350);
+        primaryStage.setMinWidth(600);
+        primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();
     }
 

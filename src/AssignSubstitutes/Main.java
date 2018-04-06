@@ -12,8 +12,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
-        primaryStage.setTitle("Sub Finder--Eat subs");
-        primaryStage.setScene(new Scene(root, 600, 361));
+        primaryStage.setTitle("Sub Finder");
+        primaryStage.setMinHeight(350);
+        primaryStage.setMinWidth(600);
+        primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();
     }
 

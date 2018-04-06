@@ -1,17 +1,27 @@
-<config>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><config>
 	<onCalls>
-		<weeklyMax>2</weeklyMax>
+		<!--<weeklyMax>2</weeklyMax>-->
 		<monthlyMax>4</monthlyMax>
-	</onCalls>
-	<filePaths>
-		<input>
-			<masterSchedule></masterSchedule>
-			<supply></supply>
-			<absences></absences>
-		</input>
-		<output>
-			<assignmentSchedule></assignmentSchedule>
-			<assignmentsPerTerm></assignmentsPerTerm>
-		</output>
-	</filePaths>
-</config>
+		<tempWeeklyMax>2</tempWeeklyMax>
+		<tempMonthlyMax>4</tempMonthlyMax>
+	<weeklyMax>2</weeklyMax></onCalls>
+	<startEndDates>
+	    <startDate>2017-02-01</startDate>
+	    <weeksUntilEnd>22</weeksUntilEnd>
+	</startEndDates>
+	<!--<noReminders>
+	    <overwriteAssignmentChanges />
+        <saveWithEmptyAssignments />
+        <overwriteSave />
+	</noReminders>-->
+	<InputFilePaths>
+        <masterSchedule>./SampleInput/MasterSchedule.xlsx</masterSchedule>
+        <supply>./SampleInput/Supply Teacher Input.xlsx</supply>
+        <absences>./SampleInput/Absences Input.xlsx</absences>
+        <courses>./SampleInput/Absences Input.xlsx</courses>
+    </InputFilePaths>
+    <output>
+        <onCallerFormsDir/>
+        <onCallerNameFormat/>
+    </output>
+<noReminders><overwriteAssignmentChanges/><saveWithEmptyAssignments/><overwriteSave/></noReminders></config>

@@ -1,17 +1,51 @@
 package AssignSubstitutes.classes;
 
 public class Period{
-	String course;
-	String teachable;
-	int roomNumber;
-	int periodNumber;
-	boolean absent=false;
-	public Period(boolean isAbsent){
-		absent=true;
+	private String course;
+	private String teachable;
+	private String roomNumber;
+	private int periodNumber;
+	private boolean absent;
+	public Period(String courseIn, String teachableIn, int periodNumberIn, String roomNumberIn, boolean isAbsent){
+		course=courseIn;
+		teachable=teachableIn;
+		periodNumber=periodNumberIn;
+		roomNumber=roomNumberIn;
+		absent=isAbsent;
 	}
-	public String getCoure(){return course;}
+	public void toggleAbsence(boolean toggle){
+		absent=toggle;
+	}
+	public String getCourse(){return course;}
 	public String getTeachable(){return teachable;}
-	public int getRoomNumber(){return roomNumber;}
+	public String getRoomNumber(){return roomNumber;}
 	public int getPeriodNumber(){return periodNumber;}
 	public boolean Absent(){return absent;}
+	public String getPeriodString(){
+		//returns empty string if error
+		String periodNum = "";
+		switch(periodNumber){
+			case 1:	periodNum += 1;
+				break;
+			case 2: periodNum += 2;
+				break;
+			case 3: periodNum += "3a";
+				break;
+			case 4:	periodNum += "3b";
+				break;
+			case 5: periodNum += "4";
+			break;
+		}
+		return periodNum;
+	}
+	public String toString(){
+		String strReturn = new String();
+        if (course ==null || course.isEmpty()){
+			strReturn += "Empty";
+		} else {
+			strReturn += course;
+		}
+		strReturn += " Period # "+getPeriodString();
+		return strReturn;
+	}
 }

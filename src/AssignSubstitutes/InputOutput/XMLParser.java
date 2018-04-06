@@ -61,7 +61,7 @@ public class XMLParser {
 
             NodeList config = doc.getElementsByTagName("config");
             settings = (Element) config.item(0);
-        } catch (TransformerException | SAXException | ParserConfigurationException | IOException e)
+        } catch (NullPointerException | TransformerException | SAXException | ParserConfigurationException | IOException e)
         {
             doc=replaceMissingDocument(filepath);
             NodeList config = doc.getElementsByTagName("config");

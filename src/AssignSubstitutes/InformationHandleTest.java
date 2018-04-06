@@ -9,15 +9,16 @@ import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import org.junit.experimental.theories.internal.Assignments;
+//import org.junit.experimental.theories.internal.Assignments;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import /*AssignSubstitutes.*/classes.Assignment;
-import /*AssignSubstitutes.*/classes.Teacher;
-import /*AssignSubstitutes.*/classes.SupplyTeacher;
-import /*AssignSubstitutes.*/classes.OnStaffTeacher;
+import AssignSubstitutes.classes.Assignment;
+import AssignSubstitutes.classes.Teacher;
+import AssignSubstitutes.classes.SupplyTeacher;
+import AssignSubstitutes.classes.OnStaffTeacher;
+import AssignSubstitutes.classes.Period;
 
 class InformationHandleTest {
 	ArrayList<OnStaffTeacher> osRoster; //size should end up 7
@@ -25,9 +26,9 @@ class InformationHandleTest {
 	ArrayList<OnStaffTeacher> absences; //size should end up 2
 	@BeforeAll
 	void buildTeacherStuff() {
-		osRoster = ThePointlessClassIMade.getTeachers();
-		supplyRoster = ThePointlessClassIMade.getSupplies();
-		absences = ThePointlessClassIMade.getAbsences(osRoster);
+		osRoster = IOTest.getTeachers();
+		supplyRoster = IOTest.getSupplies();
+		absences = IOTest.getAbsences(osRoster);
 	}
 	@Test
 	void testOSRosterSize() {

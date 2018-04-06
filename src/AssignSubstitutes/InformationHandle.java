@@ -1,20 +1,17 @@
 package AssignSubstitutes;
 
-import AssignSubstitutes.classes.Assignment;
-import AssignSubstitutes.classes.OnStaffTeacher;
-import AssignSubstitutes.classes.SupplyTeacher;
-import AssignSubstitutes.classes.Teacher;
-import AssignSubstitutes.classes.Period;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import AssignSubstitutes.InputOutput.XMLParser;
+import AssignSubstitutes.classes.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class InformationHandle{
-    //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
 	XMLParser settings = new XMLParser("./config");
 	public static final int NUM_PERIODS = 5;
 	private static final int M_TAL = settings.getMaxMonthlyTally();
@@ -210,7 +207,7 @@ public class InformationHandle{
                 }
             }
         }
-     /*   System.out.println(t.getName() + " vs " + u.getName() + "\n"
+/*   System.out.println(t.getName() + " vs " + u.getName() + "\n"
             + result.getName() + " is less:\n" +
             t.getWeeklyTally() + " vs " + u.getWeeklyTally() + "\n"
             + t.getMonthlyTally() + " vs " + u.getMonthlyTally() + "\n"
@@ -226,11 +223,11 @@ public class InformationHandle{
    	    oldSubs.set(a, u);
 	    oldSubs.set(b, t);
     }
-    /*public static ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> generateAvailabilityStats(ArrayList<OnStaffTeacher> roster){
-		//info for help:
-		//stats.get() returns the stats for a specific period.
-		//stats.get(1).get(0) returns list of teachers available this week for period 1
-		//stats.get(1).get(1) returns list of teachers availabe this month for period 1
+/*public static ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> generateAvailabilityStats(ArrayList<OnStaffTeacher> roster){
+//info for help:
+//stats.get() returns the stats for a specific period.
+//stats.get(1).get(0) returns list of teachers available this week for period 1
+//stats.get(1).get(1) returns list of teachers availabe this month for period 1
 		ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> stats = new ArrayList<ArrayList<ArrayList<OnStaffTeacher>>>();
 
 		for(int i = 0; i < NUM_PERIODS; i++){
@@ -240,7 +237,7 @@ public class InformationHandle{
 
 		return stats;
 	}*/
-	/*public static ArrayList<String> generateCoverageStats(ArrayList<OnStaffTeacher> roster){
+/*public static ArrayList<String> generateCoverageStats(ArrayList<OnStaffTeacher> roster){
 		int thisTally;
 		int prevTally = -1;
 		ArrayList<String> result = new ArrayList<String>();
@@ -273,7 +270,7 @@ public class InformationHandle{
 		return result;
 	}*/
     public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList,
-            ObservableList<Assignment>
+														 ObservableList<Assignment>
                      assignments, int periodNumber, Assignment
                 currentAssignment){
     	System.out.println("Period " + periodNumber);
@@ -356,8 +353,109 @@ public class InformationHandle{
     	}
     	return notAbsent;
     }
-    
     public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
+            ObservableList<Assignment>
+                     assignments, int periodNumber, Assignment
+                currentAssignment){
+    	System.out.println("Period " + periodNumber);
+    	System.out.println();
+    	System.out.println("Current Assignment "+currentAssignment.getAbsentee()+"\t"+currentAssignment.getSubstitute
+    			()+"\t"+currentAssignment.getPeriod().getPeriodNumber());
+    	System.out.println("Supply teachers");
+    	System.out.println("/////////////////");
+    	for(Teacher t: supplyList) {
+    		System.out.print(t+" ");
+    		for(Period p: t.getSchedule()) {
+    			System.out.print(p.getPeriodNumber() + " ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	System.out.println("On-staff teachers");
+    	System.out.println("/////////////////");
+    	for(Teacher t: fullTeacherList) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	System.out.println("Assignments");
+    	System.out.println("/////////////////");
+    	for(Assignment a : assignments){
+    		System.out.println(a.getAbsentee()+"\t"+a.getSubstitute()+"\t"+a.getPeriod().getPeriodNumber());
+    		System.out.println();
+    	}
+    	System.out.println();
+    	
+    	ArrayList<Teacher> allTeachers = new ArrayList<>();
+    	for(Teacher t : supplyList) {
+    		allTeachers.add(t);
+    	}
+    	for(Teacher t: fullTeacherList) {
+    		allTeachers.add(t);
+    	}
+    	
+    	System.out.println("All teachers without a class this period");
+    	System.out.println("/////////////////");
+    	List<Teacher> noneThisPeriod = allTeachers.stream().filter(
+    			teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(period->period.getPeriodNumber()
+    					==periodNumber)
+    			).collect(Collectors.toList());
+    	for(Teacher t: noneThisPeriod) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	System.out.println();
+    	
+    	System.out.println("Teachers without a class this period and not already assigned");
+    	System.out.println("/////////////////");
+    	List<Teacher> notAssigned = noneThisPeriod.stream().filter(
+    			teacher -> (assignments.stream().noneMatch(
+    					assignment -> assignment.getSubstitute().equals(teacher) &&
+    					assignment.getPeriod().getPeriodNumber() == periodNumber &&
+    					!assignment.equals( currentAssignment )
+    					)
+    					)).collect(Collectors.toList());
+    	for(Teacher t: notAssigned) {
+    		System.out.print(t+" ");
+    		for(Period p : t.getSchedule()){
+    			System.out.print(p.getPeriodNumber()+" ");
+    		}
+    		System.out.println();
+    	}
+    	
+    	System.out.println();
+    	System.out.println("Teachers without a class this period, not already assigned and not absent");
+    	System.out.println("/////////////////");
+    	List<Teacher> notAbsent = notAssigned.stream().filter(
+    			teacher -> (
+    					assignments.stream().noneMatch(
+    							assignment -> assignment.getAbsentee().equals(teacher) &&
+    							assignment.getPeriod().getPeriodNumber()!=periodNumber
+    							
+    							)
+    					)
+    			).collect(Collectors.toList());
+    	Period[] schedule = {new Period(null, null, periodNumber, "0", false), new Period
+    			(null, null, periodNumber, "0", false), new Period(null, null, periodNumber, "0", false), new
+    			Period(null, null, periodNumber, "0", false)};
+    	Teacher nullTeacher=new OnStaffTeacher(null, null, null);
+    	notAbsent.add(0, nullTeacher);
+    	for(Teacher t: notAbsent) {
+    		System.out.print(t + " ");
+    		/*for (Period p : t.getSchedule()) {
+				System.out.print(p.getPeriodNumber() + " ");
+			}*/
+    		System.out.println();
+    	}
+    	return notAbsent;
+    }
+/*public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
             ObservableList<Assignment>
                      assignments, int periodNumber, Assignment
                 currentAssignment){
@@ -452,13 +550,12 @@ public class InformationHandle{
     	notAbsent.add(0, nullTeacher);
     	for(Teacher t: notAbsent) {
     		System.out.print(t + " ");
-    		/*for (Period p : t.getSchedule()) {
-				System.out.print(p.getPeriodNumber() + " ");
-			}*/
+
     		System.out.println();
     	}
     	return notAbsent;
-    }
+    }*/
+
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
     	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
     	for(int i = 0; i<5; i++) {

@@ -47,14 +47,14 @@ public class XMLParser {
     private String onCallerFormPath;
     private String onCallerFormNameFormat;
 
-    private String filepath;
+    private static String filepath;
 
     public XMLParser() throws TransformerException, SAXException, ParserConfigurationException, IOException
     {
         Document doc;
         Element settings;
 
-        this.filepath = "config";
+        this.filepath = "./src/AssignSubstitutes/config";
 
         try {
             doc = getDocument(filepath);

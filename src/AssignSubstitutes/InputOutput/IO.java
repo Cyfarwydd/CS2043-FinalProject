@@ -4,6 +4,7 @@
 package AssignSubstitutes.InputOutput;
 
 
+
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.Period;
 import AssignSubstitutes.classes.SupplyTeacher;
@@ -20,7 +21,7 @@ public class IO {
 
 
         public static ArrayList<OnStaffTeacher> readTeachers(String file) throws IOException {
-            //System.out.println(file);
+            System.out.println(file);
 
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
@@ -30,7 +31,7 @@ public class IO {
             String tName;
             String tSkills;
             String[] tp1, tp2, tp3a, tp3b, tp4;
-            Period[] tSchedule;
+            Period[] tSchedule = new Period[5];
 
             for ( Row row : sheet) {
                 // Iterator keeps going even if cells are empty have to force a break
@@ -40,7 +41,6 @@ public class IO {
                 // skipping labels
                 if(row.equals(sheet.getRow(0)))  continue;
 
-                //System.out.println("row "+row.getRowNum());
                 tName = df.formatCellValue(row.getCell(0));
                 tSkills = df.formatCellValue(row.getCell(1)).split(",")[0];
                 tp1 = df.formatCellValue(row.getCell(2)).split(",");
@@ -49,15 +49,13 @@ public class IO {
                 tp3b = df.formatCellValue(row.getCell(5)).split(",");
                 tp4 = df.formatCellValue(row.getCell(6)).split(",");
 
-                tSchedule = new Period[5];
+
                 /*tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0]), 1, Integer.parseInt(tp1[1]), false);
                 tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0]), 2, Integer.parseInt(tp2[1]), false);
                 tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0]), 3, Integer.parseInt(tp3a[1]), false);
                 tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0]), 4, Integer.parseInt(tp3b[1]), false);
                 tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, Integer.parseInt(tp4[1]), false);*/
-
-                //when a period is read that has no room#, it returns an array of length 1. This avoids the
-                // IndexOutOfBounds exception
+                //for testing while teachable code is in progress
                 if(tp1.length==1){
                     String[] temp={tp1[0], "0"};
                     tp1=temp;
@@ -78,7 +76,6 @@ public class IO {
                     String[] temp={tp4[0], "0"};
                     tp4=temp;
                 }
-                //for testing while teachable code is in progress
                 tSchedule[0] = new Period(tp1[0], null, 1, tp1[1], false);
                 tSchedule[1] = new Period(tp2[0], null, 2, tp2[1], false);
                 tSchedule[2] = new Period(tp3a[0], null, 3, tp3a[1], false);

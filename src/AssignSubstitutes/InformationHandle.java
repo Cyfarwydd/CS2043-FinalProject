@@ -9,14 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Collectors;;
 
 public class InformationHandle{
-	public static XMLParser settings = new XMLParser();
-	public static final int NUM_PERIODS = 5;
-	private static final int M_TAL = settings.getMaxMonthlyTally();
-	private static final int W_TAL = settings.getMaxWeeklyTally();
-	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
+	private static final int NUM_PERIODS = 5;
+	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent, int wTal, int mTal){
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 
 		for(int i = 0; i < absent.size(); i++){
@@ -97,13 +94,13 @@ public class InformationHandle{
 	    }
 	    return subsFree;
     }
-	public static ArrayList<OnStaffTeacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster ){
+	public static ArrayList<OnStaffTeacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster, int wTal, int mTal){
 		ArrayList<OnStaffTeacher> result = new ArrayList<OnStaffTeacher>();
 		for(int i = 0; i < roster.size(); i++){
 			OnStaffTeacher t = roster.get(i);
 			try{
-				if(	t.getWeeklyTally() < W_TAL &&
-					t.getMonthlyTally() < M_TAL)
+				if(	t.getWeeklyTally() < wTal &&
+					t.getMonthlyTally() < mTal)
                 {
 				    for(int j = 0; j < t.getSchedule().length; j++) {
                         if (t.getSchedule()[j].getPeriodNumber() > period) {
@@ -124,14 +121,14 @@ public class InformationHandle{
 		}
 		return result;
 	}
-	public static ArrayList<Teacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supplies){
+	public static ArrayList<Teacher> getAvailability(int period, ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supplies, int wTal, int mTal){
 		ArrayList<Teacher> available = new ArrayList<Teacher>();
 		for(SupplyTeacher t : supplies) {
 			available.add(t);
 		}
 		for(OnStaffTeacher t: roster) {
 			try {
-				if(t.getWeeklyTally() < W_TAL && t.getMonthlyTally() < M_TAL) {
+				if(t.getWeeklyTally() < wTal && t.getMonthlyTally() < mTal) {
 					for(int j = 0; j < t.getSchedule().length; j++) {
 						if(t.getSchedule()[j].getPeriodNumber() > period) {
 							break;
@@ -556,7 +553,7 @@ public class InformationHandle{
     	return notAbsent;
     }*/
 
-    public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
+    public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList, int wTal, int mTal) throws Exception{
     	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
     	for(int i = 0; i<5; i++) {
     		ArrayList<Object> period = new ArrayList();
@@ -572,7 +569,7 @@ public class InformationHandle{
     			break;
     		case 3:
     			period.add(new String(periodStr+i+"B"));
-    			break;
+					break;
     		case 4:
     			period.add(new String(periodStr+i));
     			break;
@@ -585,8 +582,8 @@ public class InformationHandle{
     						== periodNumber)
     				).collect(Collectors.toList());
     		
-    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < W_TAL).collect(Collectors.toList());
-    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < M_TAL).collect(Collectors.toList());
+    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < wTal).collect(Collectors.toList());
+    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < mTal).collect(Collectors.toList());
     		
     		int size = weekTeachers.size();
     		OnStaffTeacher weekAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);

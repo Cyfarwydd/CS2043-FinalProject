@@ -1,6 +1,5 @@
 package AssignSubstitutes;
 
-
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
 import AssignSubstitutes.classes.SupplyTeacher;
@@ -8,13 +7,18 @@ import AssignSubstitutes.classes.Teacher;
 import AssignSubstitutes.classes.Period;
 
 import java.util.ArrayList;
-
+import java.util.List;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class InformationHandle{
     //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
+	XMLParser settings = new XMLParser("./config");
 	public static final int NUM_PERIODS = 5;
-	private static final int M_TAL = 4;
-	private static final int W_TAL = 2;
+	private static final int M_TAL = settings.getMaxMonthlyTally();
+	private static final int W_TAL = settings.getMaxWeeklyTally();
 	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 
@@ -352,108 +356,7 @@ public class InformationHandle{
     	}
     	return notAbsent;
     }
-    public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
-            ObservableList<Assignment>
-                     assignments, int periodNumber, Assignment
-                currentAssignment){
-    	System.out.println("Period " + periodNumber);
-    	System.out.println();
-    	System.out.println("Current Assignment "+currentAssignment.getAbsentee()+"\t"+currentAssignment.getSubstitute
-    			()+"\t"+currentAssignment.getPeriod().getPeriodNumber());
-    	System.out.println("Supply teachers");
-    	System.out.println("/////////////////");
-    	for(Teacher t: supplyList) {
-    		System.out.print(t+" ");
-    		for(Period p: t.getSchedule()) {
-    			System.out.print(p.getPeriodNumber() + " ");
-    		}
-    		System.out.println();
-    	}
-    	System.out.println();
-    	System.out.println("On-staff teachers");
-    	System.out.println("/////////////////");
-    	for(Teacher t: fullTeacherList) {
-    		System.out.print(t+" ");
-    		for(Period p : t.getSchedule()){
-    			System.out.print(p.getPeriodNumber()+" ");
-    		}
-    		System.out.println();
-    	}
-    	System.out.println();
-    	System.out.println("Assignments");
-    	System.out.println("/////////////////");
-    	for(Assignment a : assignments){
-    		System.out.println(a.getAbsentee()+"\t"+a.getSubstitute()+"\t"+a.getPeriod().getPeriodNumber());
-    		System.out.println();
-    	}
-    	System.out.println();
-    	
-    	List<Teacher> allTeachers = new List<Teacher>();
-    	for(Teacher t : supplyList) {
-    		allTeachers.add(t);
-    	}
-    	for(Teacher t: fullTeacherList) {
-    		allTeachers.add(t);
-    	}
-    	
-    	System.out.println("All teachers without a class this period");
-    	System.out.println("/////////////////");
-    	List<Teacher> noneThisPeriod = allTeachers.stream().filter(
-    			teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(period->period.getPeriodNumber()
-    					==periodNumber)
-    			).collect(Collectors.toList());
-    	for(Teacher t: noneThisPeriod) {
-    		System.out.print(t+" ");
-    		for(Period p : t.getSchedule()){
-    			System.out.print(p.getPeriodNumber()+" ");
-    		}
-    		System.out.println();
-    	}
-    	System.out.println();
-    	
-    	System.out.println("Teachers without a class this period and not already assigned");
-    	System.out.println("/////////////////");
-    	List<Teacher> notAssigned = noneThisPeriod.stream().filter(
-    			teacher -> (assignments.stream().noneMatch(
-    					assignment -> assignment.getSubstitute().equals(teacher) &&
-    					assignment.getPeriod().getPeriodNumber() == periodNumber &&
-    					!assignment.equals( currentAssignment )
-    					)
-    					)).collect(Collectors.toList());
-    	for(Teacher t: notAssigned) {
-    		System.out.print(t+" ");
-    		for(Period p : t.getSchedule()){
-    			System.out.print(p.getPeriodNumber()+" ");
-    		}
-    		System.out.println();
-    	}
-    	
-    	System.out.println();
-    	System.out.println("Teachers without a class this period, not already assigned and not absent");
-    	System.out.println("/////////////////");
-    	List<Teacher> notAbsent = notAssigned.stream().filter(
-    			teacher -> (
-    					assignments.stream().noneMatch(
-    							assignment -> assignment.getAbsentee().equals(teacher) &&
-    							assignment.getPeriod().getPeriodNumber()!=periodNumber
-    							
-    							)
-    					)
-    			).collect(Collectors.toList());
-    	Period[] schedule = {new Period(null, null, periodNumber, "0", false), new Period
-    			(null, null, periodNumber, "0", false), new Period(null, null, periodNumber, "0", false), new
-    			Period(null, null, periodNumber, "0", false)};
-    	Teacher nullTeacher=new OnStaffTeacher(null, null, null);
-    	notAbsent.add(0, nullTeacher);
-    	for(Teacher t: notAbsent) {
-    		System.out.print(t + " ");
-    		/*for (Period p : t.getSchedule()) {
-				System.out.print(p.getPeriodNumber() + " ");
-			}*/
-    		System.out.println();
-    	}
-    	return notAbsent;
-    }
+    
     public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
             ObservableList<Assignment>
                      assignments, int periodNumber, Assignment
@@ -558,9 +461,6 @@ public class InformationHandle{
     }
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
     	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
-    	XMLParser settings = new XMLParser("./config");
-    	int maxMonthly = settings.getTempMonthlyMax();
-    	int maxWeekly = settings.getTempWeeklyMax();
     	for(int i = 0; i<5; i++) {
     		ArrayList<Object> period = new ArrayList();
     		int periodNumber = i+1;
@@ -588,8 +488,8 @@ public class InformationHandle{
     						== periodNumber)
     				).collect(Collectors.toList());
     		
-    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
-    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
+    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < W_TAL).collect(Collectors.toList());
+    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < M_TAL).collect(Collectors.toList());
     		
     		int size = weekTeachers.size();
     		OnStaffTeacher weekAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);

@@ -22,7 +22,6 @@ public class SettingsController {
             txtFormatOut, txtTmpMaxWeek, txtTmpMaxMnth, txtPermMaxWeek, txtPermMaxMnth, txtWeeksToReminder;
     @FXML private DatePicker dpStartDate;
     @FXML private CheckBox chkboxNoNagOverwriteAssignmentChanges, chkboxNoNagSaveWithEmptyAssignments, chkboxNoNagOverwriteSave;
-    //TODO: add noNags checkboxes in panelSave
 
     private Stage stage;
     private boolean saved;
@@ -32,7 +31,7 @@ public class SettingsController {
     @FXML
     public void initialize(){
         saved=false;
-
+        //TODO: Update settings controller with XMLParser updates
         //put the panels into an array to make them easier to reference later
         panels = new AnchorPane[5];
         panels[0] = panelMaxOnCalls;
@@ -163,7 +162,7 @@ public class SettingsController {
 
     private void populateSettingsFields(){
         //TODO: get settings from IO and display them
-        settings = new XMLParser("config");
+        settings = new XMLParser();
         txtTmpMaxMnth.setText(Integer.toString(settings.getTempMonthlyMax()));
         txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
         txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));

@@ -560,7 +560,7 @@ public class InformationHandle{
 
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
     	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
-    	XMLParser settings = new XMLParser("./config");
+    	XMLParser settings = new XMLParser();
     	int maxMonthly = settings.getTempMonthlyMax();
     	int maxWeekly = settings.getTempWeeklyMax();
     	for(int i = 0; i<5; i++) {

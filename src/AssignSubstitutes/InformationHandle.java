@@ -1,6 +1,5 @@
 package AssignSubstitutes;
 
-
 import AssignSubstitutes.InputOutput.XMLParser;
 import AssignSubstitutes.classes.*;
 import javafx.collections.FXCollections;
@@ -12,12 +11,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class InformationHandle{
-    //TODO: replace NUM_PERIODS, M_TAL, W_TAL with actual variables
+	public static XMLParser settings = new XMLParser();
 	public static final int NUM_PERIODS = 5;
-	private static final int M_TAL = 4;
-	private static final int W_TAL = 2;
+	private static final int M_TAL = settings.getMaxMonthlyTally();
+	private static final int W_TAL = settings.getMaxWeeklyTally();
 	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent){
 	    ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 
@@ -209,7 +207,7 @@ public class InformationHandle{
                 }
             }
         }
-     /*   System.out.println(t.getName() + " vs " + u.getName() + "\n"
+/*   System.out.println(t.getName() + " vs " + u.getName() + "\n"
             + result.getName() + " is less:\n" +
             t.getWeeklyTally() + " vs " + u.getWeeklyTally() + "\n"
             + t.getMonthlyTally() + " vs " + u.getMonthlyTally() + "\n"
@@ -225,11 +223,11 @@ public class InformationHandle{
    	    oldSubs.set(a, u);
 	    oldSubs.set(b, t);
     }
-    /*public static ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> generateAvailabilityStats(ArrayList<OnStaffTeacher> roster){
-		//info for help:
-		//stats.get() returns the stats for a specific period.
-		//stats.get(1).get(0) returns list of teachers available this week for period 1
-		//stats.get(1).get(1) returns list of teachers availabe this month for period 1
+/*public static ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> generateAvailabilityStats(ArrayList<OnStaffTeacher> roster){
+//info for help:
+//stats.get() returns the stats for a specific period.
+//stats.get(1).get(0) returns list of teachers available this week for period 1
+//stats.get(1).get(1) returns list of teachers availabe this month for period 1
 		ArrayList<ArrayList<ArrayList<OnStaffTeacher>>> stats = new ArrayList<ArrayList<ArrayList<OnStaffTeacher>>>();
 
 		for(int i = 0; i < NUM_PERIODS; i++){
@@ -239,7 +237,7 @@ public class InformationHandle{
 
 		return stats;
 	}*/
-	/*public static ArrayList<String> generateCoverageStats(ArrayList<OnStaffTeacher> roster){
+/*public static ArrayList<String> generateCoverageStats(ArrayList<OnStaffTeacher> roster){
 		int thisTally;
 		int prevTally = -1;
 		ArrayList<String> result = new ArrayList<String>();
@@ -457,7 +455,7 @@ public class InformationHandle{
     	}
     	return notAbsent;
     }
-    /*public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
+/*public static List<Teacher> getAssignableTeacherList(Collection<OnStaffTeacher> fullTeacherList, Collection<SupplyTeacher> supplyList,
             ObservableList<Assignment>
                      assignments, int periodNumber, Assignment
                 currentAssignment){
@@ -560,9 +558,6 @@ public class InformationHandle{
 
     public static ObservableList<ArrayList<Object>> getAvailabilityStats(Collection<OnStaffTeacher> fullTeacherList) throws Exception{
     	ObservableList<ArrayList<Object>> periods= FXCollections.observableArrayList();
-    	XMLParser settings = new XMLParser();
-    	int maxMonthly = settings.getTempMonthlyMax();
-    	int maxWeekly = settings.getTempWeeklyMax();
     	for(int i = 0; i<5; i++) {
     		ArrayList<Object> period = new ArrayList();
     		int periodNumber = i+1;
@@ -590,8 +585,8 @@ public class InformationHandle{
     						== periodNumber)
     				).collect(Collectors.toList());
     		
-    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < maxWeekly).collect(Collectors.toList());
-    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < maxMonthly).collect(Collectors.toList());
+    		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < W_TAL).collect(Collectors.toList());
+    		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < M_TAL).collect(Collectors.toList());
     		
     		int size = weekTeachers.size();
     		OnStaffTeacher weekAvailTeacher = new OnStaffTeacher(size + " teachers",null,null);

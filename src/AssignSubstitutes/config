@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<config>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><config>
 	<onCalls>
 		<!--<weeklyMax>2</weeklyMax>-->
 		<monthlyMax>4</monthlyMax>
 		<tempWeeklyMax>2</tempWeeklyMax>
 		<tempMonthlyMax>4</tempMonthlyMax>
-	</onCalls>
+	<weeklyMax/></onCalls>
 	<startEndDates>
 	    <startDate>2017-02-01</startDate>
 	    <weeksUntilEnd>22</weeksUntilEnd>
@@ -22,7 +21,7 @@
         <courses>\SampleInput\Absences Input.xlsx</courses>
     </InputFilePaths>
     <output>
-        <onCallerFormsDir />
-        <onCallerNameFormat />
+        <onCallerFormsDir/>
+        <onCallerNameFormat/>
     </output>
-</config>
+<noReminders><overwriteAssignmentChanges/><saveWithEmptyAssignments/><overwriteSave/></noReminders></config>

@@ -10,8 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-;
-
 public class InformationHandle{
 	private static final int NUM_PERIODS = 5;
 	public static ArrayList<Assignment> generateAssignments(ArrayList<OnStaffTeacher> roster, ArrayList<SupplyTeacher> supply, ArrayList<OnStaffTeacher> absent, int wTal, int mTal){

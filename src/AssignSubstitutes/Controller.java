@@ -68,14 +68,18 @@ public class Controller {
 
         //TODO: check for empty input paths and notify user rather than calling IO
         try {
-            osTeachers = IO.readTeachers(settings.getMasterSchedulePath());
+            osTeachers = IO.readTeachers(settings.getMasterSchedulePath(), settings.getCourseCodesPath());
             for(OnStaffTeacher t: osTeachers){
                 System.out.println("osTeacher: "+t+" schedule "+Arrays.toString(t.getSchedule()));
             }
-        }catch (Exception e){
+        }catch (IOException e){
             errorHandler("Master Schedule file could not be found at " + settings.getMasterSchedulePath());
             clickSettings();
 
+        }catch(Exception e){
+            errorHandler("Error reading Master Schedule File at " + settings.getMasterSchedulePath()+
+                    "\n please check the formatting and reload the program");
+            //TODO:make exit;
         }
 
         try {
@@ -439,5 +443,6 @@ public class Controller {
         alert.setHeaderText(msg);
         alert.initStyle(StageStyle.UTILITY);
         alert.show();
+        //TODO: make show and wait
     }
 }

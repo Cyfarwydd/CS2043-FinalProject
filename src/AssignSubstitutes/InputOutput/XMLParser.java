@@ -54,7 +54,7 @@ public class XMLParser {
         Document doc;
         Element settings;
 
-        this.filepath = "./src/AssignSubstitutes/config";
+        this.filepath = "config";
 
         try {
             doc = getDocument(filepath);

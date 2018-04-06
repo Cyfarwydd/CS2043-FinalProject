@@ -20,21 +20,20 @@ import java.util.Map;
 public class IO {
         private static ArrayList<OnStaffTeacher> readStaff = new ArrayList<>();
 
-        public static ArrayList<OnStaffTeacher> readTeachers(String file) throws IOException {
+        public static ArrayList<OnStaffTeacher> readTeachers(String file, String courseFile) throws IOException {
 
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
             Sheet sheet = newSheet(file);
+
             DataFormatter df = new DataFormatter();
 
             String tName;
             String tSkills;
             String[] tp1, tp2, tp3a, tp3b, tp4;
-            Period[] tSchedule = new Period[5];
-
+            Period[] tSchedule;
             for ( Row row : sheet) {
                 // Iterator keeps going even if cells are empty have to force a break
-
                 if(row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
 
                 // skipping labels
@@ -42,12 +41,12 @@ public class IO {
 
                 tName = df.formatCellValue(row.getCell(0));
                 tSkills = df.formatCellValue(row.getCell(1)).split(",")[0];
+                tSchedule = new Period[5];
                 tp1 = df.formatCellValue(row.getCell(2)).split(",");
                 tp2 = df.formatCellValue(row.getCell(3)).split(",");
                 tp3a = df.formatCellValue(row.getCell(4)).split(",");
                 tp3b = df.formatCellValue(row.getCell(5)).split(",");
                 tp4 = df.formatCellValue(row.getCell(6)).split(",");
-
                 if(tp1.length==1){
                     String[] temp={tp1[0], "0"};
                     tp1=temp;
@@ -68,19 +67,17 @@ public class IO {
                     String[] temp={tp4[0], "0"};
                     tp4=temp;
                 }
-                tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0]), 1, tp1[1], false);
-                tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0]), 2, tp2[1], false);
-                tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0]), 3, tp3a[1], false);
-                tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0]), 4, tp3b[1], false);
-                tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0]), 5, tp4[1], false);
+                tSchedule[0] = new Period(tp1[0], getTeachable(tp1[0], courseFile), 1, tp1[1], false);
+                tSchedule[1] = new Period(tp2[0], getTeachable(tp2[0], courseFile), 2, tp2[1], false);
+                tSchedule[2] = new Period(tp3a[0], getTeachable(tp3a[0], courseFile), 3, tp3a[1], false);
+                tSchedule[3] = new Period(tp3b[0], getTeachable(tp3b[0], courseFile), 4, tp3b[1], false);
+                tSchedule[4] = new Period(tp4[0], getTeachable(tp4[0], courseFile), 5, tp4[1], false);
 
                 osTeachers.add(new OnStaffTeacher(tName, tSchedule, tSkills));
             }
             readStaff = osTeachers;
             return osTeachers;
         } // readTeachers(String)
-
-
 
         // TO DO: correlate absences to teachers and change their isAbsent state.
         public static ArrayList<OnStaffTeacher> readAbsences(String file) throws IOException {
@@ -118,8 +115,6 @@ public class IO {
             return osTeachers;
         } //readAbsences()
 
-
-
         public static ArrayList<SupplyTeacher> readSupplies(String file) throws IOException{
 
             Sheet sheet = newSheet(file);
@@ -139,7 +134,7 @@ public class IO {
         }
 
 
-    public static void writeOnCallerForms(Map<LocalDate, ArrayList<Assignment>> assignments) throws IOException {
+        public static void writeOnCallerForms(Map<LocalDate, ArrayList<Assignment>> assignments) throws IOException {
         // iterate through the absent teachers for the day generating an on caller form for each one
 
         System.err.println(assignments.toString());
@@ -155,7 +150,7 @@ public class IO {
     } // TO DO
 
 
-    //public void saveAssignments(){} // TO DO
+        //public void saveAssignments(){} // TO DO
         //public Settings readSettings() {} // TO DO
         //public String getMasterResetDate() {} // TO DO
         //public int getMaxWeeklyTally(){} // to do
@@ -166,17 +161,17 @@ public class IO {
 
 
 
-  /////////////\\\\\\\\\\\\\\
- // ### Helper Methods ###  \\
-// // // // ///\\\ \\ \\ \\ \\\
+          /////////////\\\\\\\\\\\\\\
+         // ### Helper Methods ###  \\
+        // // // // ///\\\ \\ \\ \\ \\\
 
 
-    private static String getTeachable(String courseName) throws IOException{
+        private static String getTeachable(String courseName, String courseFile) throws IOException{
 
         String teachable = "None";
         DataFormatter df = new DataFormatter();
 
-        Sheet sheet = newSheet("./SampleInput/Course Code Input.xlsx");
+        Sheet sheet = newSheet(courseFile);
 
         for (Row row : sheet){
             if(row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
@@ -202,7 +197,7 @@ public class IO {
         }
 
 
-    private static Workbook createWorkbook() throws IOException{
+       private static Workbook createWorkbook() throws IOException{
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
 
@@ -241,20 +236,20 @@ public class IO {
 
 
 
-    // TO DO: Remove fileDir and add to settings
-    private static void saveWorkbook(Workbook wb, String fileDir, String teacherName, LocalDate date) throws IOException{
+        // TO DO: Remove fileDir and add to settings
+        private static void saveWorkbook(Workbook wb, String fileDir, String teacherName, LocalDate date) throws IOException{
 
-        if( fileDir.equals("") ) fileDir = "./Auto Generated Output.xlsx";
-        if( date.equals("") ) date = LocalDate.now();
+            if( fileDir.equals("") ) fileDir = "./Auto Generated Output.xlsx";
+            if( date.equals("") ) date = LocalDate.now();
 
-        FileOutputStream output = new FileOutputStream(fileDir+"/"+date.toString()+" "+teacherName);
-        wb.write(output);
-        output.close();
+            FileOutputStream output = new FileOutputStream(fileDir+"/"+date.toString()+" "+teacherName);
+            wb.write(output);
+            output.close();
 
-        // Closing the workbook
-        wb.close();
+            // Closing the workbook
+            wb.close();
 
-    }
+        }
 
 
 } // class

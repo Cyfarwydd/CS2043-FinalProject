@@ -1,6 +1,5 @@
 package AssignSubstitutes;
 
-import AssignSubstitutes.InputOutput.XMLParser;
 import AssignSubstitutes.classes.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;;
+import java.util.stream.Collectors;
+
+;
 
 public class InformationHandle{
 	private static final int NUM_PERIODS = 5;

@@ -105,13 +105,14 @@ public class Controller {
         }
         buildAvailabilityTable();
         try {
-            ObservableList<ArrayList<Object>> availabilityByPeriod = InformationHandle.getAvailabilityStats(osTeachers);
+            ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, settings.getMaxWeeklyTally(), settings.getMaxMonthlyTally());
             tblAvailability.setItems(availabilityByPeriod);
         }catch(Exception e){
             errorHandler(e.getMessage());
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
         }
+
 
     }
 
@@ -123,7 +124,7 @@ public class Controller {
             btnGenerate.setVisible(false);
             btnSave.setVisible(false);
             tblAssignments.setEditable(false);
-            ArrayList<Assignment> prevAssignments = IOTest.getAssignmentByDate(date, osTeachers);
+            ArrayList<Assignment> prevAssignments = AssignSubstitutes.IOTest.getAssignmentByDate(date, osTeachers);
             displayAssignments(prevAssignments);
         }else{
             btnGenerate.setVisible(true);
@@ -167,16 +168,20 @@ public class Controller {
                 }
             }
         }
+        try {
+            currentAssignments = AssignSubstitutes.InformationHandle.generateAssignments(osTeachers, supplies, absences, settings.getMaxWeeklyTally(), settings.getMaxMonthlyTally());
 
-        currentAssignments = InformationHandle.generateAssignments(osTeachers, supplies, absences);
 
-        assignments.put(date, currentAssignments);
-        currentUnsavedAssignments = new ArrayList<>();
-        unsavedAssignments.put(date, currentUnsavedAssignments);
-        for(Assignment a : currentAssignments) {
-            currentUnsavedAssignments.add(new Assignment(a.getAbsentee(), a.getSubstitute(), a.getPeriod()));
+            assignments.put(date, currentAssignments);
+            currentUnsavedAssignments = new ArrayList<>();
+            unsavedAssignments.put(date, currentUnsavedAssignments);
+            for (Assignment a : currentAssignments) {
+                currentUnsavedAssignments.add(new Assignment(a.getAbsentee(), a.getSubstitute(), a.getPeriod()));
+            }
+            tblAssignments.getItems().setAll(currentUnsavedAssignments);
+        }catch (Exception e){
+            errorHandler(e.getMessage());
         }
-        tblAssignments.getItems().setAll(currentUnsavedAssignments);
     }
 
     @FXML
@@ -265,7 +270,7 @@ public class Controller {
             @Override
             public void startEdit() {
                 Assignment currentRow = getTableRow().getItem();
-                getItems().setAll(InformationHandle.getAssignableTeacherList(osTeachers, getTableView().getItems(),
+                getItems().setAll(AssignSubstitutes.InformationHandle.getAssignableTeacherList(osTeachers, getTableView().getItems(),
                         currentRow.getPeriod().getPeriodNumber(), currentRow));
                 super.startEdit();
             }

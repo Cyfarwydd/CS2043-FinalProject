@@ -300,9 +300,7 @@ public class XMLParser {
         return noNagOverwriteSave;
     }
 
-    public String getMasterSchedulePath() {
-        return masterSchedulePath;
-    }
+    public String getMasterSchedulePath() { return masterSchedulePath; }
 
     public String getAbsenceInputPath() {
         return absenceInputPath;

@@ -73,7 +73,9 @@ public class Controller {
                 System.out.println("osTeacher: "+t+" schedule "+Arrays.toString(t.getSchedule()));
             }
         }catch (Exception e){
-            errorHandler("Master Schedule file could not be found at" + settings.getMasterSchedulePath());
+            errorHandler("Master Schedule file could not be found at " + settings.getMasterSchedulePath());
+            clickSettings();
+
         }
 
         try {
@@ -82,16 +84,18 @@ public class Controller {
                 System.out.println("supplies: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
             }
         }catch (Exception e){
-            errorHandler("Supply Teacher file could not be found at" + settings.getSupplyTeacherPath());
+            errorHandler("Supply Teacher file could not be found at " + settings.getSupplyTeacherPath());
+            clickSettings();
         }
 
         try {
             absences = IO.readAbsences(settings.getAbsenceInputPath());
             for(Teacher t: absences){
                 System.out.println("absences: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
+                clickSettings();
             }
         }catch (Exception e){
-            errorHandler("Absences file could not be found at" + settings.getAbsenceInputPath());
+            errorHandler("Absences file could not be found at " + settings.getAbsenceInputPath());
         }
 
         //TODO: get noNag booleans from settings
@@ -206,6 +210,12 @@ public class Controller {
         }
         assignments.put(date, new ArrayList<>(tblItems));
         //TODO: call IO to write assignments to file.
+        //TODO: call IO to write assignments to file.
+        try {
+            IO.writeOnCallerForms(assignments);
+        }catch (IOException e){
+            errorHandler("Error writing the on caller forms");
+        }
         if(date == LocalDate.now()) {
             //TODO: increment tallys
             //TODO: update availability

@@ -54,8 +54,6 @@ public class XMLParser {
 
         NodeList config = doc.getElementsByTagName("config");
         Element settings = (Element)config.item(0);
-        //TODO: get all / set all currently applicable settings
-        //TODO: confirm existence of all settings in config
 
         this.filepath = "config";
 

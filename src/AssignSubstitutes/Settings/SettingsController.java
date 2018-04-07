@@ -140,12 +140,12 @@ public class SettingsController {
 
     private void navSelectionChange(ObservableValue<? extends String> observable, String oldValue, String newValue){
 
-        System.out.println("settingsMenu width: "+settingsMenu.getWidth());
+        /*System.out.println("settingsMenu width: "+settingsMenu.getWidth());
         System.out.println("panelContainer width: "+panelContainer.getWidth());
         System.out.println("panelMaxOnCalls width: "+panelMaxOnCalls.getWidth());
         System.out.println("panelContainer height: "+panelContainer.getHeight());
         System.out.println("panelMaxOnCalls height: "+panelMaxOnCalls.getHeight());
-        System.out.println("panelMaxOnCalls label height: "+((Label)(panelMaxOnCalls.getChildren().get(4))).getHeight());
+        System.out.println("panelMaxOnCalls label height: "+((Label)(panelMaxOnCalls.getChildren().get(4))).getHeight());*/
         int newIndex = settingsMenu.getItems().indexOf(newValue);
         panelContainer.getChildren().add(panels[newIndex]);
         panelContainer.getChildren().remove(0);

@@ -82,7 +82,11 @@ public class Controller {
             errorHandler("Supply Teacher file could not be found");
         }
         try {
-            absences = IO.readAbsences(settings.getAbsenceInputPath());
+            LocalDate l = datePicker.getValue();
+            if(l == null){
+                l = LocalDate.now();
+            }
+            absences = IO.readAbsences(settings.getAbsenceInputPath(), osTeachers, l);
             for(Teacher t: absences){
                 System.out.println("absences: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
             }

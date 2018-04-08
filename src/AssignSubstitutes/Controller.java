@@ -29,7 +29,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Controller {
-
+    //TODO: disable generate button on weekends
     private XMLParser settings;
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;

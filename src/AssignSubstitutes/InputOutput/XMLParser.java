@@ -31,7 +31,7 @@ public class XMLParser {
     private Integer maxMonthlyTally;
     private Integer tempWeeklyMax;
     private Integer tempMonthlyMax;
-
+    //TODO: make all class variables static
     private LocalDate startDate;
     private Integer weeksToReminder;
 

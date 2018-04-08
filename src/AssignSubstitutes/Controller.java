@@ -40,21 +40,32 @@ public class Controller {
 
     private ArrayList<LocalDate> generated;
     private boolean noNagSaveWithEmptyAssignments, noNagOverwriteAssignmentChanges, noNagOverwriteSave;
-    @FXML private TableView<Assignment> tblAssignments;
-    @FXML private TableColumn<Assignment, String> colAssignAbsent, colAssignDelete;
-    @FXML private TableColumn<Assignment, Teacher> colAssignSub;
-    @FXML private TableColumn<Assignment, Integer> colAssignPeriod;
-    @FXML private TableView<OnStaffTeacher> tblCoverage;
-    @FXML private TableColumn<OnStaffTeacher, String> colCovTeacher;
-    @FXML private TableColumn<OnStaffTeacher, Integer> colCovWeek, colCovMonth, colCovTotal;
-    @FXML private TableView<ArrayList<Object>> tblAvailability;
-    @FXML private TableColumn<ArrayList<Object>, String> colAvailPeriod, colAvailWeek, colAvailMonth;
-    @FXML private DatePicker datePicker;
-    @FXML private Button btnGenerate, btnSave;
+    @FXML
+    private TableView<Assignment> tblAssignments;
+    @FXML
+    private TableColumn<Assignment, String> colAssignAbsent, colAssignDelete;
+    @FXML
+    private TableColumn<Assignment, Teacher> colAssignSub;
+    @FXML
+    private TableColumn<Assignment, Integer> colAssignPeriod;
+    @FXML
+    private TableView<OnStaffTeacher> tblCoverage;
+    @FXML
+    private TableColumn<OnStaffTeacher, String> colCovTeacher;
+    @FXML
+    private TableColumn<OnStaffTeacher, Integer> colCovWeek, colCovMonth, colCovTotal;
+    @FXML
+    private TableView<ArrayList<Object>> tblAvailability;
+    @FXML
+    private TableColumn<ArrayList<Object>, String> colAvailPeriod, colAvailWeek, colAvailMonth;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private Button btnGenerate, btnSave;
 
     @FXML
-    public void initialize(){
-        assignments =Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
+    public void initialize() {
+        assignments = Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         unsavedAssignments = Collections.synchronizedMap(new HashMap<LocalDate, ArrayList<Assignment>>());
         generated = new ArrayList<>();
 
@@ -62,48 +73,54 @@ public class Controller {
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
             settings = new XMLParser();
-        }catch (Exception e){
+            System.out.println("xmlparser didn't throw up");
+        } catch (Exception e) {
+            System.out.println("xmlparser threw up");
             errorHandler("XML config file could not be found");
         }
 
         //TODO: check for empty input paths and notify user rather than calling IO
+        if (settings == null) {
+            System.out.println("settings is null");
+        }
         try {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath(), settings.getCourseCodesPath());
-            for(OnStaffTeacher t: osTeachers){
-                System.out.println("osTeacher: "+t+" schedule "+Arrays.toString(t.getSchedule()));
+            for (OnStaffTeacher t : osTeachers) {
+                System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             errorHandler("Master Schedule file could not be found at " + settings.getMasterSchedulePath());
             clickSettings();
         }
 
         try {
             supplies = IO.readSupplies(settings.getSupplyTeacherPath());
-            for(Teacher t: supplies){
-                System.out.println("supplies: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
+            for (Teacher t : supplies) {
+                System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             errorHandler("Supply Teacher file could not be found at " + settings.getSupplyTeacherPath());
             clickSettings();
         }
 
         try {
             LocalDate l = datePicker.getValue();
-            if(l == null){
+            if (l == null) {
                 l = LocalDate.now();
             }
+            //TODO: disable Generate assignments button on weekends
             absences = IO.readAbsences(settings.getAbsenceInputPath(), osTeachers, l);
-            for(Teacher t: absences){
-                System.out.println("absences: "+t+" schedule "+(t.getSchedule()==null ? "null" : Arrays.toString(t.getSchedule())));
+            for (Teacher t : absences) {
+                System.out.println("absences: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             errorHandler("Absences file could not be found at " + settings.getAbsenceInputPath());
             clickSettings();
         }
 
         //TODO: get noNag booleans from settings
-        noNagOverwriteAssignmentChanges=false;
-        noNagSaveWithEmptyAssignments=false;
+        noNagOverwriteAssignmentChanges = false;
+        noNagSaveWithEmptyAssignments = false;
 
         btnSave.setVisible(false);
 
@@ -111,14 +128,14 @@ public class Controller {
 
         buildAssignmentsTable();
         buildCoverageTable();
-        if(osTeachers!=null) {
+        if (osTeachers != null) {
             tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
         }
         buildAvailabilityTable();
         try {
             ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, settings.getMaxWeeklyTally(), settings.getMaxMonthlyTally());
             tblAvailability.setItems(availabilityByPeriod);
-        }catch(Exception e){
+        } catch (Exception e) {
             errorHandler(e.getMessage());
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
@@ -128,20 +145,20 @@ public class Controller {
     }
 
     @FXML
-    private void changeDate(){
+    private void changeDate() {
         LocalDate date = datePicker.getValue();
 
-        if(date.isBefore(LocalDate.now())) {
+        if (date.isBefore(LocalDate.now())) {
             btnGenerate.setVisible(false);
             btnSave.setVisible(false);
             tblAssignments.setEditable(false);
             ArrayList<Assignment> prevAssignments = AssignSubstitutes.IOTest.getAssignmentByDate(date, osTeachers);
             displayAssignments(prevAssignments);
-        }else{
+        } else {
             btnGenerate.setVisible(true);
-            if(generated.contains(date)) {
+            if (generated.contains(date)) {
                 btnSave.setVisible(true);
-            }else{
+            } else {
                 btnSave.setVisible(false);
             }
             tblAssignments.setEditable(true);
@@ -150,19 +167,19 @@ public class Controller {
     }
 
     @FXML
-    private void clickGenerateAssignments(){
+    private void clickGenerateAssignments() {
         LocalDate date = datePicker.getValue();
         ArrayList<Assignment> currentAssignments;
         ArrayList<Assignment> currentUnsavedAssignments;
-        if(!generated.contains(date)){
+        if (!generated.contains(date)) {
             generated.add(date);
             btnSave.setVisible(true);
-        }else{
+        } else {
             //check to see if it has already been generated.
-            currentAssignments=assignments.get(date);
-            currentUnsavedAssignments=unsavedAssignments.get(date);
-            if(!noNagOverwriteAssignmentChanges&&!currentAssignments.equals(currentUnsavedAssignments)){
-                boolean[] nagCheck={noNagOverwriteAssignmentChanges};
+            currentAssignments = assignments.get(date);
+            currentUnsavedAssignments = unsavedAssignments.get(date);
+            if (!noNagOverwriteAssignmentChanges && !currentAssignments.equals(currentUnsavedAssignments)) {
+                boolean[] nagCheck = {noNagOverwriteAssignmentChanges};
                 ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.APPLY);
                 ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -172,7 +189,7 @@ public class Controller {
 
                 if (result.get() == buttonTypeNo) {
                     return;
-                }else{
+                } else {
                     noNagOverwriteAssignmentChanges = nagCheck[0];
                     //TODO: write noNag to settings
                     //TODO: get Absentees and Supplies
@@ -190,18 +207,18 @@ public class Controller {
                 currentUnsavedAssignments.add(new Assignment(a.getAbsentee(), a.getSubstitute(), a.getPeriod()));
             }
             tblAssignments.getItems().setAll(currentUnsavedAssignments);
-        }catch (Exception e){
+        } catch (Exception e) {
             errorHandler(e.getMessage());
         }
     }
 
     @FXML
-    private void clickSave(){
+    private void clickSave() {
         LocalDate date = datePicker.getValue();
         ObservableList<Assignment> tblItems = tblAssignments.getItems();
         //check for empty assignments
-        if(!noNagSaveWithEmptyAssignments && tblItems.stream().anyMatch(a-> a.getAbsentee().getName().isEmpty())){
-            boolean[] nagCheck={noNagSaveWithEmptyAssignments};
+        if (!noNagSaveWithEmptyAssignments && tblItems.stream().anyMatch(a -> a.getAbsentee().getName().isEmpty())) {
+            boolean[] nagCheck = {noNagSaveWithEmptyAssignments};
             ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.APPLY);
             ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -211,7 +228,7 @@ public class Controller {
 
             if (result.get() == buttonTypeNo) {
                 return;
-            }else{
+            } else {
                 noNagSaveWithEmptyAssignments = nagCheck[0];
                 //TODO: write noNag to settings
             }
@@ -220,10 +237,10 @@ public class Controller {
         //TODO: call IO to write assignments to file.
         try {
             IO.writeOnCallerForms(assignments);
-        }catch (IOException e){
+        } catch (IOException e) {
             errorHandler("Error writing the on caller forms");
         }
-        if(date == LocalDate.now()) {
+        if (date == LocalDate.now()) {
             //TODO: increment tallys
             //TODO: update availability
         }
@@ -251,16 +268,16 @@ public class Controller {
 
             boolean saved = controller.getSaved();
             System.out.println("Saved: " + saved);
-        }catch(Exception e){
+        } catch (Exception e) {
             errorHandler(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void displayAssignments(Collection<Assignment> assignmentsIn){
-        if(assignmentsIn!=null) {
+    private void displayAssignments(Collection<Assignment> assignmentsIn) {
+        if (assignmentsIn != null) {
             tblAssignments.getItems().setAll(assignmentsIn);
-        }else{
+        } else {
             tblAssignments.getItems().setAll(new ArrayList<>());
         }
     }
@@ -311,7 +328,7 @@ public class Controller {
             }
         });
 
-        colAssignDelete.setCellFactory(new Callback<TableColumn<Assignment,String>,TableCell<Assignment,String>>(){
+        colAssignDelete.setCellFactory(new Callback<TableColumn<Assignment, String>, TableCell<Assignment, String>>() {
             @Override
             public TableCell<Assignment, String> call(final TableColumn<Assignment, String> param) {
                 final TableCell<Assignment, String> cell = new TableCell<Assignment, String>() {
@@ -350,7 +367,7 @@ public class Controller {
     }
 
     private void buildAvailabilityTable() {
-        colAvailPeriod.setCellValueFactory(arrayList -> new SimpleObjectProperty<>((String)arrayList.getValue().get(0)));
+        colAvailPeriod.setCellValueFactory(arrayList -> new SimpleObjectProperty<>((String) arrayList.getValue().get(0)));
 
         colAvailWeek.setCellFactory(new Callback<>() {
             @Override
@@ -359,24 +376,25 @@ public class Controller {
                 final TableCell<ArrayList<Object>, String> cell = new
                         TableCell<>() {
 
-                    final ComboBox<OnStaffTeacher> comboBox = new ComboBox();
+                            final ComboBox<OnStaffTeacher> comboBox = new ComboBox();
 
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(1);
-                            comboBox.setItems(FXCollections.observableArrayList(teachers));
-                            comboBox.getSelectionModel().selectFirst();
-                            setGraphic(comboBox);
-                            //TODO: on select, selectFirst
-                            setText(null);
-                        }
-                    }
-                };
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    List<OnStaffTeacher> teachers = (List<OnStaffTeacher>) getTableRow().getItem().get(1);
+
+                                    comboBox.setItems(FXCollections.observableArrayList(teachers));
+                                    comboBox.getSelectionModel().selectFirst();
+                                    setGraphic(comboBox);
+                                    //TODO: on select, selectFirst
+                                    setText(null);
+                                }
+                            }
+                        };
                 return cell;
             }
         });
@@ -397,7 +415,7 @@ public class Controller {
                                     setGraphic(null);
                                     setText(null);
                                 } else {
-                                    List<OnStaffTeacher> teachers = (List<OnStaffTeacher>)getTableRow().getItem().get(2);
+                                    List<OnStaffTeacher> teachers = (List<OnStaffTeacher>) getTableRow().getItem().get(2);
                                     comboBox.setItems(FXCollections.observableArrayList(teachers));
                                     comboBox.getSelectionModel().selectFirst();
                                     setGraphic(comboBox);
@@ -411,8 +429,8 @@ public class Controller {
     }
 
     private static Alert createConfirmAlertWithOptOut(String title, String headerText,
-                                                            boolean[] selected,
-                                                            ButtonType... buttonTypes) {
+                                                      boolean[] selected,
+                                                      ButtonType... buttonTypes) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getDialogPane().applyCss();
         Node graphic = alert.getDialogPane().getGraphic();

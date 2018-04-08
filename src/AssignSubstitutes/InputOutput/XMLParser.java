@@ -52,28 +52,25 @@ public class XMLParser {
     public XMLParser() throws TransformerException, SAXException, ParserConfigurationException, IOException
     {
         Document doc;
+        NodeList config;
         Element settings;
-
         this.filepath = "config";
 
         try {
             doc = getDocument(filepath);
-
-            NodeList config = doc.getElementsByTagName("config");
+            config = doc.getElementsByTagName("config");
             settings = (Element) config.item(0);
-        } catch (NullPointerException | TransformerException | SAXException | ParserConfigurationException | IOException e)
+        } catch (NullPointerException | ParserConfigurationException | SAXException | IOException e)
         {
-            doc=replaceMissingDocument(filepath);
-            NodeList config = doc.getElementsByTagName("config");
+            doc=replaceMissingDocument();
+            config = doc.getElementsByTagName("config");
             settings = (Element) config.item(0);
-            e.printStackTrace();
         }
 
         //TODO: add date temps were changed and a check to reverse them
         Element parentElement;
         try {
             parentElement = (Element) settings.getElementsByTagName("onCalls").item(0);
-
 
             try {
                 this.maxWeeklyTally = verifyInts(settings.getElementsByTagName("weeklyMax").item(0).getTextContent(),
@@ -207,6 +204,7 @@ public class XMLParser {
         }catch (Exception e){
             replaceMissingOutputElement(doc, settings);
         }
+        System.out.println("does it get this far?");
     } // constructor
 
 
@@ -412,26 +410,29 @@ public class XMLParser {
         this.onCallerFormNameFormat = onCallerFormNameFormat;
     }
 
-    private static Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    private Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException
     {
         DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = docBF.newDocumentBuilder();
         Document doc;
-        try {
-            doc = db.parse(filePath);
-            doc.getDocumentElement().normalize();
-        }catch (Exception e){
-            doc = replaceMissingDocument(filePath);
-        }
+        doc = db.parse(filePath);
+        doc.getDocumentElement().normalize();
         return doc;
     }
 
-    private static Document replaceMissingDocument(String filepath){
+    private Document replaceMissingDocument() throws IOException, SAXException, ParserConfigurationException, TransformerException
+    {
         DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
-        //DocumentBuilder db = docBF.newDocumentBuilder();
-        Document doc;
-        //TODO: make this method write a document
-        return null;
+        DocumentBuilder db = docBF.newDocumentBuilder();
+        Document doc = db.newDocument();
+        Element rootElement = doc.createElement("config");
+        doc.appendChild(rootElement);
+        replaceMissingOnCallsElement(doc, rootElement);
+        replaceMissingStartEndDatesElement(doc, rootElement);
+        replaceMissingNoRemindersElement(doc, rootElement);
+        replaceMissingInputFilePathsElement(doc, rootElement);
+        replaceMissingOutputElement(doc, rootElement);
+        return doc;
     }
 
     private void replaceMissingOnCallsElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException
@@ -526,12 +527,7 @@ public class XMLParser {
         Node out = doc.getElementsByTagName(childElement).item(0);
         out.setTextContent(input);
 
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File(filepath));
-        transformer.transform(source, result);
-
+        writeXML(doc);
     }
 
     private void writeXML(Document doc) throws TransformerException
@@ -541,6 +537,5 @@ public class XMLParser {
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(new File(filepath));
         transformer.transform(source, result);
-
     }
 } // class

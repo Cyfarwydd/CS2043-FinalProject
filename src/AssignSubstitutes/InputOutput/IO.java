@@ -83,26 +83,26 @@ public class IO {
 
         // correlate absences to teachers and change their isAbsent state.
         public static ArrayList<OnStaffTeacher> readAbsences(String file, ArrayList<OnStaffTeacher> roster, LocalDate l) throws IOException {
-
+            System.out.println();
+            System.out.println("file : "+file);
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
             int d = l.getDayOfWeek().getValue() -1;
-            if(d > 4) return null;
+            System.out.println("d : "+file);
+            if(d > 4) return osTeachers;
             Sheet sheet = newSheet(file);
             DataFormatter df = new DataFormatter();
 
-
             String tName;
 
+            System.out.println("1");
             for (Row row : sheet) {
                 Period[] tSchedule = new Period[5];
                 // skips labels and empty rows
                 if (row == sheet.getRow(0)) continue;
                 if (row == sheet.getRow(1)) continue;
                 if (row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
-
                 tName = df.formatCellValue(row.getCell(0));
-
                 // Goes through the teacher's five periods for each day through Monday to Friday
                /* for (int j = 0; j < 5; j++) {
                     for (int i = j * 5; i < (j * 5) + 5; i++) {
@@ -117,12 +117,15 @@ public class IO {
                        tSchedule[i - (d * 5)] = new Period(df.formatCellValue(row.getCell(i + 1)), null, i - (d * 5) + 1, "-1", false);
                    }
                }
+
                 osTeachers.add(new OnStaffTeacher(tName, tSchedule, null));
             }
+
             ArrayList<OnStaffTeacher> absent = crossReferenceAbsences(osTeachers, roster);
 
             return absent;
         } //readAbsences()
+
     private static ArrayList<OnStaffTeacher> crossReferenceAbsences(ArrayList<OnStaffTeacher> absent, ArrayList<OnStaffTeacher> roster){
             ArrayList<OnStaffTeacher> trueAbsences = new ArrayList<>();
             for(OnStaffTeacher t : absent){

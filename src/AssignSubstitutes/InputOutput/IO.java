@@ -81,40 +81,75 @@ public class IO {
             return osTeachers;
         } // readTeachers(String)
 
-        // TO DO: correlate absences to teachers and change their isAbsent state.
-        public static ArrayList<OnStaffTeacher> readAbsences(String file) throws IOException {
+        // correlate absences to teachers and change their isAbsent state.
+        public static ArrayList<OnStaffTeacher> readAbsences(String file, ArrayList<OnStaffTeacher> roster, LocalDate l) throws IOException {
+
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
-
+            int d = l.getDayOfWeek().getValue() -1;
+            if(d > 4) return null;
             Sheet sheet = newSheet(file);
             DataFormatter df = new DataFormatter();
 
 
             String tName;
-            Period[] tSchedule = new Period[5];
-
-            Period[][] weeklySchedule = new Period[5][];
 
             for (Row row : sheet) {
+                Period[] tSchedule = new Period[5];
                 // skips labels and empty rows
-                if (row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
                 if (row == sheet.getRow(0)) continue;
                 if (row == sheet.getRow(1)) continue;
+                if (row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) break;
 
                 tName = df.formatCellValue(row.getCell(0));
 
                 // Goes through the teacher's five periods for each day through Monday to Friday
-                for (int j = 0; j < 5; j++) {
+               /* for (int j = 0; j < 5; j++) {
                     for (int i = j * 5; i < (j * 5) + 5; i++) {
                         tSchedule[i - (j * 5)] = new Period(df.formatCellValue(row.getCell(i + 1)), null, i - (j * 5) + 1, "-1", true);
                     }
                     weeklySchedule[j] = tSchedule;
-                }
-
-                osTeachers.add(new OnStaffTeacher(tName, weeklySchedule[0], null));
+                }*/
+               for(int i = d * 5; i < (d * 5) + 5; i++){
+                   if(df.formatCellValue(row.getCell(i + 1)).toLowerCase().equals("x")){
+                       tSchedule[i - (d * 5)] = new Period(df.formatCellValue(row.getCell(i + 1)), null, i - (d * 5) + 1, "-1", true);
+                   }else{
+                       tSchedule[i - (d * 5)] = new Period(df.formatCellValue(row.getCell(i + 1)), null, i - (d * 5) + 1, "-1", false);
+                   }
+               }
+                osTeachers.add(new OnStaffTeacher(tName, tSchedule, null));
             }
-            return osTeachers;
+            ArrayList<OnStaffTeacher> absent = crossReferenceAbsences(osTeachers, roster);
+
+            return absent;
         } //readAbsences()
+    private static ArrayList<OnStaffTeacher> crossReferenceAbsences(ArrayList<OnStaffTeacher> absent, ArrayList<OnStaffTeacher> roster){
+            ArrayList<OnStaffTeacher> trueAbsences = new ArrayList<>();
+            for(OnStaffTeacher t : absent){
+                Period[] sch = new Period[5];
+                for(OnStaffTeacher u : roster){
+                    if(t.getName().equals(u.getName())) {
+                        for (Period p : t.getSchedule()) {
+                            for (Period q : u.getSchedule()) {
+                                if (p.getPeriodNumber() == q.getPeriodNumber() && p.Absent()) {
+                                    sch[q.getPeriodNumber() - 1] = q;
+                                    sch[q.getPeriodNumber() - 1].toggleAbsence(true);
+                                } else {
+                                    sch[q.getPeriodNumber() - 1] = q;
+                                }
+                            }
+                        }
+                    }
+                }
+                for(Period p: sch){
+                    if(p.Absent()){
+                        trueAbsences.add(new OnStaffTeacher(t.getName(), sch, null));
+                        break;
+                    }
+                }
+            }
+            return trueAbsences;
+    }
 
         public static ArrayList<SupplyTeacher> readSupplies(String file) throws IOException{
 

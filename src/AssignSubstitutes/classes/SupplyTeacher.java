@@ -15,7 +15,7 @@ public class SupplyTeacher extends Teacher{
         teachable = teachableIn;
         Period[] sch = new Period[5];
         for(int i = 0; i < 5; i++){
-            sch[i] = new Period(null, null, i, "100", false);
+            sch[i] = new Period(null, null, i + 1, "100", false);
         }
         schedule = sch;
     }

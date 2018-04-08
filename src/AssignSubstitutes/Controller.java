@@ -69,75 +69,38 @@ public class Controller {
         generated = new ArrayList<>();
 
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
+        //TODO: Find and do something about that errant empty error message that pops up whenever there is an init problem.
+
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
             Settings.init();
         } catch (Exception e) {
-            errorHandler("XML config file could not be found");
+            errorHandler("ERROR loading config file");
         }
 
-        //TODO: differentiate between thrown exceptions (ie:file not found vs some kind of fault)
-        try {
-            try {
-                osTeachers = IO.readTeachers(Settings.getMasterSchedulePath(), Settings.getCourseCodesPath());
-                for (OnStaffTeacher t : osTeachers) {
-                    System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
-                }
-            } catch (IOException e) {
-                errorHandler("Master Schedule file could not be found at " + Settings.getMasterSchedulePath());
-                clickSettings();
-            }
-        }catch (Exception e) {
-            errorHandler("Error Something went wrong get the list of staff teachers");
-        }
-        try {
-            try {
-                supplies = IO.readSupplies(Settings.getSupplyTeacherPath());
-                for (Teacher t : supplies) {
-                    System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
-                }
-            } catch (IOException e) {
-                errorHandler("Supply Teacher file could not be found at " + Settings.getSupplyTeacherPath());
-                clickSettings();
-            }
-        }catch (Exception e) {
-            errorHandler("Error Something went wrong get the list of staff teachers");
-        }
-        try {
-            try {
-                LocalDate l = datePicker.getValue();
-                if (l == null) {
-                    l = LocalDate.now();
-                }
-                //TODO: disable Generate assignments button on weekends
-                absences = IO.readAbsences(Settings.getAbsenceInputPath(), osTeachers, l);
-                for (Teacher t : absences) {
-                    System.out.println("absences: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
-
-                }
-            } catch (IOException e) {
-                errorHandler("Absences file could not be found at " + Settings.getAbsenceInputPath());
-                clickSettings();
-            }
-        }catch (Exception e) {
-            errorHandler("Error Something went wrong get the list of staff teachers");
-        }
-
-        //TODO: get noNag booleans from settings
         noNagOverwriteAssignmentChanges = false;
         noNagSaveWithEmptyAssignments = false;
         noNagOverwriteSave = false;
 
+        resetCheck();
+
         btnSave.setVisible(false);
 
         datePicker.setValue(LocalDate.now());
+        changeDate();
+
+        getFileData();
 
         buildAssignmentsTable();
+
         buildCoverageTable();
+
         if (osTeachers != null) {
             tblCoverage.setItems(FXCollections.observableArrayList(osTeachers));
         }
+
         buildAvailabilityTable();
+
         try {
             ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getMaxWeeklyTally(), Settings.getMaxMonthlyTally());
             tblAvailability.setItems(availabilityByPeriod);
@@ -146,21 +109,14 @@ public class Controller {
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
         }
-
-
     }
 
     @FXML
     private void changeDate() {
         LocalDate date = datePicker.getValue();
-
-        if (date.isBefore(LocalDate.now())) {
-            btnGenerate.setVisible(false);
-            btnSave.setVisible(false);
-            tblAssignments.setEditable(false);
-            ArrayList<Assignment> prevAssignments = AssignSubstitutes.IOTest.getAssignmentByDate(date, osTeachers);
-            displayAssignments(prevAssignments);
-        } else {
+        LocalDate now = LocalDate.now();
+        int dayOfTheWeek = date.getDayOfWeek().getValue(); //monday = 1...Sunday = 7
+        if (date.equals(now) && dayOfTheWeek < 6){
             btnGenerate.setVisible(true);
             if (generated.contains(date)) {
                 btnSave.setVisible(true);
@@ -169,6 +125,14 @@ public class Controller {
             }
             tblAssignments.setEditable(true);
             displayAssignments(unsavedAssignments.get(date));
+        } else {
+            btnGenerate.setVisible(false);
+            btnSave.setVisible(false);
+            tblAssignments.setEditable(false);
+            if(date.isBefore(now) && dayOfTheWeek < 6) {
+                ArrayList<Assignment> prevAssignments = AssignSubstitutes.IOTest.getAssignmentByDate(date, osTeachers);
+                displayAssignments(prevAssignments);
+            }
         }
     }
 
@@ -442,6 +406,77 @@ public class Controller {
                 return cell;
             }
         });
+    }
+
+    private void resetCheck(){
+        try{
+            LocalDate now = LocalDate.now();
+            LocalDate startDate = Settings.getStartDate();
+            long weeks = Settings.getWeeksToReminder();
+
+            if(now.minusWeeks(weeks).compareTo(startDate)>0){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Time to change your start date. Click on the cog and go to 'Other'.");
+                alert.initStyle(StageStyle.UTILITY);
+                alert.show();
+            }
+        }catch (Exception e){
+            errorHandler("There was a problem checking when you would like to be reminded to reset your startdate." +
+                    "\nCheck the settings.");
+        }
+    }
+
+    private void getFileData(){
+        //TODO: differentiate between thrown exceptions (ie:file not found vs some kind of fault)
+        getOSTeachers();
+        getSupplies();
+        getAbsences();
+    }
+    private void getOSTeachers(){
+        try {
+            try {
+                osTeachers = IO.readTeachers(Settings.getMasterSchedulePath(), Settings.getCourseCodesPath());
+                for (OnStaffTeacher t : osTeachers) {
+                    System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
+                }
+            } catch (IOException e) {
+                errorHandler("Master Schedule file could not be found at " + Settings.getMasterSchedulePath());
+                clickSettings();
+            }
+        }catch (Exception e) {
+            errorHandler("Error Something went wrong get the list of staff teachers");
+        }
+    }
+    private void getSupplies(){
+        try {
+            try {
+                supplies = IO.readSupplies(Settings.getSupplyTeacherPath());
+                for (Teacher t : supplies) {
+                    System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
+                }
+            } catch (IOException e) {
+                errorHandler("Supply Teacher file could not be found at " + Settings.getSupplyTeacherPath());
+                clickSettings();
+            }
+        }catch (Exception e) {
+            errorHandler("Error Something went wrong get the list of staff teachers");
+        }
+    }
+    private void getAbsences(){
+        try {
+            try {
+                absences = IO.readAbsences(Settings.getAbsenceInputPath(), osTeachers, datePicker.getValue());
+                for (Teacher t : absences) {
+                    System.out.println("absences: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
+
+                }
+            } catch (IOException e) {
+                errorHandler("Absences file could not be found at " + Settings.getAbsenceInputPath());
+                clickSettings();
+            }
+        }catch (Exception e) {
+            errorHandler("Error Something went wrong get the list of staff teachers");
+        }
     }
 
     private static Alert createConfirmAlertWithOptOut(String title, String headerText,

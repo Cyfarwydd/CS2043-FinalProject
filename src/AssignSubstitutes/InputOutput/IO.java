@@ -83,19 +83,15 @@ public class IO {
 
         // correlate absences to teachers and change their isAbsent state.
         public static ArrayList<OnStaffTeacher> readAbsences(String file, ArrayList<OnStaffTeacher> roster, LocalDate l) throws IOException {
-            System.out.println();
-            System.out.println("file : "+file);
             ArrayList<OnStaffTeacher> osTeachers = new ArrayList<>();
 
             int d = l.getDayOfWeek().getValue() -1;
-            System.out.println("d : "+file);
             if(d > 4) return osTeachers;
             Sheet sheet = newSheet(file);
             DataFormatter df = new DataFormatter();
 
             String tName;
 
-            System.out.println("1");
             for (Row row : sheet) {
                 Period[] tSchedule = new Period[5];
                 // skips labels and empty rows

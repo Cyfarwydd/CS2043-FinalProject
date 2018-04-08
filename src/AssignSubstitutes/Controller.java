@@ -95,7 +95,6 @@ public class Controller {
                 supplies = IO.readSupplies(Settings.getSupplyTeacherPath());
                 for (Teacher t : supplies) {
                     System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
-
                 }
             } catch (IOException e) {
                 errorHandler("Supply Teacher file could not be found at " + Settings.getSupplyTeacherPath());
@@ -127,6 +126,7 @@ public class Controller {
         //TODO: get noNag booleans from settings
         noNagOverwriteAssignmentChanges = false;
         noNagSaveWithEmptyAssignments = false;
+        noNagOverwriteSave = false;
 
         btnSave.setVisible(false);
 
@@ -184,6 +184,9 @@ public class Controller {
             //check to see if it has already been generated.
             currentAssignments = assignments.get(date);
             currentUnsavedAssignments = unsavedAssignments.get(date);
+            try {
+                noNagOverwriteAssignmentChanges = Settings.isNoNagOverwriteAssignmentChanges();
+            }catch(Exception e){}
             if (!noNagOverwriteAssignmentChanges && !currentAssignments.equals(currentUnsavedAssignments)) {
                 boolean[] nagCheck = {noNagOverwriteAssignmentChanges};
                 ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.APPLY);
@@ -222,6 +225,9 @@ public class Controller {
     private void clickSave() {
         LocalDate date = datePicker.getValue();
         ObservableList<Assignment> tblItems = tblAssignments.getItems();
+        try{
+            noNagSaveWithEmptyAssignments=Settings.isNoNagSaveWithEmptyAssignments();
+        }catch(Exception e){}
         //check for empty assignments
         if (!noNagSaveWithEmptyAssignments && tblItems.stream().anyMatch(a -> a.getAbsentee().getName().isEmpty())) {
             boolean[] nagCheck = {noNagSaveWithEmptyAssignments};
@@ -236,7 +242,11 @@ public class Controller {
                 return;
             } else {
                 noNagSaveWithEmptyAssignments = nagCheck[0];
-                //TODO: write noNag to settings
+                try{
+                    Settings.setNoNagSaveWithEmptyAssignments(noNagSaveWithEmptyAssignments);
+                }catch (Exception e){
+                    errorHandler("Error saving preference not to confirm");
+                }
             }
         }
         assignments.put(date, new ArrayList<>(tblItems));

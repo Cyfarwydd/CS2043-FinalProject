@@ -47,7 +47,7 @@ public class XMLParser {
     private String onCallerFormPath;
     private String onCallerFormNameFormat;
 
-    private String filepath;
+    private static String filepath;
 
     public XMLParser() throws TransformerException, SAXException, ParserConfigurationException, IOException
     {
@@ -300,9 +300,7 @@ public class XMLParser {
         return noNagOverwriteSave;
     }
 
-    public String getMasterSchedulePath() {
-        return masterSchedulePath;
-    }
+    public String getMasterSchedulePath() { return masterSchedulePath; }
 
     public String getAbsenceInputPath() {
         return absenceInputPath;

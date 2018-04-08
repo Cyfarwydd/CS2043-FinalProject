@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><config>
 	<onCalls>
-		<!--<weeklyMax>2</weeklyMax>-->
+		<weeklyMax>2</weeklyMax>
 		<monthlyMax>4</monthlyMax>
 		<tempWeeklyMax>2</tempWeeklyMax>
 		<tempMonthlyMax>4</tempMonthlyMax>
@@ -9,19 +9,19 @@
 	    <startDate>2017-02-01</startDate>
 	    <weeksUntilEnd>22</weeksUntilEnd>
 	</startEndDates>
-	<!--<noReminders>
+	<noReminders>
 	    <overwriteAssignmentChanges />
         <saveWithEmptyAssignments />
         <overwriteSave />
-	</noReminders>-->
+	</noReminders>
 	<InputFilePaths>
-        <masterSchedule>..\..\SampleInput\MasterSchedule.xlsx</masterSchedule>
-        <supply>..\..\SampleInput\Supply Teacher Input.xlsx</supply>
-        <absences>..\..\SampleInput\Absences Input.xlsx</absences>
-        <courses>..\..\SampleInput\Absences Input.xlsx</courses>
+        <masterSchedule>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\CS2043-FinalProject\SampleInput\MasterSchedule.xlsx</masterSchedule>
+        <supply>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\CS2043-FinalProject\SampleInput\Supply Teacher Input.xlsx</supply>
+        <absences>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\CS2043-FinalProject\SampleInput\Absences Input.xlsx</absences>
+        <courses>D:\todo\school stuff winter 2018\CS2043 Software Engineering\Team project\CS2043-FinalProject\SampleInput\Course Code Input.xlsx</courses>
     </InputFilePaths>
     <output>
         <onCallerFormsDir/>
         <onCallerNameFormat/>
     </output>
-<noReminders><overwriteAssignmentChanges/><saveWithEmptyAssignments/><overwriteSave/></noReminders></config>
+</config>

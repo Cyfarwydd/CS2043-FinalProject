@@ -30,7 +30,6 @@ import java.util.*;
 
 public class Controller {
     //TODO: disable generate button on weekends
-    //private Settings settings;
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
@@ -72,7 +71,6 @@ public class Controller {
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
-            /*settings = new Settings();*/
             Settings.init();
         } catch (Exception e) {
             errorHandler("XML config file could not be found");

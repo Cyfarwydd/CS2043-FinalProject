@@ -17,12 +17,19 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 
 public class Settings {
+    //TODO: create Element inner class that consists of default data, set data, key, parent and children and make a tree
+    // that corresponds to the data and makes it easier to manipulate the xml with a much cleaner init process
+
+    private final static String FILEPATH="config";
 
     //DEFAULT VALUES
     private final static Integer DEFAULT_MAX_WEEKLY_TALLY=2;
     private final static Integer DEFAULT_MAX_MONTHLY_TALLY=4;
+    private final static Integer DEFAULT_APPLICABLE_PERIOD=0;
 
     private final static Integer DEFAULT_WEEKS_TO_REMINDER=22;
 
@@ -34,6 +41,8 @@ public class Settings {
     private static Integer maxMonthlyTally;
     private static Integer tempWeeklyMax;
     private static Integer tempMonthlyMax;
+    private static Integer tempWeeklyMaxApplicableWeek;
+    private static Integer tempMonthlyMaxApplicableMonth;
 
     private static LocalDate startDate;
     private static Integer weeksToReminder;
@@ -51,17 +60,16 @@ public class Settings {
     private static String onCallerFormNameFormat;
 
     //INIT
-    private static String filepath;
     private static boolean isInit = false;
     public static void init() throws TransformerException, SAXException, ParserConfigurationException, IOException
     {
+        isInit=true;
         Document doc;
         NodeList config;
         Element settings;
-        filepath = "config";
 
         try {
-            doc = getDocument(filepath);
+            doc = getDocument(FILEPATH);
             config = doc.getElementsByTagName("config");
             settings = (Element) config.item(0);
         } catch (NullPointerException | ParserConfigurationException | SAXException | IOException e)
@@ -93,20 +101,45 @@ public class Settings {
             }
 
             try {
-                tempWeeklyMax = verifyInts(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent(),
-                        maxWeeklyTally, "tempWeeklyMax");
+                tempWeeklyMaxApplicableWeek = verifyInts(settings.getElementsByTagName("tempWeeklyMaxApplicableWeek").item(0).getTextContent(),
+                        DEFAULT_APPLICABLE_PERIOD, "tempWeeklyMaxApplicableWeek");
             }catch (Exception e){
-                replaceMissingElement(doc, parentElement,"tempWeeklyMax");
+                replaceMissingElement(doc, parentElement,"tempWeeklyMaxApplicableWeek");
+                setTempWeeklyMaxApplicableWeek(DEFAULT_APPLICABLE_PERIOD);
+            }
+
+            try {
+                if(getWeek()==tempWeeklyMaxApplicableWeek) {
+                    tempWeeklyMax = verifyInts(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent(),
+                            maxWeeklyTally, "tempWeeklyMax");
+                }else{
+                    setTempWeeklyMax(maxWeeklyTally);
+                }
+            } catch (Exception e) {
+                replaceMissingElement(doc, parentElement, "tempWeeklyMax");
                 setTempWeeklyMax(maxWeeklyTally);
             }
 
             try {
-                tempMonthlyMax = verifyInts(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent(),
-                        maxMonthlyTally, "tempMonthlyMax");
+                tempMonthlyMaxApplicableMonth = verifyInts(settings.getElementsByTagName("tempMonthlyMaxApplicableMonth").item(0).getTextContent(),
+                        DEFAULT_APPLICABLE_PERIOD, "tempMonthlyMaxApplicableMonth");
+            }catch (Exception e){
+                replaceMissingElement(doc, parentElement,"tempMonthlyMaxApplicableMonth");
+                setTempMonthlyMaxApplicableMonth(DEFAULT_APPLICABLE_PERIOD);
+            }
+
+            try {
+                if(getMonth()==tempMonthlyMaxApplicableMonth) {
+                    tempMonthlyMax = verifyInts(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent(),
+                            maxMonthlyTally, "tempMonthlyMax");
+                }else{
+                    setTempMonthlyMax(maxMonthlyTally);
+                }
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement, "tempMonthlyMax");
                 setTempMonthlyMax(maxMonthlyTally);
             }
+
 
         }catch (Exception e){
             replaceMissingOnCallsElement(doc, settings);
@@ -208,6 +241,7 @@ public class Settings {
         }catch (Exception e){
             replaceMissingOutputElement(doc, settings);
         }
+
     }
 
     //ACCESSORS
@@ -320,6 +354,7 @@ public class Settings {
     {
         confirmInit();
         tempWeeklyMax = tempWeeklyMaxIn;
+        setTempWeeklyMaxApplicableWeek(getWeek());
         writeXML(tempWeeklyMax.toString(), "tempWeeklyMax");
     }
 
@@ -327,7 +362,20 @@ public class Settings {
     {
         confirmInit();
         tempMonthlyMax = tempMonthlyMaxIn;
+        setTempMonthlyMaxApplicableMonth(getMonth());
         writeXML(tempMonthlyMax.toString(), "tempMonthlyMax");
+    }
+
+    private static void setTempWeeklyMaxApplicableWeek(Integer newVal) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        tempWeeklyMaxApplicableWeek = newVal;
+        writeXML(tempWeeklyMaxApplicableWeek.toString(), "tempWeeklyMaxApplicableWeek");
+    }
+
+    private static void setTempMonthlyMaxApplicableMonth(Integer newVal) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        tempMonthlyMaxApplicableMonth = newVal;
+        writeXML(tempMonthlyMaxApplicableMonth.toString(), "tempMonthlyMaxApplicableMonth");
     }
 
     public static void setStartDate(LocalDate startDateIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
@@ -497,11 +545,17 @@ public class Settings {
         parent.appendChild(ele);
         ele = doc.createElement("tempMonthlyMax");
         parent.appendChild(ele);
+        ele = doc.createElement("tempWeeklyMaxApplicableWeek");
+        parent.appendChild(ele);
+        ele = doc.createElement("tempMonthlyMaxApplicableMonth");
+        parent.appendChild(ele);
         writeXML(doc);
         setMaxWeeklyTally(DEFAULT_MAX_WEEKLY_TALLY);
         setMaxMonthlyTally(DEFAULT_MAX_WEEKLY_TALLY);
         setTempWeeklyMax(maxWeeklyTally);
         setTempMonthlyMax(maxMonthlyTally);
+        setTempWeeklyMaxApplicableWeek(DEFAULT_APPLICABLE_PERIOD);
+        setTempMonthlyMaxApplicableMonth(DEFAULT_APPLICABLE_PERIOD);
     }
 
     private static void replaceMissingStartEndDatesElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException
@@ -572,6 +626,16 @@ public class Settings {
 
     //OTHER HELPERS
 
+    private static Integer getWeek(){
+        WeekFields week = WeekFields.of(Locale.getDefault());
+        Integer weekNum = LocalDate.now().get(week.weekOfWeekBasedYear());
+        return weekNum;
+    }
+
+    private static Integer getMonth(){
+        return LocalDate.now().getMonthValue();
+    }
+
     private static Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException
     {
         DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
@@ -584,7 +648,7 @@ public class Settings {
 
     private static void writeXML(String input, String childElement) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {
-        Document doc = getDocument(filepath);
+        Document doc = getDocument(FILEPATH);
         Node out = doc.getElementsByTagName(childElement).item(0);
         out.setTextContent(input);
 
@@ -596,7 +660,7 @@ public class Settings {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File(filepath));
+        StreamResult result = new StreamResult(new File(FILEPATH));
         transformer.transform(source, result);
     }
 } // class

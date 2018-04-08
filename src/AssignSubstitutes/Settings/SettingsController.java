@@ -29,7 +29,6 @@ public class SettingsController {
 
     private Stage stage;
     private boolean saved;
-    //private Settings settings;
 
     @FXML
     public void initialize(){
@@ -65,7 +64,6 @@ public class SettingsController {
             txtMasterSchedule.setText(location);
         }
     }
-
     @FXML
     private void browseAbsenceList(){
         String location = getFilePath();
@@ -124,6 +122,7 @@ public class SettingsController {
 
     @FXML
     private void resetSettings(){
+        //TODO: add reset functionality
         populateSettingsFields();
     }
 

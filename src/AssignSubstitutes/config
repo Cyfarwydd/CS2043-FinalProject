@@ -5,6 +5,8 @@
 		<monthlyMax>4</monthlyMax>
 		<tempWeeklyMax>2</tempWeeklyMax>
 		<tempMonthlyMax>4</tempMonthlyMax>
+		<tempWeeklyMaxApplicableWeek />
+		<tempMonthlyMaxApplicableMonth />
 	</onCalls>
 	<startEndDates>
 	    <startDate>2017-02-01</startDate>

@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>402</x>
+      <x>528</x>
       <y>720</y>
       <w>138</w>
       <h>144</h>
@@ -32,7 +32,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>744</x>
+      <x>870</x>
       <y>750</y>
       <w>150</w>
       <h>102</h>
@@ -53,7 +53,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>534</x>
+      <x>660</x>
       <y>744</y>
       <w>114</w>
       <h>66</h>
@@ -64,7 +64,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>234</x>
+      <x>360</x>
       <y>846</y>
       <w>570</w>
       <h>54</h>
@@ -78,7 +78,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>114</x>
+      <x>240</x>
       <y>816</y>
       <w>126</w>
       <h>78</h>
@@ -101,7 +101,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>498</x>
+      <x>624</x>
       <y>324</y>
       <w>330</w>
       <h>312</h>
@@ -144,7 +144,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>816</x>
+      <x>942</x>
       <y>66</y>
       <w>384</w>
       <h>132</h>
@@ -171,7 +171,7 @@ _-saveWorkbook(Workbook,String,String,LocalDate):void_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>468</x>
+      <x>594</x>
       <y>294</y>
       <w>138</w>
       <h>126</h>
@@ -194,7 +194,7 @@ lt=-
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
+      <x>126</x>
       <y>204</y>
       <w>492</w>
       <h>144</h>
@@ -220,7 +220,7 @@ _-getAvailabilityStats(Collection&lt;OnStaffTeacher&gt;,int,int):ObservableList&
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>726</x>
+      <x>852</x>
       <y>192</y>
       <w>234</w>
       <h>216</h>
@@ -244,7 +244,7 @@ _-getAvailabilityStats(Collection&lt;OnStaffTeacher&gt;,int,int):ObservableList&
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
+      <x>534</x>
       <y>384</y>
       <w>102</w>
       <h>18</h>
@@ -255,7 +255,7 @@ _-getAvailabilityStats(Collection&lt;OnStaffTeacher&gt;,int,int):ObservableList&
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>348</x>
+      <x>474</x>
       <y>372</y>
       <w>66</w>
       <h>42</h>
@@ -270,7 +270,7 @@ _-getAvailabilityStats(Collection&lt;OnStaffTeacher&gt;,int,int):ObservableList&
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>594</x>
+      <x>720</x>
       <y>60</y>
       <w>126</w>
       <h>234</h>
@@ -306,7 +306,7 @@ _-getAvailabilityStats(Collection&lt;OnStaffTeacher&gt;,int,int):ObservableList&
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>648</x>
+      <x>774</x>
       <y>0</y>
       <w>246</w>
       <h>78</h>
@@ -318,7 +318,7 @@ _-getAvailabilityStats(Collection&lt;OnStaffTeacher&gt;,int,int):ObservableList&
   <element>
     <id>Text</id>
     <coordinates>
-      <x>870</x>
+      <x>996</x>
       <y>498</y>
       <w>60</w>
       <h>54</h>
@@ -330,7 +330,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>726</x>
       <y>288</y>
       <w>156</w>
       <h>48</h>
@@ -342,7 +342,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>822</x>
+      <x>948</x>
       <y>192</y>
       <w>162</w>
       <h>768</h>
@@ -364,7 +364,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>480</x>
+      <x>606</x>
       <y>192</y>
       <w>504</w>
       <h>816</h>
@@ -377,7 +377,7 @@ FileInputOutput creates Teachers and Periods</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>174</x>
+      <x>300</x>
       <y>192</y>
       <w>810</w>
       <h>972</h>
@@ -411,7 +411,7 @@ FileInputOutput creates Teachers and Periods</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>822</x>
+      <x>948</x>
       <y>402</y>
       <w>78</w>
       <h>360</h>
@@ -423,7 +423,7 @@ FileInputOutput creates Teachers and Periods</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
+      <x>126</x>
       <y>576</y>
       <w>138</w>
       <h>90</h>
@@ -443,7 +443,7 @@ FileInputOutput creates Teachers and Periods</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>126</x>
+      <x>252</x>
       <y>654</y>
       <w>672</w>
       <h>108</h>
@@ -455,7 +455,7 @@ FileInputOutput creates Teachers and Periods</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>102</x>
+      <x>228</x>
       <y>342</y>
       <w>162</w>
       <h>240</h>
@@ -467,7 +467,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>108</x>
+      <x>234</x>
       <y>660</y>
       <w>306</w>
       <h>108</h>
@@ -479,7 +479,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>48</x>
+      <x>174</x>
       <y>660</y>
       <w>78</w>
       <h>192</h>
@@ -491,7 +491,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>534</x>
+      <x>660</x>
       <y>630</y>
       <w>78</w>
       <h>162</h>
@@ -503,7 +503,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>132</x>
+      <x>258</x>
       <y>462</y>
       <w>378</w>
       <h>150</h>
@@ -515,7 +515,7 @@ lt=-&gt;</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>984</x>
+      <x>1110</x>
       <y>234</y>
       <w>288</w>
       <h>576</h>
@@ -590,7 +590,7 @@ _-static filepath:String_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>618</x>
+      <x>744</x>
       <y>690</y>
       <w>144</w>
       <h>60</h>
@@ -606,7 +606,7 @@ _-static filepath:String_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>672</x>
+      <x>798</x>
       <y>744</y>
       <w>84</w>
       <h>72</h>
@@ -617,7 +617,7 @@ _-static filepath:String_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1074</x>
+      <x>1200</x>
       <y>192</y>
       <w>18</w>
       <h>54</h>

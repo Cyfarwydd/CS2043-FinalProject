@@ -1,6 +1,6 @@
 package AssignSubstitutes.Settings;
 
-import AssignSubstitutes.InputOutput.XMLParser;
+import AssignSubstitutes.InputOutput.Settings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -25,7 +25,7 @@ public class SettingsController {
 
     private Stage stage;
     private boolean saved;
-    private XMLParser settings;
+    private Settings settings;
 
     @FXML
     public void initialize(){
@@ -161,7 +161,7 @@ public class SettingsController {
 
     private void populateSettingsFields(){
         try {
-            settings = new XMLParser();
+            settings = new Settings();
             txtTmpMaxMnth.setText(Integer.toString(settings.getTempMonthlyMax()));
             txtTmpMaxWeek.setText(Integer.toString(settings.getTempWeeklyMax()));
             txtPermMaxMnth.setText(Integer.toString(settings.getMaxMonthlyTally()));

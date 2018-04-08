@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class XMLParser {
+public class Settings {
     private final static Integer DEFAULT_MAX_WEEKLY_TALLY=2;
     private final static Integer DEFAULT_MAX_MONTHLY_TALLY=4;
 
@@ -49,7 +49,7 @@ public class XMLParser {
 
     private static String filepath;
 
-    public XMLParser() throws TransformerException, SAXException, ParserConfigurationException, IOException
+    public Settings() throws TransformerException, SAXException, ParserConfigurationException, IOException
     {
         Document doc;
         NodeList config;

@@ -1,7 +1,7 @@
 package AssignSubstitutes;
 
 import AssignSubstitutes.InputOutput.IO;
-import AssignSubstitutes.InputOutput.XMLParser;
+import AssignSubstitutes.InputOutput.Settings;
 import AssignSubstitutes.Settings.SettingsController;
 import AssignSubstitutes.classes.Assignment;
 import AssignSubstitutes.classes.OnStaffTeacher;
@@ -30,7 +30,7 @@ import java.util.*;
 
 public class Controller {
     //TODO: disable generate button on weekends
-    private XMLParser settings;
+    private Settings settings;
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
@@ -72,17 +72,12 @@ public class Controller {
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
-            settings = new XMLParser();
-            System.out.println("xmlparser didn't throw up");
+            settings = new Settings();
         } catch (Exception e) {
-            System.out.println("xmlparser threw up");
             errorHandler("XML config file could not be found");
         }
 
-        //TODO: check for empty input paths and notify user rather than calling IO
-        if (settings == null) {
-            System.out.println("settings is null");
-        }
+        //TODO: differentiate between thrown exceptions (ie:file not found vs some kind of fault)
         try {
             osTeachers = IO.readTeachers(settings.getMasterSchedulePath(), settings.getCourseCodesPath());
             for (OnStaffTeacher t : osTeachers) {

@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class Settings {
+
+    //DEFAULT VALUES
     private final static Integer DEFAULT_MAX_WEEKLY_TALLY=2;
     private final static Integer DEFAULT_MAX_MONTHLY_TALLY=4;
 
@@ -27,34 +29,36 @@ public class Settings {
     private final static String DEFAULT_ON_CALLER_FORM_PATH = "/OnCallerForms/";
     private final static String DEFAULT_ON_CALLER_FORM_NAME_FORMAT = "[NAME]-[MMM][DD]-[YY]";
 
-    private Integer maxWeeklyTally;
-    private Integer maxMonthlyTally;
-    private Integer tempWeeklyMax;
-    private Integer tempMonthlyMax;
-    //TODO: make all class variables static
-    private LocalDate startDate;
-    private Integer weeksToReminder;
+    //STORED VALUES
+    private static Integer maxWeeklyTally;
+    private static Integer maxMonthlyTally;
+    private static Integer tempWeeklyMax;
+    private static Integer tempMonthlyMax;
 
-    private boolean noNagOverwriteAssignmentChanges;
-    private boolean noNagSaveWithEmptyAssignments;
-    private boolean noNagOverwriteSave;
+    private static LocalDate startDate;
+    private static Integer weeksToReminder;
 
-    private String masterSchedulePath;
-    private String absenceInputPath;
-    private String supplyTeacherPath;
-    private String courseCodesPath;
+    private static Boolean noNagOverwriteAssignmentChanges;
+    private static Boolean noNagSaveWithEmptyAssignments;
+    private static Boolean noNagOverwriteSave;
 
-    private String onCallerFormPath;
-    private String onCallerFormNameFormat;
+    private static String masterSchedulePath;
+    private static String absenceInputPath;
+    private static String supplyTeacherPath;
+    private static String courseCodesPath;
 
+    private static String onCallerFormPath;
+    private static String onCallerFormNameFormat;
+
+    //INIT
     private static String filepath;
-
-    public Settings() throws TransformerException, SAXException, ParserConfigurationException, IOException
+    private static boolean isInit = false;
+    public static void init() throws TransformerException, SAXException, ParserConfigurationException, IOException
     {
         Document doc;
         NodeList config;
         Element settings;
-        this.filepath = "config";
+        filepath = "config";
 
         try {
             doc = getDocument(filepath);
@@ -73,7 +77,7 @@ public class Settings {
             parentElement = (Element) settings.getElementsByTagName("onCalls").item(0);
 
             try {
-                this.maxWeeklyTally = verifyInts(settings.getElementsByTagName("weeklyMax").item(0).getTextContent(),
+                maxWeeklyTally = verifyInts(settings.getElementsByTagName("weeklyMax").item(0).getTextContent(),
                         DEFAULT_MAX_WEEKLY_TALLY, "weeklyMax");
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement, "weeklyMax");
@@ -81,7 +85,7 @@ public class Settings {
             }
 
             try {
-                this.maxMonthlyTally = verifyInts(settings.getElementsByTagName("monthlyMax").item(0).getTextContent(),
+                maxMonthlyTally = verifyInts(settings.getElementsByTagName("monthlyMax").item(0).getTextContent(),
                         DEFAULT_MAX_MONTHLY_TALLY, "monthlyMax");
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement,"monthlyMax");
@@ -89,7 +93,7 @@ public class Settings {
             }
 
             try {
-                this.tempWeeklyMax = verifyInts(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent(),
+                tempWeeklyMax = verifyInts(settings.getElementsByTagName("tempWeeklyMax").item(0).getTextContent(),
                         maxWeeklyTally, "tempWeeklyMax");
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement,"tempWeeklyMax");
@@ -97,7 +101,7 @@ public class Settings {
             }
 
             try {
-                this.tempMonthlyMax = verifyInts(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent(),
+                tempMonthlyMax = verifyInts(settings.getElementsByTagName("tempMonthlyMax").item(0).getTextContent(),
                         maxMonthlyTally, "tempMonthlyMax");
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement, "tempMonthlyMax");
@@ -112,7 +116,7 @@ public class Settings {
             parentElement = (Element) settings.getElementsByTagName("startEndDates").item(0);
 
             try {
-                this.startDate = verifyDate(settings.getElementsByTagName("startDate").item(0).getTextContent(),
+                startDate = verifyDate(settings.getElementsByTagName("startDate").item(0).getTextContent(),
                         setLocalDate(), "startDate");
 
             } catch (Exception e) {
@@ -121,7 +125,7 @@ public class Settings {
             }
 
             try {
-                this.weeksToReminder = verifyInts(settings.getElementsByTagName("weeksUntilEnd").item(0).getTextContent(), DEFAULT_WEEKS_TO_REMINDER, "weeksUntilEnd");
+                weeksToReminder = verifyInts(settings.getElementsByTagName("weeksUntilEnd").item(0).getTextContent(), DEFAULT_WEEKS_TO_REMINDER, "weeksUntilEnd");
             } catch (Exception e) {
                 replaceMissingElement(doc, parentElement, "weeksUntilEnd");
                 setWeeksToReminder(DEFAULT_WEEKS_TO_REMINDER);
@@ -135,19 +139,19 @@ public class Settings {
             parentElement = (Element) settings.getElementsByTagName("noReminders").item(0);
 
             try {
-                this.noNagOverwriteAssignmentChanges = Boolean.parseBoolean(settings.getElementsByTagName("overwriteAssignmentChanges").item(0).getTextContent());
+                noNagOverwriteAssignmentChanges = Boolean.parseBoolean(settings.getElementsByTagName("overwriteAssignmentChanges").item(0).getTextContent());
             } catch (Exception e) {
                 replaceMissingElement(doc, parentElement, "overwriteAssignmentChanges");
             }
 
             try {
-                this.noNagSaveWithEmptyAssignments = Boolean.parseBoolean(settings.getElementsByTagName("saveWithEmptyAssignments").item(0).getTextContent());
+                noNagSaveWithEmptyAssignments = Boolean.parseBoolean(settings.getElementsByTagName("saveWithEmptyAssignments").item(0).getTextContent());
             }catch(Exception e){
                 replaceMissingElement(doc, parentElement, "saveWithEmptyAssignments");
             }
 
             try {
-                this.noNagOverwriteSave = Boolean.parseBoolean(settings.getElementsByTagName("overwriteSave").item(0).getTextContent());
+                noNagOverwriteSave = Boolean.parseBoolean(settings.getElementsByTagName("overwriteSave").item(0).getTextContent());
             }catch(Exception e){
                 replaceMissingElement(doc, parentElement, "overwriteSave");
             }
@@ -160,25 +164,25 @@ public class Settings {
             parentElement = (Element) settings.getElementsByTagName("inputFilePaths").item(0);
 
             try {
-                this.masterSchedulePath = settings.getElementsByTagName("masterSchedule").item(0).getTextContent();
+                masterSchedulePath = settings.getElementsByTagName("masterSchedule").item(0).getTextContent();
             }catch(Exception e){
                 replaceMissingElement(doc, parentElement, "masterSchedule");
             }
 
             try {
-                this.absenceInputPath = settings.getElementsByTagName("absences").item(0).getTextContent();
+                absenceInputPath = settings.getElementsByTagName("absences").item(0).getTextContent();
             }catch(Exception e){
                 replaceMissingElement(doc, parentElement, "absences");
             }
 
             try {
-                this.supplyTeacherPath = settings.getElementsByTagName("supply").item(0).getTextContent();
+                supplyTeacherPath = settings.getElementsByTagName("supply").item(0).getTextContent();
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement, "supply");
             }
 
             try {
-                this.courseCodesPath = settings.getElementsByTagName("courses").item(0).getTextContent();
+                courseCodesPath = settings.getElementsByTagName("courses").item(0).getTextContent();
             }catch(Exception e){
                 replaceMissingElement(doc, parentElement, "courses");
             }
@@ -190,13 +194,13 @@ public class Settings {
             parentElement = (Element) settings.getElementsByTagName("output").item(0);
 
             try {
-                this.onCallerFormPath = settings.getElementsByTagName("onCallerFormsDir").item(0).getTextContent();
+                onCallerFormPath = settings.getElementsByTagName("onCallerFormsDir").item(0).getTextContent();
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement, "onCallerFormsDir");
                 setOnCallerFormPath(DEFAULT_ON_CALLER_FORM_PATH);
             }
             try {
-                this.onCallerFormNameFormat = settings.getElementsByTagName("onCallerNameFormat").item(0).getTextContent();
+                onCallerFormNameFormat = settings.getElementsByTagName("onCallerNameFormat").item(0).getTextContent();
             }catch (Exception e){
                 replaceMissingElement(doc, parentElement, "onCallerNameFormat");
                 setOnCallerFormNameFormat(DEFAULT_ON_CALLER_FORM_NAME_FORMAT);
@@ -204,12 +208,215 @@ public class Settings {
         }catch (Exception e){
             replaceMissingOutputElement(doc, settings);
         }
-        System.out.println("does it get this far?");
-    } // constructor
+    }
 
+    //ACCESSORS
 
+    public static Integer getMaxWeeklyTally() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return maxWeeklyTally;
+    }
 
-    private Integer verifyInts(String integer, int defaultVal, String key) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    public static Integer getMaxMonthlyTally() throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        confirmInit();
+        return maxMonthlyTally;
+    }
+
+    public static Integer getTempWeeklyMax() throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        confirmInit();
+        return tempWeeklyMax;
+    }
+
+    public static Integer getTempMonthlyMax() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return tempMonthlyMax;
+    }
+
+    public static LocalDate getStartDate() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return startDate;
+    }
+
+    public static Integer getWeeksToReminder() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return weeksToReminder;
+    }
+
+    public static Boolean isNoNagOverwriteAssignmentChanges() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return noNagOverwriteAssignmentChanges;
+    }
+
+    public static Boolean isNoNagSaveWithEmptyAssignments() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return noNagSaveWithEmptyAssignments;
+    }
+
+    public static Boolean isNoNagOverwriteSave() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return noNagOverwriteSave;
+    }
+
+    public static String getMasterSchedulePath() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return masterSchedulePath;
+    }
+
+    public static String getAbsenceInputPath() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return absenceInputPath;
+    }
+
+    public static String getSupplyTeacherPath() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return supplyTeacherPath;
+    }
+
+    public static String getCourseCodesPath() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return courseCodesPath;
+    }
+
+    public static String getOnCallerFormPath() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return onCallerFormPath;
+    }
+
+    public static String getOnCallerFormNameFormat() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        return onCallerFormNameFormat;
+    }
+
+    //MUTATORS
+
+    public static void setMaxWeeklyTally(Integer maxWeeklyTallyIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        maxWeeklyTally = maxWeeklyTallyIn;
+        writeXML(maxWeeklyTally.toString(), "weeklyMax");
+    }
+
+    public static void setMaxMonthlyTally(Integer maxMonthlyTallyIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        maxMonthlyTally = maxMonthlyTallyIn;
+        writeXML(maxMonthlyTally.toString(),"monthlyMax");
+    }
+
+    public static void setTempWeeklyMax(Integer tempWeeklyMaxIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        tempWeeklyMax = tempWeeklyMaxIn;
+        writeXML(tempWeeklyMax.toString(), "tempWeeklyMax");
+    }
+
+    public static void setTempMonthlyMax(Integer tempMonthlyMaxIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        tempMonthlyMax = tempMonthlyMaxIn;
+        writeXML(tempMonthlyMax.toString(), "tempMonthlyMax");
+    }
+
+    public static void setStartDate(LocalDate startDateIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        startDate = startDateIn;
+        writeXML(startDate.toString(), "startDate");
+    }
+
+    public static void setWeeksToReminder(Integer weeksToReminderIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        weeksToReminder = weeksToReminderIn;
+        writeXML(weeksToReminder.toString(), "weeksUntilEnd");
+    }
+
+    public static void setNoNagOverwriteAssignmentChanges(Boolean noNagOverwriteAssignmentChangesIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        noNagOverwriteAssignmentChanges = noNagOverwriteAssignmentChangesIn;
+        writeXML(noNagOverwriteAssignmentChanges.toString(), "overwriteAssignmentChanges");
+    }
+
+    public static void setNoNagSaveWithEmptyAssignments(Boolean noNagSaveWithEmptyAssignmentsIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        noNagSaveWithEmptyAssignments = noNagSaveWithEmptyAssignmentsIn;
+        writeXML(noNagSaveWithEmptyAssignments.toString(), "saveWithEmptyAssignments");
+    }
+
+    public static void setNoNagOverwriteSave(Boolean noNagOverwriteSaveIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        noNagOverwriteSave = noNagOverwriteSaveIn;
+        writeXML(noNagOverwriteSave.toString(), "overwriteSave");
+    }
+
+    public static void setMasterSchedulePath(String masterSchedulePathIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        masterSchedulePath = masterSchedulePathIn;
+        writeXML(masterSchedulePath, "masterSchedule");
+    }
+
+    public static void setAbsenceInputPath(String absenceInputPathIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        absenceInputPath = absenceInputPathIn;
+        writeXML(absenceInputPath, "absences");
+    }
+
+    public static void setSupplyTeacherPath(String supplyTeacherPathIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        supplyTeacherPath = supplyTeacherPathIn;
+        writeXML(supplyTeacherPath, "supply");
+    }
+
+    public static void setCourseCodesPath(String courseCodesPathIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        courseCodesPath = courseCodesPathIn;
+        writeXML(courseCodesPath, "courses");
+    }
+
+    public static void setOnCallerFormPath(String onCallerFormPathIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        onCallerFormPath = onCallerFormPathIn;
+        writeXML(onCallerFormPath, "onCallerFormsDir");
+    }
+
+    public static void setOnCallerFormNameFormat(String onCallerFormNameFormatIn) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        confirmInit();
+        onCallerFormNameFormat = onCallerFormNameFormatIn;
+        writeXML(onCallerFormNameFormat, "onCallerNameFormat");
+    }
+
+    //FAULT TOLERANCE
+
+    private static void confirmInit() throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        if(!isInit){
+            init();
+        }
+    }
+
+    private static Integer verifyInts(String integer, int defaultVal, String key) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {
         Integer retVal;
         try{
@@ -223,7 +430,7 @@ public class Settings {
         return retVal;
     }
 
-    private LocalDate verifyDate(String date, LocalDate defaultVal, String key) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    private static LocalDate verifyDate(String date, LocalDate defaultVal, String key) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {
         LocalDate retVal;
         try{
@@ -237,7 +444,7 @@ public class Settings {
         return retVal;
     }
 
-    private LocalDate setLocalDate(){
+    private static LocalDate setLocalDate(){
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
         LocalDate date;
@@ -262,165 +469,7 @@ public class Settings {
         return date;
     }
 
-    public Integer getMaxWeeklyTally() {
-        return maxWeeklyTally;
-    }
-
-    public Integer getMaxMonthlyTally() {
-        return maxMonthlyTally;
-    }
-
-    public Integer getTempWeeklyMax() {
-        return tempWeeklyMax;
-    }
-
-    public Integer getTempMonthlyMax() {
-        return tempMonthlyMax;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public Integer getWeeksToReminder() {
-        return weeksToReminder;
-    }
-
-    public boolean isNoNagOverwriteAssignmentChanges() {
-        return noNagOverwriteAssignmentChanges;
-    }
-
-    public boolean isNoNagSaveWithEmptyAssignments() {
-        return noNagSaveWithEmptyAssignments;
-    }
-
-    public boolean isNoNagOverwriteSave() {
-        return noNagOverwriteSave;
-    }
-
-    public String getMasterSchedulePath() { return masterSchedulePath; }
-
-    public String getAbsenceInputPath() {
-        return absenceInputPath;
-    }
-
-    public String getSupplyTeacherPath() {
-        return supplyTeacherPath;
-    }
-
-    public String getCourseCodesPath() {
-        return courseCodesPath;
-    }
-
-    public String getOnCallerFormPath() {
-        return onCallerFormPath;
-    }
-
-    public String getOnCallerFormNameFormat() {
-        return onCallerFormNameFormat;
-    }
-
-    public void setMaxWeeklyTally(Integer maxWeeklyTally) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(maxWeeklyTally.toString(), "weeklyMax");
-        this.maxWeeklyTally = maxWeeklyTally;
-    }
-
-    public void setMaxMonthlyTally(Integer maxMonthlyTally) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(maxMonthlyTally.toString(),"monthlyMax");
-        this.maxMonthlyTally = maxMonthlyTally;
-    }
-
-    public void setTempWeeklyMax(Integer tempWeeklyMax) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(tempWeeklyMax.toString(), "tempWeeklyMax");
-        this.tempWeeklyMax = tempWeeklyMax;
-    }
-
-    public void setTempMonthlyMax(Integer tempMonthlyMax) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(tempMonthlyMax.toString(), "tempMonthlyMax");
-        this.tempMonthlyMax = tempMonthlyMax;
-    }
-
-    public void setStartDate(LocalDate startDate) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(startDate.toString(), "startDate");
-        this.startDate = startDate;
-    }
-
-    public void setWeeksToReminder(Integer weeksToReminder) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(weeksToReminder.toString(), "weeksUntilEnd");
-        this.weeksToReminder = weeksToReminder;
-    }
-
-    public void setNoNagOverwriteAssignmentChanges(Boolean noNagOverwriteAssignmentChanges) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(noNagOverwriteAssignmentChanges.toString(), "overwriteAssignmentChanges");
-        this.noNagOverwriteAssignmentChanges = noNagOverwriteAssignmentChanges;
-    }
-
-    public void setNoNagSaveWithEmptyAssignments(Boolean noNagSaveWithEmptyAssignments) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(noNagSaveWithEmptyAssignments.toString(), "saveWithEmptyAssignments");
-        this.noNagSaveWithEmptyAssignments = noNagSaveWithEmptyAssignments;
-    }
-
-    public void setNoNagOverwriteSave(Boolean noNagOverwriteSave) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(noNagOverwriteSave.toString(), "overwriteSave");
-        this.noNagOverwriteSave = noNagOverwriteSave;
-    }
-
-    public void setMasterSchedulePath(String masterSchedulePath) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(masterSchedulePath, "masterSchedule");
-        this.masterSchedulePath = masterSchedulePath;
-    }
-
-    public void setAbsenceInputPath(String absenceInputPath) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(absenceInputPath, "absences");
-        this.absenceInputPath = absenceInputPath;
-    }
-
-    public void setSupplyTeacherPath(String supplyTeacherPath) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(supplyTeacherPath, "supply");
-        this.supplyTeacherPath = supplyTeacherPath;
-    }
-
-    public void setCourseCodesPath(String courseCodesPath) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(courseCodesPath, "courses");
-        this.courseCodesPath = courseCodesPath;
-    }
-
-    public void setOnCallerFormPath(String onCallerFormPath) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(onCallerFormPath, "onCallerFormsDir");
-        this.onCallerFormPath = onCallerFormPath;
-    }
-
-    public void setOnCallerFormNameFormat(String onCallerFormNameFormat) throws ParserConfigurationException, SAXException, IOException, TransformerException
-    {
-        writeXML(onCallerFormNameFormat, "onCallerNameFormat");
-        this.onCallerFormNameFormat = onCallerFormNameFormat;
-    }
-
-    private Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException
-    {
-        DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = docBF.newDocumentBuilder();
-        Document doc;
-        doc = db.parse(filePath);
-        doc.getDocumentElement().normalize();
-        return doc;
-    }
-
-    private Document replaceMissingDocument() throws IOException, SAXException, ParserConfigurationException, TransformerException
+    private static Document replaceMissingDocument() throws IOException, SAXException, ParserConfigurationException, TransformerException
     {
         DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = docBF.newDocumentBuilder();
@@ -435,7 +484,7 @@ public class Settings {
         return doc;
     }
 
-    private void replaceMissingOnCallsElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException
+    private static void replaceMissingOnCallsElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException
     {
         Element ele = doc.createElement("onCalls");
         parent.appendChild(ele);
@@ -455,7 +504,7 @@ public class Settings {
         setTempMonthlyMax(maxMonthlyTally);
     }
 
-    private void replaceMissingStartEndDatesElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException
+    private static void replaceMissingStartEndDatesElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException
     {
         Element ele = doc.createElement("startEndDates");
         parent.appendChild(ele);
@@ -470,7 +519,7 @@ public class Settings {
         setWeeksToReminder(DEFAULT_WEEKS_TO_REMINDER);
     }
 
-    private void replaceMissingNoRemindersElement(Document doc, Element parent) throws TransformerException
+    private static void replaceMissingNoRemindersElement(Document doc, Element parent) throws TransformerException
     {
         Element ele = doc.createElement("noReminders");
         parent.appendChild(ele);
@@ -484,7 +533,7 @@ public class Settings {
         writeXML(doc);
     }
 
-    private void replaceMissingInputFilePathsElement(Document doc, Element parent) throws TransformerException
+    private static void replaceMissingInputFilePathsElement(Document doc, Element parent) throws TransformerException
     {
         Element ele = doc.createElement("inputFilePaths");
         parent.appendChild(ele);
@@ -500,7 +549,7 @@ public class Settings {
         writeXML(doc);
     }
 
-    private void replaceMissingOutputElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException {
+    private static void replaceMissingOutputElement(Document doc, Element parent) throws IOException, SAXException, ParserConfigurationException, TransformerException {
         Element ele = doc.createElement("output");
         parent.appendChild(ele);
         parent = ele;
@@ -514,14 +563,26 @@ public class Settings {
         setOnCallerFormNameFormat(DEFAULT_ON_CALLER_FORM_NAME_FORMAT);
     }
 
-    private void replaceMissingElement(Document doc, Element parentElement, String key) throws TransformerException
+    private static void replaceMissingElement(Document doc, Element parentElement, String key) throws TransformerException
     {
         Element ele = doc.createElement(key);
         parentElement.appendChild(ele);
         writeXML(doc);
     }
 
-    private void writeXML(String input, String childElement) throws ParserConfigurationException, SAXException, IOException, TransformerException
+    //OTHER HELPERS
+
+    private static Document getDocument(String filePath) throws ParserConfigurationException, SAXException, IOException
+    {
+        DocumentBuilderFactory docBF = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = docBF.newDocumentBuilder();
+        Document doc;
+        doc = db.parse(filePath);
+        doc.getDocumentElement().normalize();
+        return doc;
+    }
+
+    private static void writeXML(String input, String childElement) throws ParserConfigurationException, SAXException, IOException, TransformerException
     {
         Document doc = getDocument(filepath);
         Node out = doc.getElementsByTagName(childElement).item(0);
@@ -530,7 +591,7 @@ public class Settings {
         writeXML(doc);
     }
 
-    private void writeXML(Document doc) throws TransformerException
+    private static void writeXML(Document doc) throws TransformerException
     {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();

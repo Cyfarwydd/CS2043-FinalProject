@@ -30,7 +30,7 @@ import java.util.*;
 
 public class Controller {
     //TODO: disable generate button on weekends
-    private Settings settings;
+    //private Settings settings;
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
@@ -72,45 +72,58 @@ public class Controller {
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
-            settings = new Settings();
+            /*settings = new Settings();*/
+            Settings.init();
         } catch (Exception e) {
             errorHandler("XML config file could not be found");
         }
 
         //TODO: differentiate between thrown exceptions (ie:file not found vs some kind of fault)
         try {
-            osTeachers = IO.readTeachers(settings.getMasterSchedulePath(), settings.getCourseCodesPath());
-            for (OnStaffTeacher t : osTeachers) {
-                System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
+            try {
+                osTeachers = IO.readTeachers(Settings.getMasterSchedulePath(), Settings.getCourseCodesPath());
+                for (OnStaffTeacher t : osTeachers) {
+                    System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
+                }
+            } catch (IOException e) {
+                errorHandler("Master Schedule file could not be found at " + Settings.getMasterSchedulePath());
+                clickSettings();
             }
-        } catch (IOException e) {
-            errorHandler("Master Schedule file could not be found at " + settings.getMasterSchedulePath());
-            clickSettings();
+        }catch (Exception e) {
+            errorHandler("Error Something went wrong get the list of staff teachers");
         }
-
         try {
-            supplies = IO.readSupplies(settings.getSupplyTeacherPath());
-            for (Teacher t : supplies) {
-                System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
+            try {
+                supplies = IO.readSupplies(Settings.getSupplyTeacherPath());
+                for (Teacher t : supplies) {
+                    System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
+
+                }
+            } catch (IOException e) {
+                errorHandler("Supply Teacher file could not be found at " + Settings.getSupplyTeacherPath());
+                clickSettings();
             }
-        } catch (Exception e) {
-            errorHandler("Supply Teacher file could not be found at " + settings.getSupplyTeacherPath());
-            clickSettings();
+        }catch (Exception e) {
+            errorHandler("Error Something went wrong get the list of staff teachers");
         }
-
         try {
-            LocalDate l = datePicker.getValue();
-            if (l == null) {
-                l = LocalDate.now();
+            try {
+                LocalDate l = datePicker.getValue();
+                if (l == null) {
+                    l = LocalDate.now();
+                }
+                //TODO: disable Generate assignments button on weekends
+                absences = IO.readAbsences(Settings.getAbsenceInputPath(), osTeachers, l);
+                for (Teacher t : absences) {
+                    System.out.println("absences: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
+
+                }
+            } catch (IOException e) {
+                errorHandler("Absences file could not be found at " + Settings.getAbsenceInputPath());
+                clickSettings();
             }
-            //TODO: disable Generate assignments button on weekends
-            absences = IO.readAbsences(settings.getAbsenceInputPath(), osTeachers, l);
-            for (Teacher t : absences) {
-                System.out.println("absences: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
-            }
-        } catch (Exception e) {
-            errorHandler("Absences file could not be found at " + settings.getAbsenceInputPath());
-            clickSettings();
+        }catch (Exception e) {
+            errorHandler("Error Something went wrong get the list of staff teachers");
         }
 
         //TODO: get noNag booleans from settings
@@ -128,7 +141,7 @@ public class Controller {
         }
         buildAvailabilityTable();
         try {
-            ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, settings.getMaxWeeklyTally(), settings.getMaxMonthlyTally());
+            ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getMaxWeeklyTally(), Settings.getMaxMonthlyTally());
             tblAvailability.setItems(availabilityByPeriod);
         } catch (Exception e) {
             errorHandler(e.getMessage());
@@ -192,7 +205,7 @@ public class Controller {
             }
         }
         try {
-            currentAssignments = AssignSubstitutes.InformationHandle.generateAssignments(osTeachers, supplies, absences, settings.getMaxWeeklyTally(), settings.getMaxMonthlyTally());
+            currentAssignments = AssignSubstitutes.InformationHandle.generateAssignments(osTeachers, supplies, absences, Settings.getMaxWeeklyTally(), Settings.getMaxMonthlyTally());
 
 
             assignments.put(date, currentAssignments);

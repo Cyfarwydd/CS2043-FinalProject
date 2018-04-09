@@ -29,7 +29,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Controller {
-    //TODO: disable generate button on weekends
     private ArrayList<OnStaffTeacher> osTeachers;
     private Map<LocalDate, ArrayList<Assignment>> assignments;
     private Map<LocalDate, ArrayList<Assignment>> unsavedAssignments;
@@ -71,7 +70,6 @@ public class Controller {
         //TODO: make sure that child stages are brought to front when visible, when parent stages are made active (relevant for error dialogs on load)
         //TODO: Find and do something about that errant empty error message that pops up whenever there is an init problem.
 
-        //TODO: add reset reminder once implemented in settingsUI and XMLParser/Settings
         try {
             Settings.init();
         } catch (Exception e) {
@@ -89,7 +87,7 @@ public class Controller {
         datePicker.setValue(LocalDate.now());
         changeDate();
 
-        getFileData();
+        getOSTeachers();
 
         buildAssignmentsTable();
 
@@ -102,7 +100,14 @@ public class Controller {
         buildAvailabilityTable();
 
         try {
-            ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getMaxWeeklyTally(), Settings.getMaxMonthlyTally());
+            System.out.println("n of osTeachers : "+ osTeachers.size());
+            System.out.println("temp max monthly : "+ Settings.getTempMonthlyMax());
+            System.out.println("temp max weekly : "+ Settings.getTempWeeklyMax());
+            ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getTempWeeklyMax(), Settings.getTempMonthlyMax());
+
+            System.out.println("n of period 1, weekly : "+((ArrayList<OnStaffTeacher>)availabilityByPeriod.get(0).get(1)).size());
+            System.out.println("item 0 of period 1, weekly : "+((ArrayList<OnStaffTeacher>)availabilityByPeriod.get(0).get(1)).get(0));
+
             tblAvailability.setItems(availabilityByPeriod);
         } catch (Exception e) {
             errorHandler(e.getMessage());
@@ -164,14 +169,18 @@ public class Controller {
                     return;
                 } else {
                     noNagOverwriteAssignmentChanges = nagCheck[0];
-                    //TODO: write noNag to settings
-                    //TODO: get Absentees and Supplies
+                    try{
+                        Settings.setNoNagOverwriteAssignmentChanges(noNagOverwriteAssignmentChanges);
+                    }catch (Exception e){
+                        errorHandler("Error saving preference not to confirm");
+                    }
                 }
             }
         }
         try {
+            getSupplies();
+            getAbsences();
             currentAssignments = AssignSubstitutes.InformationHandle.generateAssignments(osTeachers, supplies, absences, Settings.getMaxWeeklyTally(), Settings.getMaxMonthlyTally());
-
 
             assignments.put(date, currentAssignments);
             currentUnsavedAssignments = new ArrayList<>();
@@ -214,7 +223,7 @@ public class Controller {
             }
         }
         assignments.put(date, new ArrayList<>(tblItems));
-        //TODO: call IO to write assignments to file.
+        //TODO: call IO to write assignments to file(s).
         try {
             IO.writeOnCallerForms(assignments);
         } catch (IOException e) {
@@ -370,7 +379,6 @@ public class Controller {
                                     comboBox.setItems(FXCollections.observableArrayList(teachers));
                                     comboBox.getSelectionModel().selectFirst();
                                     setGraphic(comboBox);
-                                    //TODO: on select, selectFirst
                                     setText(null);
                                 }
                             }
@@ -409,6 +417,7 @@ public class Controller {
     }
 
     private void resetCheck(){
+        //TODO: base check on end of Absences list instead of a fixed number of weeks set by the user
         try{
             LocalDate now = LocalDate.now();
             LocalDate startDate = Settings.getStartDate();
@@ -426,19 +435,14 @@ public class Controller {
         }
     }
 
-    private void getFileData(){
-        //TODO: differentiate between thrown exceptions (ie:file not found vs some kind of fault)
-        getOSTeachers();
-        getSupplies();
-        getAbsences();
-    }
     private void getOSTeachers(){
+        //TODO: differentiate between thrown exceptions (ie:file not found vs some kind of fault)
         try {
             try {
                 osTeachers = IO.readTeachers(Settings.getMasterSchedulePath(), Settings.getCourseCodesPath());
-                for (OnStaffTeacher t : osTeachers) {
+                /*for (OnStaffTeacher t : osTeachers) {
                     System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
-                }
+                }*/
             } catch (IOException e) {
                 errorHandler("Master Schedule file could not be found at " + Settings.getMasterSchedulePath());
                 clickSettings();
@@ -451,9 +455,9 @@ public class Controller {
         try {
             try {
                 supplies = IO.readSupplies(Settings.getSupplyTeacherPath());
-                for (Teacher t : supplies) {
+                /*for (Teacher t : supplies) {
                     System.out.println("supplies: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
-                }
+                }*/
             } catch (IOException e) {
                 errorHandler("Supply Teacher file could not be found at " + Settings.getSupplyTeacherPath());
                 clickSettings();
@@ -466,10 +470,9 @@ public class Controller {
         try {
             try {
                 absences = IO.readAbsences(Settings.getAbsenceInputPath(), osTeachers, datePicker.getValue());
-                for (Teacher t : absences) {
+                /*for (Teacher t : absences) {
                     System.out.println("absences: " + t + " schedule " + (t.getSchedule() == null ? "null" : Arrays.toString(t.getSchedule())));
-
-                }
+                }*/
             } catch (IOException e) {
                 errorHandler("Absences file could not be found at " + Settings.getAbsenceInputPath());
                 clickSettings();
@@ -509,7 +512,6 @@ public class Controller {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(msg);
         alert.initStyle(StageStyle.UTILITY);
-        alert.show();
-        //TODO: make show and wait
+        alert.showAndWait();
     }
 }

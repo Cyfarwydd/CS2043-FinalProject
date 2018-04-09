@@ -322,12 +322,12 @@ public class InformationHandle{
     		default:
     			throw new Exception("Period out of bounds");
     		}
-    		
+
     		List<OnStaffTeacher> noneThisPeriod = fullTeacherList.stream().filter(
     				teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(p -> p.getPeriodNumber()
-    						== periodNumber)
+    						== periodNumber && !p.getCourse().equals("Break"))
     				).collect(Collectors.toList());
-    		
+
     		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < wTal).collect(Collectors.toList());
     		List<OnStaffTeacher> monthTeachers = weekTeachers.stream().filter(t-> t.getWeeklyTally() < mTal).collect(Collectors.toList());
     		

@@ -1,10 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><config>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
 	<onCalls>
 		<weeklyMax>2</weeklyMax>
 		<monthlyMax>4</monthlyMax>
 		<tempWeeklyMax>2</tempWeeklyMax>
 		<tempMonthlyMax>4</tempMonthlyMax>
-	<weeklyMax>2</weeklyMax></onCalls>
+		<tempWeeklyMaxApplicableWeek />
+		<tempMonthlyMaxApplicableMonth />
+	</onCalls>
 	<startEndDates>
 	    <startDate>2017-02-01</startDate>
 	    <weeksUntilEnd>22</weeksUntilEnd>

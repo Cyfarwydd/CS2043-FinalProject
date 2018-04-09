@@ -100,10 +100,12 @@ public class Controller {
         buildAvailabilityTable();
 
         try {
-            ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getTempWeeklyMax(), Settings.getTempMonthlyMax());
-            tblAvailability.setItems(availabilityByPeriod);
+            if(osTeachers!=null) {
+                ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getTempWeeklyMax(), Settings.getTempMonthlyMax());
+                tblAvailability.setItems(availabilityByPeriod);
+            }
         } catch (Exception e) {
-            errorHandler(e.getMessage());
+            errorHandler("ERROR: there was a problem adding to the availability table");
             //TODO: make alternative errorhandlers (USER and StackFrame)
             //TODO: improve error messages
         }
@@ -229,9 +231,9 @@ public class Controller {
     }
 
     @FXML
-    private void clickSettings() {
+    private boolean clickSettings() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings/SettingsUI.fxml"));
-
+        boolean saved=false;
         try {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
@@ -248,12 +250,13 @@ public class Controller {
             //show
             stage.showAndWait();
 
-            boolean saved = controller.getSaved();
+            saved = controller.getSaved();
             System.out.println("Saved: " + saved);
         } catch (Exception e) {
             errorHandler(e.getMessage());
             e.printStackTrace();
         }
+        return saved;
     }
 
     private void displayAssignments(Collection<Assignment> assignmentsIn) {
@@ -437,8 +440,13 @@ public class Controller {
                     System.out.println("osTeacher: " + t + " schedule " + Arrays.toString(t.getSchedule()));
                 }*/
             } catch (IOException e) {
-                errorHandler("Master Schedule file could not be found at " + Settings.getMasterSchedulePath());
-                clickSettings();
+                String courseCodes = Settings.getCourseCodesPath();
+                String schedule = Settings.getMasterSchedulePath();
+                errorHandler("Master Schedule file could not be found at " + schedule +
+                        "\nor course codes file could at " + courseCodes);
+                if(clickSettings() && (!courseCodes.equals(Settings.getMasterSchedulePath()) || !schedule.equals(Settings.getCourseCodesPath()))){
+                    getOSTeachers();
+                }
             }
         }catch (Exception e) {
             errorHandler("Error Something went wrong get the list of staff teachers");

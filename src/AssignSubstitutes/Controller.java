@@ -100,14 +100,7 @@ public class Controller {
         buildAvailabilityTable();
 
         try {
-            System.out.println("n of osTeachers : "+ osTeachers.size());
-            System.out.println("temp max monthly : "+ Settings.getTempMonthlyMax());
-            System.out.println("temp max weekly : "+ Settings.getTempWeeklyMax());
             ObservableList<ArrayList<Object>> availabilityByPeriod = AssignSubstitutes.InformationHandle.getAvailabilityStats(osTeachers, Settings.getTempWeeklyMax(), Settings.getTempMonthlyMax());
-
-            System.out.println("n of period 1, weekly : "+((ArrayList<OnStaffTeacher>)availabilityByPeriod.get(0).get(1)).size());
-            System.out.println("item 0 of period 1, weekly : "+((ArrayList<OnStaffTeacher>)availabilityByPeriod.get(0).get(1)).get(0));
-
             tblAvailability.setItems(availabilityByPeriod);
         } catch (Exception e) {
             errorHandler(e.getMessage());
@@ -417,7 +410,7 @@ public class Controller {
     }
 
     private void resetCheck(){
-        //TODO: base check on end of Absences list instead of a fixed number of weeks set by the user
+        //TODO: check on end of Absences list instead of a fixed number of weeks set by the user
         try{
             LocalDate now = LocalDate.now();
             LocalDate startDate = Settings.getStartDate();

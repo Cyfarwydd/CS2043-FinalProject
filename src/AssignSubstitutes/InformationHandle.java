@@ -325,7 +325,7 @@ public class InformationHandle{
 
     		List<OnStaffTeacher> noneThisPeriod = fullTeacherList.stream().filter(
     				teacher -> Arrays.stream(teacher.getSchedule()).noneMatch(p -> p.getPeriodNumber()
-    						== periodNumber && p.getCourse().equals("Break"))
+    						== periodNumber && !p.getCourse().equals("Break"))
     				).collect(Collectors.toList());
 
     		List<OnStaffTeacher> weekTeachers = noneThisPeriod.stream().filter(t-> t.getWeeklyTally() < wTal).collect(Collectors.toList());

@@ -59,14 +59,19 @@ public class SettingsController {
 
     @FXML
     private void browseMasterSchedule(){
-        String location = getFilePath();
+        String closestDirToStart = getClosestDir(txtMasterSchedule.getText(), txtSupplies.getText(),
+                txtAbsenceList.getText(), txtCourseCodes.getText());
+        String location = getFilePath(closestDirToStart);
         if(location!=null) {
             txtMasterSchedule.setText(location);
         }
     }
+
     @FXML
     private void browseAbsenceList(){
-        String location = getFilePath();
+        String closestDirToStart = getClosestDir(txtAbsenceList.getText(), txtMasterSchedule.getText(), txtSupplies.getText(),
+                txtCourseCodes.getText());
+        String location = getFilePath(closestDirToStart);
         if(location!=null) {
             txtAbsenceList.setText(location);
         }
@@ -74,7 +79,9 @@ public class SettingsController {
 
     @FXML
     private void browseCourseCodes(){
-        String location = getFilePath();
+        String closestDirToStart = getClosestDir(txtCourseCodes.getText(), txtAbsenceList.getText(),
+                txtMasterSchedule.getText(), txtSupplies.getText());
+        String location = getFilePath(closestDirToStart);
         if(location!=null) {
             txtCourseCodes.setText(location);
         }
@@ -82,7 +89,9 @@ public class SettingsController {
 
     @FXML
     private void browseSupplies(){
-        String location = getFilePath();
+        String closestDirToStart = getClosestDir(txtSupplies.getText(), txtCourseCodes.getText(), txtAbsenceList.getText(),
+                txtMasterSchedule.getText());
+        String location = getFilePath(closestDirToStart);
         if(location!=null) {
             txtSupplies.setText(location);
         }
@@ -90,9 +99,13 @@ public class SettingsController {
 
     @FXML
     private void browseOnCallerDir(){
+        String closestDirToStart = getClosestDir(txtOnCallerDir.getText());
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File(closestDirToStart));
         File file = directoryChooser.showDialog(stage);
-        txtOnCallerDir.setText(file.getPath());
+        if(file!=null) {
+            txtOnCallerDir.setText(file.getPath());
+        }
     }
 
     @FXML
@@ -122,7 +135,11 @@ public class SettingsController {
 
     @FXML
     private void resetSettings(){
-        //TODO: add reset functionality
+        try {
+            Settings.resetDefaults();
+        }catch (Exception e){
+            errorHandler("ERROR: resetting configuration file and settings");
+        }
         populateSettingsFields();
     }
 
@@ -147,8 +164,39 @@ public class SettingsController {
         panelContainer.getChildren().remove(0);
     }
 
-    private String getFilePath(){
+    private String getClosestDir(String thisTxtBox, String... otherTxtBoxes){
+        String dir=validateDir(thisTxtBox);
+        if (dir!=null) {
+            return dir;
+        }else{
+            for(String t : otherTxtBoxes) {
+                dir = validateDir(thisTxtBox);
+                if (dir != null) {
+                    return dir;
+                }
+            }
+        }
+        return System.getProperty("user.home");
+    }
+    private String validateDir(String path){
+        File f=null;
+        if(!path.isEmpty()){
+            f = new File(path);
+            if(f.exists()){
+                if (!f.isDirectory()) {
+                    f = f.getParentFile();
+                }
+            }
+        }
+        if (f!=null && f.isDirectory()) {
+            return f.getPath();
+        }else{
+            return null;
+        }
+    }
+    private String getFilePath(String startingPoint){
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(startingPoint));
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(stage);

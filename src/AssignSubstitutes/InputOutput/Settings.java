@@ -79,7 +79,6 @@ public class Settings {
             settings = (Element) config.item(0);
         }
 
-        //TODO: add date temps were changed and a check to reverse them
         Element parentElement;
         try {
             parentElement = (Element) settings.getElementsByTagName("onCalls").item(0);
@@ -244,6 +243,11 @@ public class Settings {
 
     }
 
+    //RESET
+    public static void resetDefaults()throws ParserConfigurationException, SAXException, IOException, TransformerException
+    {
+        replaceMissingDocument();
+    }
     //ACCESSORS
 
     public static Integer getMaxWeeklyTally() throws ParserConfigurationException, SAXException, IOException, TransformerException
